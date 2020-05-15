@@ -1,7 +1,7 @@
 from random import random
 from collections import deque
 from utils import Square, Vector
- 
+
 
 class Colony:
     def __init__(self, radius, max_population_count, reproduce_chance):
