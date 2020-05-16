@@ -5,7 +5,11 @@ from utils import Vector, Color, generate_filename
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser(description='Develop a beautiful square colony')
+    description = 'Creates a beautiful colony of squares. ' \
+                  'It may take some time for rendering! ' \
+                  'Percentages show the duration of further program execution in ideal conditions! ' \
+                  'In fact, probability can take its toll.'
+    parser = ArgumentParser(description=description)
     parser.add_argument('width', type=int, help='The width of the image')
     parser.add_argument('height', type=int, help='The height of the image')
     parser.add_argument('-rc', '--reproduce_chance', metavar='RC', type=float, default=0.5, help='The chance the square can produce other squares')
