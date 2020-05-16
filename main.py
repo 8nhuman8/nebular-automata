@@ -13,11 +13,9 @@ if __name__ == '__main__':
     parser.add_argument('-ca', '--color_accent', metavar=('R', 'G', 'B'), nargs=3, type=int, default=(255, 29, 119), help='The color of squares')
     parser.add_argument('-cb', '--color_background', metavar=('R', 'G', 'B', 'A'), nargs=4, type=int, default=(255, 255, 255, 255), help='The background color')
     parser.add_argument('-fp', '--find_percent', metavar='FP', type=float, help='The program will work until a colony is filled with a certain percentage')
-    parser.add_argument('-fi', '--fade_in', dest='fade', action='store_false', help='The original color is white. The color of each new generation will fade into the specified color')
-    parser.add_argument('-fo', '--fade_out', dest='fade', action='store_true', help='The original color is the specified color. The color of each new generation will fade out')
+    parser.add_argument('-fi', '--fade_in', action='store_true', help='The original color is white. The color of each new generation will fade into the specified color')
     parser.add_argument('-s', '--save', action='store_true', help='The generated image will be saved in the root')
     parser.add_argument('-p', '--path', type=str, help='The path by which the generated image will be saved')
-    parser.set_defaults(fade=True)
     args = parser.parse_args()
 
     radius = Vector(args.width, args.height)
@@ -47,10 +45,11 @@ if __name__ == '__main__':
                 max_gen = colony.current_generation
                 gen = colony.colony[x][y].gen
 
-                if args.fade:
-                    alpha = round((1 - gen / max_gen) * 255)
-                else:
+                alpha = None
+                if args.fade_in:
                     alpha = round(gen / max_gen * 255)
+                else:
+                    alpha = round((1 - gen / max_gen) * 255)
                 color_accent = color_accent._replace(a=alpha)
 
                 draw.point([x, y], color_accent)
