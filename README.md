@@ -2,16 +2,17 @@
 Visualization of an interesting mathematical idea.
 
 ## Idea
-Let a square be surrounded on each side by a new square of the same size with a chance of ***q***. Newly formed squares reproduce other squares and so on, to infinity.
-We will limit the growth of the population by setting a certain maximum allowable number of squares, upon reaching which the program will be completed.
+Let a square be surrounded on each side by a new square of the same size with a chance of **q**. Newly formed squares reproduce other squares and so on, to infinity.  
+We will limit the growth of the population by setting a certain maximum allowable number of squares, upon reaching which the program will be completed.  
 As you probably noticed when looking at the images below, the edges of the shapes are more duller then its centre and, conversely, the center of the shape is duller than its edges on in some images. The fact is that with each generation, squares are created more white or more 'colored' specifically so that the process of structure development is visualized.
 
 ## Remarks
-With ***q*** tending to ***1***, the structure becomes more and more like a rhombus, which is not really surprising.
-If ***q*** approximately equal to ***0.5***, the structure is complete chaos.
-With ***q*** approximately equal to ***0.6***, the structure resembles a circle.
-If ***q*** is in ***[0.7, 1)***, the the structure looks like a convex rhombus.
-If ***q*** is equals to ***1***, the structure becomes a rhombus.
+With **q** tending to **1**, the structure becomes more and more like a *rhombus*, which is not really surprising.  
+If the **q** is less than **0.5**, then the structure is *unlikely to grow*.  
+If **q** approximately equal to **0.5**, the structure is *complete chaos*.  
+With **q** approximately equal to **0.6**, the structure resembles a *circle*.  
+If **q** is in **\[0.7, 1)**, the the structure looks like a *convex rhombus*.  
+If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Usage
 1. Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
