@@ -6,7 +6,7 @@ Let a square be surrounded on each side by a new square of the same size with a 
 We will limit the growth of the population by setting a certain maximum allowable number of squares, upon reaching which the program will be completed.
 
 ## Usage
-1. Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will automatically installed).
+1. Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
 2. Run the program with `python main.py --help` and check out all the parameters.
 3. Run the program again with the parameters you need.
 4. Enjoy the beauty.
