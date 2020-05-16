@@ -1,40 +1,66 @@
 from PIL import Image, ImageDraw
+from argparse import ArgumentParser
 from colony import Colony
 from utils import Vector, Color, generate_filename
 
 
-RADIUS = Vector(100, 100)
-MAX_POPULATION_COUNT = (RADIUS.x * RADIUS.y) // 2
-REPRODUCE_CHANCE = 0.5
+if __name__ == '__main__':
+    parser = ArgumentParser(description='Develop a beautiful square colony')
+    parser.add_argument('width', type=int, help='The width of the image')
+    parser.add_argument('height', type=int, help='The height of the image')
+    parser.add_argument('-rc', '--reproduce_chance', metavar='RC', type=float, default=0.5, help='The chance the square can produce other squares')
+    parser.add_argument('-mpc', '--max_population_count', metavar='MPC', type=int, help='The maximum number of squares in the image')
+    parser.add_argument('-ca', '--color_accent', metavar=('R', 'G', 'B'), nargs=3, type=int, default=(255, 29, 119), help='The color of squares')
+    parser.add_argument('-cb', '--color_background', metavar=('R', 'G', 'B', 'A'), nargs=4, type=int, default=(255, 255, 255, 255), help='The background color')
+    parser.add_argument('-fp', '--find_percent', metavar='FP', type=float, help='The program will work until a colony is filled with a certain percentage')
+    parser.add_argument('-fi', '--fade_in', dest='fade', action='store_false', help='The original color is white. The color of each new generation will fade into the specified color')
+    parser.add_argument('-fo', '--fade_out', dest='fade', action='store_true', help='The original color is the specified color. The color of each new generation will fade out')
+    parser.add_argument('-s', '--save', action='store_true', help='The generated image will be saved in the root')
+    parser.add_argument('-p', '--path', type=str, help='The path by which the generated image will be saved')
+    parser.set_defaults(fade=True)
+    args = parser.parse_args()
 
-COLOR_ACCENT = Color(255, 29, 119, 255)
-COLOR_BACKGROUND = Color(255, 255, 255, 255)
+    radius = Vector(args.width, args.height)
+    max_population_count = args.max_population_count
+    if not max_population_count:
+        max_population_count = (radius.x * radius.y) // 2
+    color_accent = Color(*args.color_accent, 255)
+    color_background = Color(*args.color_background)
 
+    colony = Colony(radius, max_population_count, args.reproduce_chance)
+    colony.develop()
 
-colony = Colony(RADIUS, MAX_POPULATION_COUNT, REPRODUCE_CHANCE)
-colony.develop_colony()
+    if args.find_percent:
+        while True:
+            if colony.population_count / colony.max_population_count <= args.find_percent:
+                colony.destroy()
+                colony.develop()
+            else:
+                break
 
+    image = Image.new('RGBA', (radius.x, radius.y))
+    draw = ImageDraw.Draw(image)
 
-image = Image.new('RGBA', (RADIUS.x, RADIUS.y))
-draw = ImageDraw.Draw(image)
+    for x in range(radius.x + 1):
+        for y in range(radius.y + 1):
+            if colony.colony[x][y]:
+                max_gen = colony.current_generation
+                gen = colony.colony[x][y].gen
 
-for x in range(RADIUS.x + 1):
-    for y in range(RADIUS.y + 1):
-        if colony.colony[x][y]:
-            max_gen = colony.current_generation
-            gen = colony.colony[x][y].gen
+                if args.fade:
+                    alpha = round((1 - gen / max_gen) * 255)
+                else:
+                    alpha = round(gen / max_gen * 255)
+                color_accent = color_accent._replace(a=alpha)
 
-            alpha = round((1 - gen / max_gen) * 255)
-            COLOR_ACCENT = COLOR_ACCENT._replace(a=alpha)
+                draw.point([x, y], color_accent)
+            else:
+                draw.point([x, y], color_background)
 
-            draw.point([x, y], COLOR_ACCENT)
+    image_name = f'{radius.x}x{radius.y}_({colony.population_count}#{max_population_count})_{args.reproduce_chance}_{generate_filename()}.png'
+    if args.save:
+        if args.path:
+            image.save(args.path + image_name, 'PNG')
         else:
-            draw.point([x, y], COLOR_BACKGROUND)
-
-
-IMAGE_PATH = 'img/'
-IMAGE_NAME = f'{RADIUS.x}x{RADIUS.y}_({colony.population_count}#{MAX_POPULATION_COUNT})_{REPRODUCE_CHANCE}_{generate_filename()}.png'
-
-
-image.save(IMAGE_PATH + IMAGE_NAME, 'PNG')
-image.show()
+            image.save(image_name, 'PNG')
+    image.show()

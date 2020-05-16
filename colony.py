@@ -18,16 +18,16 @@ class Colony:
         self.not_reproduced_squares = deque()
 
 
-    def __able_to_reproduce__(self):
+    def _able_to_reproduce(self):
         return random() < self.reproduce_chance
 
 
-    def __output_execution_percentage__(self):
+    def _output_execution_percentage(self):
         print(round(self.population_count / self.max_population_count * 100, 2), '%', sep='', end='\t')
         print(f'({self.population_count} / {self.max_population_count})')
 
 
-    def __square_reproduce__(self, square, generation):
+    def _square_reproduce(self, square, generation):
         self.population_count += 1
 
         x = square.x
@@ -48,7 +48,7 @@ class Colony:
                 and nc.x >= 0
                 and nc.y <= self.radius.y
                 and nc.y >= 0
-                and self.__able_to_reproduce__()
+                and self._able_to_reproduce()
             ):
                 if not self.colony[nc.x][nc.y]:
                     self.colony[nc.x][nc.y] = Square(nc.x, nc.y, generation)
@@ -57,21 +57,28 @@ class Colony:
         return neighboring_squares
 
 
-    def __get_next_generation__(self, current_generation_squares):
+    def _get_next_generation(self, current_generation_squares):
         self.current_generation += 1
 
         next_generation_squares = []
         for square in current_generation_squares:
-            next_generation_squares.extend(self.__square_reproduce__(square, self.current_generation))
+            next_generation_squares.extend(self._square_reproduce(square, self.current_generation))
         return next_generation_squares
 
 
-    def develop_colony(self):
+    def destroy(self):
+        self.colony = [[None for y in range(self.radius.y + 1)] for x in range(self.radius.x + 1)]
+        self.population_count = 1
+        self.current_generation = 1
+        self.not_reproduced_squares = deque()
+
+
+    def develop(self):
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.colony[starting_square.x][starting_square.y] = starting_square
         self.not_reproduced_squares.append([starting_square])
 
-        while (self.not_reproduced_squares != deque([[]])) and (self.population_count <= self.max_population_count):
-            self.__output_execution_percentage__()
+        while self.not_reproduced_squares != deque([[]]) and self.population_count <= self.max_population_count:
+            self._output_execution_percentage()
             current_generation_squares = self.not_reproduced_squares.popleft()
-            self.not_reproduced_squares.append(self.__get_next_generation__(current_generation_squares))
+            self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
