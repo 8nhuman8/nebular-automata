@@ -28,21 +28,19 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -rc RC, --reproduce_chance RC
+  -rc RC, --reproduce-chance RC
                         The chance the square can produce other squares
-  -mpc MPC, --max_population_count MPC
+  -mpc MPC, --max-population-count MPC
                         The maximum number of squares in the image
-  -ca R G B, --color_accent R G B
+  -ca R G B, --color-accent R G B
                         The color of squares
-  -cb R G B A, --color_background R G B A
+  -cb R G B A, --color-background R G B A
                         The background color
-  -fp FP, --find_percent FP
+  -fp FP, --find-percent FP
                         The program will work until a colony is filled with a
                         certain percentage
-  -fi, --fade_in        The original color is white. The color of each new
+  -fi, --fade-in        The original color is white. The color of each new
                         generation will fade into the specified color
-  -fo, --fade_out       The original color is the specified color. The color
-                        of each new generation will fade out
   -s, --save            The generated image will be saved in the root
   -p PATH, --path PATH  The path by which the generated image will be saved
 ```

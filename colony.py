@@ -5,7 +5,7 @@ from utils import Square, Vector
 
 
 class Colony:
-    def __init__(self, radius, max_population_count, reproduce_chance):
+    def __init__(self, radius: Vector, max_population_count: int, reproduce_chance: float):
         self.radius = radius
         self.starting_point = Vector(self.radius.x // 2, self.radius.y // 2)
 
@@ -19,18 +19,18 @@ class Colony:
         self.not_reproduced_squares = deque()
 
 
-    def _able_to_reproduce(self):
+    def _able_to_reproduce(self) -> bool:
         return random() < self.reproduce_chance
 
 
-    def _output_execution_percentage(self):
+    def _output_debug_info(self) -> None:
         print(self.current_generation, end='\t')
         print(f'[{datetime.now().isoformat()}]', end='\t')
-        print(round(self.population_count / self.max_population_count * 100, 2), '%', sep='', end='\t')
+        print('{:.5f}'.format(self.population_count / self.max_population_count * 100), '%', end='\t')
         print(f'({self.population_count} / {self.max_population_count})')
 
 
-    def _square_reproduce(self, square, generation):
+    def _square_reproduce(self, square: Square, generation: int) -> list:
         self.population_count += 1
 
         x = square.x
@@ -60,7 +60,7 @@ class Colony:
         return neighboring_squares
 
 
-    def _get_next_generation(self, current_generation_squares):
+    def _get_next_generation(self, current_generation_squares: list) -> list:
         self.current_generation += 1
 
         next_generation_squares = []
@@ -69,26 +69,38 @@ class Colony:
         return next_generation_squares
 
 
-    def destroy(self):
+    def _destroy(self) -> None:
         self.colony = [[None for y in range(self.radius.y + 1)] for x in range(self.radius.x + 1)]
         self.population_count = 1
         self.current_generation = 1
         self.not_reproduced_squares = deque()
 
-
-    def develop(self):
-        start_date = datetime.now()
-
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.colony[starting_square.x][starting_square.y] = starting_square
         self.not_reproduced_squares.append([starting_square])
 
-        while self.not_reproduced_squares != deque([[]]) and self.population_count <= self.max_population_count:
-            self._output_execution_percentage()
-            current_generation_squares = self.not_reproduced_squares.popleft()
-            self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
 
-        print()
-        print(f'Start date: {start_date.isoformat()}')
-        print(f'End date: {datetime.now().isoformat()}')
-        print(f'Program took: {datetime.now() - start_date} to run')
+    def develop(self, find_percent: float=0) -> None:
+        starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
+        self.colony[starting_square.x][starting_square.y] = starting_square
+        self.not_reproduced_squares.append([starting_square])
+
+        if find_percent:
+            while True:
+                while self.not_reproduced_squares != deque([[]]) and self.population_count <= self.max_population_count:
+                    self._output_debug_info()
+                    current_generation_squares = self.not_reproduced_squares.popleft()
+                    self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
+
+                    if self.population_count / self.max_population_count >= find_percent:
+                        break
+
+                if self.population_count / self.max_population_count >= find_percent:
+                    break
+                else:
+                    self._destroy()
+        else:
+            while self.not_reproduced_squares != deque([[]]) and self.population_count <= self.max_population_count:
+                self._output_debug_info()
+                current_generation_squares = self.not_reproduced_squares.popleft()
+                self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
