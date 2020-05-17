@@ -7,7 +7,7 @@ We will limit the growth of the population by setting a certain maximum allowabl
 As you probably noticed when looking at the images below, the edges of the shapes are more duller then its centre and, conversely, the center of the shape is duller than its edges on in some images. The fact is that with each generation, squares are created more white or more 'colored' specifically so that the process of structure development is visualized.
 
 ## Remarks
-With **q** tending to **1**, the structure becomes more and more like a *rhombus*, which is not really surprising.  
+With **q** tending to **1**, the structure becomes more and more like a *rhombus*, that is not really surprising.  
 If the **q** is less than **0.5**, then the structure is *unlikely to grow*.  
 If **q** approximately equal to **0.5**, the structure is *complete chaos*.  
 With **q** approximately equal to **0.6**, the structure resembles a *circle*.  
