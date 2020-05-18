@@ -19,9 +19,11 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Usage
 1. Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
-2. Run the program with `python main.py --help` and check out all the parameters.
-3. Run the program again with the parameters you need.
-4. Enjoy the beauty.
+2. Open the folder with the scripts.
+3. Check out all the command-line parameters.
+4. Run the `main.py` with `python main.py --help` and read the description with all the parameters.
+5. Run the `main.py` again with the parameters you need.
+6. Enjoy the beauty.
 
 ## Command-line arguments description
 ```
@@ -48,12 +50,12 @@ optional arguments:
   -p PATH, --path PATH  The path by which the generated image will be saved
 ```
 
-## Images created by this program
-![](images/1.png)
-![](images/2.png)
-![](images/3.png)
-![](images/4.png)
-![](images/5.png)
-![](images/6.png)
-![](images/7.png)
-![](images/8.png)
+## Gallery (images created by this program)
+![](gallery/1.png)
+![](gallery/2.png)
+![](gallery/3.png)
+![](gallery/4.png)
+![](gallery/5.png)
+![](gallery/6.png)
+![](gallery/7.png)
+![](gallery/8.png)
