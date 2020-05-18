@@ -27,27 +27,40 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Command-line arguments description
 ```
+usage: main.py [-h] [-rc RC] [-mpc MPC] [-ca R G B] [-cb R G B A] [-fp FP]
+               [-fi] [-s] [-p PATH]
+               width height
+
+Creates a beautiful colony of squares. It may take some time for rendering!
+Percentages show the duration of further program execution in ideal
+conditions! In fact, probability can take its toll.
+
 positional arguments:
-  width                 The width of the image
-  height                The height of the image
+  width                 The width of the image.
+  height                The height of the image.
 
 optional arguments:
   -h, --help            show this help message and exit
   -rc RC, --reproduce-chance RC
-                        The chance the square can produce other squares
+                        The chance the square can produce other squares.
   -mpc MPC, --max-population-count MPC
-                        The maximum number of squares in the image
+                        The maximum number of squares in the image.
   -ca R G B, --color-accent R G B
-                        The color of squares
+                        The color of squares. Color components must be
+                        specified between 0 and 255.
   -cb R G B A, --color-background R G B A
-                        The background color
+                        The background color. Color components must be
+                        specified between 0 and 255.
   -fp FP, --find-percent FP
                         The program will work until a colony is filled with a
-                        certain percentage
+                        certain percentage.
   -fi, --fade-in        The original color is white. The color of each new
-                        generation will fade into the specified color
-  -s, --save            The generated image will be saved in the root
-  -p PATH, --path PATH  The path by which the generated image will be saved
+                        generation will fade into the specified color.
+  -s, --save            The generated image will be saved in the root if no
+                        path is specified.
+  -p PATH, --path PATH  The path by which the generated image will be saved.
+                        Write the path without quotes, separating the
+                        directories with the usual single slash.
 ```
 
 ## Gallery (images created by this program)
