@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser.add_argument('width', type=int, help='The width of the image.')
     parser.add_argument('height', type=int, help='The height of the image.')
     parser.add_argument('-rc', '--reproduce-chance', metavar='RC', type=float, default=0.5, help='The chance the square can produce other squares.')
-    parser.add_argument('-mpc', '--max-population-count', metavar='MPC', type=int, help='The maximum number of squares in the image.')
+    parser.add_argument('-mpc', '--max-population-count', metavar='MPC', type=int, help='The maximum number of squares in the image. By default, this is half of all pixels in the future image.')
     parser.add_argument('-m', '--multicolor', action='store_true', help='Enables multicolor mode.')
     parser.add_argument('-ca1', '--color-accent1', metavar=('R', 'G', 'B', 'A'), nargs=4, type=int, default=(0, 255, 255, 255), help='The first or (primary if multicolor mode is not enabled) color of squares. Color components must be specified between 0 and 255. The The default color is aqua')
     parser.add_argument('-ca2', '--color-accent2', metavar=('R', 'G', 'B', 'A'), nargs=4, type=int, default=(255, 29, 119, 255), help='The second color of squares if multicolor mode is enabled. Color components must be specified between 0 and 255. The The default color is (r, g, b): (255, 29, 119, 255).')

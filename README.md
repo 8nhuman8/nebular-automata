@@ -45,7 +45,9 @@ optional arguments:
   -rc RC, --reproduce-chance RC
                         The chance the square can produce other squares.
   -mpc MPC, --max-population-count MPC
-                        The maximum number of squares in the image.
+                        The maximum number of squares in the image. By
+                        default, this is half of all pixels in the future
+                        image.
   -m, --multicolor      Enables multicolor mode.
   -ca1 R G B A, --color-accent1 R G B A
                         The first or (primary if multicolor mode is not
