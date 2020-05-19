@@ -50,14 +50,17 @@ optional arguments:
   -ca1 R G B A, --color-accent1 R G B A
                         The first or (primary if multicolor mode is not
                         enabled) color of squares. Color components must be
-                        specified between 0 and 255.
+                        specified between 0 and 255. The The default color is
+                        aqua
   -ca2 R G B A, --color-accent2 R G B A
                         The second color of squares if multicolor mode is
                         enabled. Color components must be specified between 0
-                        and 255.
+                        and 255. The The default color is (r, g, b): (255, 29,
+                        119, 255).
   -cb R G B A, --color-background R G B A
                         The background color. Color components must be
-                        specified between 0 and 255.
+                        specified between 0 and 255. The default color is
+                        white.
   -fp FP, --find-percent FP
                         The program will work until a colony is filled with a
                         certain percentage.
