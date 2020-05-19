@@ -2,7 +2,7 @@
 Visualization of an interesting mathematical idea.
 
 ## Idea
->The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382)
+>The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
 
 Let a square be surrounded on each side by a new square of the same size with a chance of **q**. Newly formed squares reproduce other squares and so on, to infinity.  
 We will limit the growth of the population by setting a certain maximum allowable number of squares, upon reaching which the program will be completed.
@@ -27,13 +27,14 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Command-line arguments description
 ```
-usage: main.py [-h] [-rc RC] [-mpc MPC] [-ca R G B] [-cb R G B A] [-fp FP]
-               [-fi] [-s] [-p PATH]
+usage: main.py [-h] [-rc RC] [-mpc MPC] [-m] [-ca1 R G B A] [-ca2 R G B A]
+               [-cb R G B A] [-fp FP] [-fi] [-s] [-p PATH]
                width height
 
 Creates a beautiful colony of squares. It may take some time for rendering!
 Percentages show the duration of further program execution in ideal
-conditions! In fact, probability can take its toll.
+conditions! In fact, probability can take its toll. Do not use 'fade-in'
+argument if multicolor mode is enabled!
 
 positional arguments:
   width                 The width of the image.
@@ -45,9 +46,15 @@ optional arguments:
                         The chance the square can produce other squares.
   -mpc MPC, --max-population-count MPC
                         The maximum number of squares in the image.
-  -ca R G B, --color-accent R G B
-                        The color of squares. Color components must be
+  -m, --multicolor      Enables multicolor mode.
+  -ca1 R G B A, --color-accent1 R G B A
+                        The first or (primary if multicolor mode is not
+                        enabled) color of squares. Color components must be
                         specified between 0 and 255.
+  -ca2 R G B A, --color-accent2 R G B A
+                        The second color of squares if multicolor mode is
+                        enabled. Color components must be specified between 0
+                        and 255.
   -cb R G B A, --color-background R G B A
                         The background color. Color components must be
                         specified between 0 and 255.
@@ -55,7 +62,8 @@ optional arguments:
                         The program will work until a colony is filled with a
                         certain percentage.
   -fi, --fade-in        The original color is white. The color of each new
-                        generation will fade into the specified color.
+                        generation will fade into the specified color. Do not
+                        use this argument if multicolor mode is enabled!
   -s, --save            The generated image will be saved in the root if no
                         path is specified.
   -p PATH, --path PATH  The path by which the generated image will be saved.
