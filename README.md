@@ -85,3 +85,8 @@ optional arguments:
 ![](gallery/6.png)
 ![](gallery/7.png)
 ![](gallery/8.png)
+
+## License
+[Square colony](https://github.com/8nhuman8/square-colony) specific code is distributed under [MIT License](LICENSE).
+
+Copyright (c) 2020 Artyom Bezmenov
