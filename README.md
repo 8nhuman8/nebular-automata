@@ -1,5 +1,5 @@
 # Square colony
-Visualization of an interesting mathematical idea.
+A program for visualizing an interesting mathematical idea.
 
 ## Idea
 >The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
