@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw
 from argparse import ArgumentParser
 from datetime import datetime
+from time import sleep
 from colony import Colony
 from utils import Vector, Color, generate_filename, get_runtime, get_gradient
 
@@ -43,11 +44,13 @@ if __name__ == '__main__':
         gradient = get_gradient(colony.current_generation, color_accent1, color_accent2)
 
     print('\nNow the data will be processed and converted to a graphical representation.\nIt can take some time.')
+    sleep(1)
 
     image = Image.new('RGBA', (radius.x, radius.y))
     draw = ImageDraw.Draw(image)
 
     for x in range(radius.x + 1):
+        print(f'[{datetime.now().isoformat()}]', 'Image drawing:', f'{round(x / radius.x * 100, 5)} %', sep='\t')
         for y in range(radius.y + 1):
             if colony.colony[x][y]:
                 if not args.multicolor:
