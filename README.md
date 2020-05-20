@@ -27,14 +27,12 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Command-line arguments description
 ```
-usage: main.py [-h] [-rc RC] [-mpc MPC] [-m] [-ca1 R G B A] [-ca2 R G B A]
+usage: main.py [-h] [-rc RC] [-mc MC] [-m] [-ca1 R G B A] [-ca2 R G B A]
                [-cb R G B A] [-fp FP] [-fi] [-s] [-p PATH]
                width height
 
-Creates a beautiful colony of squares. It may take some time for rendering!
-Percentages show the duration of further program execution in ideal
-conditions! In fact, probability can take its toll. Do not use 'fade-in'
-argument if multicolor mode is enabled!
+Creates a beautiful nebula. Percentages show the duration of further program
+execution in ideal conditions! In fact, probability can take its toll.
 
 positional arguments:
   width                 The width of the image.
@@ -44,7 +42,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -rc RC, --reproduce-chance RC
                         The chance the square can produce other squares.
-  -mpc MPC, --max-population-count MPC
+  -mc MC, --max-count MC
                         The maximum number of squares in the image. By
                         default, this is half of all pixels in the future
                         image.
@@ -64,11 +62,10 @@ optional arguments:
                         specified between 0 and 255. The default color is
                         white.
   -fp FP, --find-percent FP
-                        The program will work until a colony is filled with a
+                        The program will work until a nebula is filled with a
                         certain percentage.
   -fi, --fade-in        The original color is white. The color of each new
-                        generation will fade into the specified color. Do not
-                        use this argument if multicolor mode is enabled!
+                        generation will fade into the specified color.
   -s, --save            The generated image will be saved in the root if no
                         path is specified.
   -p PATH, --path PATH  The path by which the generated image will be saved.
