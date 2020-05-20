@@ -1,5 +1,14 @@
+# Python bytecode-compiled files folder
 __pycache__/
+
+# VS Code workspace settings
 .vscode/
-img/
+
+# To-do list
 TODO.txt
+
+# Generated images
+img/
+
+# An old gallery folder
 gallery_old/
