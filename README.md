@@ -1,4 +1,4 @@
-# Square colony
+# Nebular automata
 A program for visualizing an interesting mathematical idea.
 
 ## Idea
@@ -84,6 +84,6 @@ optional arguments:
 ![](gallery/8.png)
 
 ## License
-[Square colony](https://github.com/8nhuman8/square-colony) specific code is distributed under [MIT License](LICENSE).
+[Nebular automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](LICENSE).
 
 Copyright (c) 2020 Artyom Bezmenov
