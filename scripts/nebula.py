@@ -83,7 +83,7 @@ class Nebula:
         self.not_reproduced_squares.append([starting_square])
 
 
-    def develop(self, find_percent: float=None) -> None:
+    def develop(self, find_percent: float = None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.not_reproduced_squares.append([starting_square])
