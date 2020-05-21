@@ -1,6 +1,7 @@
 from random import random
 from collections import deque
 from datetime import datetime
+
 from utils import Square, Vector
 
 
@@ -55,7 +56,7 @@ class Nebula:
                 and nc.y >= 0
                 and self._able_to_reproduce()
             ):
-                if not self.squares[nc.x][nc.y]:
+                if self.squares[nc.x][nc.y] is None:
                     self.squares[nc.x][nc.y] = Square(nc.x, nc.y, generation)
                     neighboring_squares.append(self.squares[nc.x][nc.y])
 
@@ -82,7 +83,7 @@ class Nebula:
         self.not_reproduced_squares.append([starting_square])
 
 
-    def develop(self, find_percent: float=0) -> None:
+    def develop(self, find_percent: float=None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.not_reproduced_squares.append([starting_square])

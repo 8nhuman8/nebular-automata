@@ -39,45 +39,45 @@ def get_gradient(gen: int, c1: Color, c2: Color) -> list:
     # t: int -- temporary copy of the color component
     if c1.r < c2.r:
         t = c1.r
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t += d_r
             grad_r.append(round(t))
     else:
         t = c1.r
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t -= d_r
             grad_r.append(round(t))
 
     if c1.g < c2.g:
         t = c1.g
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t += d_g
             grad_g.append(round(t))
     else:
         t = c1.g
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t -= d_g
             grad_g.append(round(t))
 
     if c1.b < c2.b:
         t = c1.b
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t += d_b
             grad_b.append(round(t))
     else:
         t = c1.b
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t -= d_b
             grad_b.append(round(t))
 
     if c1.a < c2.a:
         t = c1.a
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t += d_a
             grad_a.append(round(t))
     else:
         t = c1.a
-        for _ in range(2, gen + 1):
+        for _ in range(gen - 1):
             t -= d_a
             grad_a.append(round(t))
 

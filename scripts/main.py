@@ -1,7 +1,9 @@
 from PIL import Image, ImageDraw
 from argparse import ArgumentParser
+
 from datetime import datetime
 from time import sleep
+
 from nebula import Nebula
 from utils import Vector, Color, generate_filename, get_runtime, get_gradient
 
@@ -35,7 +37,7 @@ if __name__ == '__main__':
 
     radius = Vector(args.width, args.height)
     max_count = args.max_count
-    if not max_count:
+    if max_count is None:
         max_count = (radius.x * radius.y) // 2
     color_accent1 = Color(*args.color_accent1)
     color_accent2 = Color(*args.color_accent2)
