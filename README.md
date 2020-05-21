@@ -27,45 +27,53 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Command-line arguments description
 ```
-usage: main.py [-h] [-rc RC] [-mc MC] [-m] [-ca1 R G B A] [-ca2 R G B A]
-               [-cb R G B A] [-fp FP] [-fi] [-s] [-p PATH]
+usage: main.py [-h] [-rc FLOAT] [-mc INT] [-ca1 R G B A] [-cb R G B A] [-m]
+               [-ca2 R G B A] [-fp FLOAT] [-fi] [-s] [-p PATH]
                width height
 
 Creates a beautiful nebula. Percentages show the duration of further program
 execution in ideal conditions! In fact, probability can take its toll.
 
-positional arguments:
+optional arguments:
+  -h, --help            show this help message and exit
+
+Required options:
   width                 The width of the image.
   height                The height of the image.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -rc RC, --reproduce-chance RC
+Basic options:
+  -rc FLOAT, --reproduce-chance FLOAT
                         The chance the square can produce other squares.
-  -mc MC, --max-count MC
+  -mc INT, --max-count INT
                         The maximum number of squares in the image. By
                         default, this is half of all pixels in the future
                         image.
-  -m, --multicolor      Enables multicolor mode.
   -ca1 R G B A, --color-accent1 R G B A
                         The first or (primary if multicolor mode is not
                         enabled) color of squares. Color components must be
                         specified between 0 and 255. The The default color is
                         aqua
+  -cb R G B A, --color-background R G B A
+                        The background color. Color components must be
+                        specified between 0 and 255. The default color is
+                        white.
+
+Multicoloring options:
+  -m, --multicolor      Enables multicolor mode.
   -ca2 R G B A, --color-accent2 R G B A
                         The second color of squares if multicolor mode is
                         enabled. Color components must be specified between 0
                         and 255. The The default color is (r, g, b): (255, 29,
                         119, 255).
-  -cb R G B A, --color-background R G B A
-                        The background color. Color components must be
-                        specified between 0 and 255. The default color is
-                        white.
-  -fp FP, --find-percent FP
+
+Additional options:
+  -fp FLOAT, --find-percent FLOAT
                         The program will work until a nebula is filled with a
                         certain percentage.
   -fi, --fade-in        The original color is white. The color of each new
                         generation will fade into the specified color.
+
+Saving options:
   -s, --save            The generated image will be saved in the root if no
                         path is specified.
   -p PATH, --path PATH  The path by which the generated image will be saved.
