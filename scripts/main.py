@@ -9,7 +9,7 @@ from utils import Vector, Color, generate_filename, get_runtime, get_gradient
 import constants as c
 
 
-def parse_args() -> Namespace:
+def parse_args(args: str = None) -> Namespace:
     parser = ArgumentParser(description=c.DESCRIPTION)
 
     group_required = parser.add_argument_group('Required options')
@@ -45,14 +45,17 @@ def parse_args() -> Namespace:
     group_saving.add_argument('-s', '--save', action='store_true', help=c.HELP_SAVE)
     group_saving.add_argument('-p', '--path', metavar='PATH', type=str, help=c.HELP_PATH)
 
-    return parser.parse_args()
+    if args is None:
+        return parser.parse_args()
+    else:
+        return parser.parse_args(args)
 
 
 def render_image(args: Namespace) -> None:
-    radius = Vector(args.width, args.height)
+    size = Vector(args.width, args.height)
     max_count = args.max_count
     if max_count is None:
-        max_count = (radius.x * radius.y) // 2
+        max_count = (size.x * size.y) // 2
     color_accent1 = Color(*args.color_accent1)
     color_accent2 = Color(*args.color_accent2)
     color_background = Color(*args.color_background)
@@ -60,7 +63,7 @@ def render_image(args: Namespace) -> None:
 
     start_date = datetime.now()
 
-    nebula = Nebula(radius, max_count, args.reproduce_chance)
+    nebula = Nebula(size, max_count, args.reproduce_chance)
     nebula.develop(args.find_percent)
 
     if args.multicolor:
@@ -69,12 +72,12 @@ def render_image(args: Namespace) -> None:
     print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
     sleep(1)
 
-    image = Image.new('RGBA', (radius.x, radius.y))
+    image = Image.new('RGBA', (size.x, size.y))
     draw = ImageDraw.Draw(image)
 
-    for x in range(radius.x + 1):
-        print(f'[{datetime.now().isoformat()}]', 'Image drawing:', f'{round(x / radius.x * 100, 5)} %', sep='\t')
-        for y in range(radius.y + 1):
+    for x in range(size.x + 1):
+        print(f'[{datetime.now().isoformat()}]', 'Image drawing:', '{:.5f}'.format(x / size.x * 100) + ' %', sep='\t')
+        for y in range(size.y + 1):
             if nebula.squares[x][y]:
                 if not args.multicolor:
                     max_gen = nebula.current_generation
@@ -92,15 +95,20 @@ def render_image(args: Namespace) -> None:
             else:
                 draw.point([x, y], color_background)
 
-    image_name = f'{radius.x}x{radius.y}_({nebula.count}#{max_count})_{args.reproduce_chance}_{generate_filename()}.png'
+    image_name = f'{size.x}x{size.y}_({nebula.count}#{max_count})_{args.reproduce_chance}_{generate_filename()}.png'
+    image_path = None
     if args.save:
         if args.path:
             image.save(args.path + image_name, 'PNG')
+            image_path = args.path + image_name
         else:
             image.save(image_name, 'PNG')
+            image_path = image_name
     image.show()
 
     get_runtime(start_date)
+
+    return image_path
 
 
 if __name__ == '__main__':

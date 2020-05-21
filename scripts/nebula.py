@@ -6,9 +6,9 @@ from utils import Square, Vector
 
 
 class Nebula:
-    def __init__(self, radius: Vector, max_count: int, reproduce_chance: float):
-        self.radius = radius
-        self.starting_point = Vector(self.radius.x // 2, self.radius.y // 2)
+    def __init__(self, size: Vector, max_count: int, reproduce_chance: float):
+        self.size = size
+        self.starting_point = Vector(self.size.x // 2, self.size.y // 2)
 
         # The maximum allowable value of squares count
         self.max_count = max_count
@@ -18,7 +18,7 @@ class Nebula:
         self.count = 1
         self.current_generation = 1
 
-        self.squares = [[None for y in range(self.radius.y + 1)] for x in range(self.radius.x + 1)]
+        self.squares = [[None for y in range(self.size.y + 1)] for x in range(self.size.x + 1)]
         self.not_reproduced_squares = deque()
 
 
@@ -50,9 +50,9 @@ class Nebula:
         # 'nc' stands for 'neighboring coordinate'
         for nc in neighboring_coordinates:
             if (
-                nc.x <= self.radius.x
+                nc.x <= self.size.x
                 and nc.x >= 0
-                and nc.y <= self.radius.y
+                and nc.y <= self.size.y
                 and nc.y >= 0
                 and self._able_to_reproduce()
             ):
@@ -73,7 +73,7 @@ class Nebula:
 
 
     def _destroy(self) -> None:
-        self.squares = [[None for y in range(self.radius.y + 1)] for x in range(self.radius.x + 1)]
+        self.squares = [[None for y in range(self.size.y + 1)] for x in range(self.size.x + 1)]
         self.count = 1
         self.current_generation = 1
         self.not_reproduced_squares = deque()
