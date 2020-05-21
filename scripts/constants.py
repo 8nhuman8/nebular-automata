@@ -26,3 +26,7 @@ HELP_PATH = ("The path by which the generated image will be saved. Write the pat
              "without quotes, separating the directories with the usual single slash.")
 
 COLORS_METAVAR = ('R', 'G', 'B', 'A')
+
+
+NOTIFICATION_MSG_BEFORE_RENDERING = ('\nNow the data will be processed and converted '
+                                     'to a graphical representation.\nIt can take some time.')

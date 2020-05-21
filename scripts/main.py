@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 
 from datetime import datetime
 from time import sleep
@@ -9,7 +9,7 @@ from utils import Vector, Color, generate_filename, get_runtime, get_gradient
 import constants as c
 
 
-if __name__ == '__main__':
+def parse_args() -> Namespace:
     parser = ArgumentParser(description=c.DESCRIPTION)
 
     group_required = parser.add_argument_group('Required options')
@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     group_basic = parser.add_argument_group('Basic options')
     group_basic.add_argument('-rc', '--reproduce-chance', metavar='FLOAT',
-                             type=float, default=0.5, help=c.HELP_REPRODUCE_CHANCE)
+                             type=float, default=0.51, help=c.HELP_REPRODUCE_CHANCE)
     group_basic.add_argument('-mc', '--max-count', metavar='INT',
                              type=int, help=c.HELP_MAX_COUNT)
     group_basic.add_argument('-ca1', '--color-accent1', metavar=c.COLORS_METAVAR,
@@ -45,8 +45,10 @@ if __name__ == '__main__':
     group_saving.add_argument('-s', '--save', action='store_true', help=c.HELP_SAVE)
     group_saving.add_argument('-p', '--path', metavar='PATH', type=str, help=c.HELP_PATH)
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
+
+def render_image(args: Namespace) -> None:
     radius = Vector(args.width, args.height)
     max_count = args.max_count
     if max_count is None:
@@ -64,7 +66,7 @@ if __name__ == '__main__':
     if args.multicolor:
         gradient = get_gradient(nebula.current_generation, color_accent1, color_accent2)
 
-    print('\nNow the data will be processed and converted to a graphical representation.\nIt can take some time.')
+    print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
     sleep(1)
 
     image = Image.new('RGBA', (radius.x, radius.y))
@@ -78,11 +80,9 @@ if __name__ == '__main__':
                     max_gen = nebula.current_generation
                     gen = nebula.squares[x][y].gen
 
-                    alpha = None
+                    alpha = alpha = round((1 - gen / max_gen) * 255)
                     if args.fade_in:
                         alpha = round(gen / max_gen * 255)
-                    else:
-                        alpha = round((1 - gen / max_gen) * 255)
                     color_accent = color_accent1._replace(a=alpha)
 
                     draw.point([x, y], color_accent)
@@ -101,3 +101,8 @@ if __name__ == '__main__':
     image.show()
 
     get_runtime(start_date)
+
+
+if __name__ == '__main__':
+    args = parse_args()
+    render_image(args)
