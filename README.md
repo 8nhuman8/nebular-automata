@@ -81,6 +81,11 @@ Saving options:
                         directories with the usual single slash.
 ```
 
+## License
+[Nebular automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](LICENSE).
+
+Copyright (c) 2020 Artyom Bezmenov
+
 ## Gallery (images created by this program)
 ![](gallery/1.png)
 ![](gallery/2.png)
@@ -90,8 +95,3 @@ Saving options:
 ![](gallery/6.png)
 ![](gallery/7.png)
 ![](gallery/8.png)
-
-## License
-[Nebular automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](LICENSE).
-
-Copyright (c) 2020 Artyom Bezmenov
