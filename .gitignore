@@ -8,7 +8,7 @@ __pycache__/
 TODO.txt
 
 # Generated images
-img/
+images/
 
 # An old gallery folder
 gallery_old/
