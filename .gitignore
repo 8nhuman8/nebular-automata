@@ -14,7 +14,7 @@ img/
 gallery_old/
 
 # Generated images for Telegram channel
-telegram_images/
+_telegram_*
 
 # Telegram information
 telegram_cfg.json

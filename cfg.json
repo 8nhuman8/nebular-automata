@@ -2,5 +2,6 @@
     "token": "",
     "chat_id": "",
     "width": "",
-    "height": ""
+    "height": "",
+    "random": true
 }

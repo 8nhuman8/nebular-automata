@@ -41,9 +41,13 @@ def parse_args(args: list = None) -> Namespace:
     group_additional.add_argument('-fi', '--fade-in', action='store_true',
                                   help=c.HELP_FADE_IN)
 
-    group_saving = parser.add_argument_group('Saving options')
-    group_saving.add_argument('-s', '--save', action='store_true', help=c.HELP_SAVE)
-    group_saving.add_argument('-p', '--path', metavar='PATH', type=str, help=c.HELP_PATH)
+    group_system = parser.add_argument_group('System options')
+    group_system.add_argument('-s', '--save', action='store_true',
+                              help=c.HELP_SAVE)
+    group_system.add_argument('-p', '--path', metavar='PATH',
+                              type=str, help=c.HELP_PATH)
+    group_system.add_argument('-si', '--show-image', action='store_true',
+                              help=c.HELP_SHOW_IMAGE)
 
     if args is None:
         return parser.parse_args()
@@ -51,7 +55,7 @@ def parse_args(args: list = None) -> Namespace:
         return parser.parse_args(args)
 
 
-def render_image(args: Namespace) -> None:
+def render_image(args: Namespace, msg_send: bool = False) -> None:
     size = utils.Vector(args.width, args.height)
     max_count = args.max_count
     if max_count is None:
@@ -64,7 +68,7 @@ def render_image(args: Namespace) -> None:
     start_date = datetime.now()
 
     nebula = Nebula(size, max_count, args.reproduce_chance)
-    nebula.develop(args.find_percent)
+    nebula.develop(find_percent=args.find_percent)
 
     if args.multicolor:
         gradient = utils.get_gradient(nebula.current_generation, color_accent1, color_accent2)
@@ -97,14 +101,18 @@ def render_image(args: Namespace) -> None:
 
     image_name = f'{size.x}x{size.y}_({nebula.count}#{max_count})_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
-    if args.save:
+    if args.save or msg_send:
         if args.path:
             image.save(args.path + image_name, 'PNG')
             image_path = args.path + image_name
+        elif msg_send:
+            image.save(c.TELEGRAM_IMAGES_SAVE_PATH + c.TELERGAM_IMAGE_PREFIX + image_name, 'PNG')
+            image_path = c.TELEGRAM_IMAGES_SAVE_PATH + c.TELERGAM_IMAGE_PREFIX + image_name
         else:
             image.save(image_name, 'PNG')
             image_path = image_name
-    image.show()
+    if args.show_image:
+        image.show()
 
     utils.get_runtime(start_date)
 

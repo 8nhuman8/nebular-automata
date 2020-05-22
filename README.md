@@ -27,9 +27,9 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Command-line arguments description
 ```
-usage: main.py [-h] [-rc FLOAT] [-mc INT] [-ca1 R G B A] [-cb R G B A] [-m]
-               [-ca2 R G B A] [-fp FLOAT] [-fi] [-s] [-p PATH]
-               width height
+usage: render.py [-h] [-rc FLOAT] [-mc INT] [-ca1 R G B A] [-cb R G B A] [-m]
+                 [-ca2 R G B A] [-fp FLOAT] [-fi] [-s] [-p PATH] [-si]
+                 width height
 
 Creates a beautiful nebula. Percentages show the duration of further program
 execution in ideal conditions! In fact, probability can take its toll.
@@ -73,12 +73,13 @@ Additional options:
   -fi, --fade-in        The original color is white. The color of each new
                         generation will fade into the specified color.
 
-Saving options:
+System options:
   -s, --save            The generated image will be saved in the root if no
                         path is specified.
   -p PATH, --path PATH  The path by which the generated image will be saved.
                         Write the path without quotes, separating the
                         directories with the usual single slash.
+  -si, --show-image     Show image after execution.
 ```
 
 ## License

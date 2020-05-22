@@ -24,6 +24,7 @@ HELP_FADE_IN = ('The original color is white. The color of each '
 HELP_SAVE = 'The generated image will be saved in the root if no path is specified.'
 HELP_PATH = ("The path by which the generated image will be saved. Write the path "
              "without quotes, separating the directories with the usual single slash.")
+HELP_SHOW_IMAGE = 'Show image after execution.'
 
 COLORS_METAVAR = ('R', 'G', 'B', 'A')
 
@@ -33,4 +34,5 @@ NOTIFICATION_MSG_BEFORE_RENDERING = ('\nNow the data will be processed and conve
 
 
 TELEGRAM_IMAGES_SAVE_PATH = './telegram_images/'
+TELERGAM_IMAGE_PREFIX = '_telegram_'
 CONFIG_PATH = './cfg.json'
