@@ -15,3 +15,6 @@ gallery_old/
 
 # Generated images for Telegram channel
 telegram_images/
+
+# Telegram information
+telegram_config.txt

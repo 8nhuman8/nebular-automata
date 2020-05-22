@@ -5,11 +5,11 @@ from datetime import datetime
 from time import sleep
 
 from nebula import Nebula
-from utils import Vector, Color, generate_filename, get_runtime, get_gradient
+import utils
 import constants as c
 
 
-def parse_args(args: str = None) -> Namespace:
+def parse_args(args: list = None) -> Namespace:
     parser = ArgumentParser(description=c.DESCRIPTION)
 
     group_required = parser.add_argument_group('Required options')
@@ -52,13 +52,13 @@ def parse_args(args: str = None) -> Namespace:
 
 
 def render_image(args: Namespace) -> None:
-    size = Vector(args.width, args.height)
+    size = utils.Vector(args.width, args.height)
     max_count = args.max_count
     if max_count is None:
         max_count = (size.x * size.y) // 2
-    color_accent1 = Color(*args.color_accent1)
-    color_accent2 = Color(*args.color_accent2)
-    color_background = Color(*args.color_background)
+    color_accent1 = utils.Color(*args.color_accent1)
+    color_accent2 = utils.Color(*args.color_accent2)
+    color_background = utils.Color(*args.color_background)
 
 
     start_date = datetime.now()
@@ -67,7 +67,7 @@ def render_image(args: Namespace) -> None:
     nebula.develop(args.find_percent)
 
     if args.multicolor:
-        gradient = get_gradient(nebula.current_generation, color_accent1, color_accent2)
+        gradient = utils.get_gradient(nebula.current_generation, color_accent1, color_accent2)
 
     print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
     sleep(1)
@@ -95,7 +95,7 @@ def render_image(args: Namespace) -> None:
             else:
                 draw.point([x, y], color_background)
 
-    image_name = f'{size.x}x{size.y}_({nebula.count}#{max_count})_{args.reproduce_chance}_{generate_filename()}.png'
+    image_name = f'{size.x}x{size.y}_({nebula.count}#{max_count})_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
     if args.save:
         if args.path:
@@ -106,7 +106,7 @@ def render_image(args: Namespace) -> None:
             image_path = image_name
     image.show()
 
-    get_runtime(start_date)
+    utils.get_runtime(start_date)
 
     return image_path
 

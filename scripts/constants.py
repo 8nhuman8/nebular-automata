@@ -30,3 +30,7 @@ COLORS_METAVAR = ('R', 'G', 'B', 'A')
 
 NOTIFICATION_MSG_BEFORE_RENDERING = ('\nNow the data will be processed and converted '
                                      'to a graphical representation.\nIt can take some time.')
+
+
+TELEGRAM_IMAGES_SAVE_PATH = './telegram_images/'
+CONFIG_PATH = './cfg.json'

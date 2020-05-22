@@ -21,8 +21,8 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 1. Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
 2. Open the folder with the scripts.
 3. Check out all the command-line parameters.
-4. Run the `main.py` with `python main.py --help` and read the description with all the parameters.
-5. Run the `main.py` again with the parameters you need.
+4. Go to the 'scripts' folder.
+5. Run the `render.py` with `python render.py [parameters]`.
 6. Enjoy the beauty.
 
 ## Command-line arguments description
