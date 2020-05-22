@@ -17,4 +17,4 @@ gallery_old/
 telegram_images/
 
 # Telegram information
-telegram_config.txt
+telegram_cfg.json
