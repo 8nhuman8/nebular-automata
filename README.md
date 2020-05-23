@@ -37,9 +37,10 @@ But if you want to use another folder, then create it and change the `TELEGRAM_I
 
 ## Command-line arguments description
 ```
-usage: render.py [-h] [-rc FLOAT] [-mc INT] [-ca1 R G B A] [-cb R G B A] [-m]
-                 [-ca2 R G B A] [-fp FLOAT] [-fi] [-s] [-p PATH] [-si]
-                 width height
+usage: renderer.py [-h] [-rc FLOAT] [-mc INT] [-ca1 R G B A] [-cb R G B A]
+                   [-r] [-m] [-ca2 R G B A] [--min-percent FLOAT]
+                   [--max-percent FLOAT] [-fi] [-s] [-p PATH] [-si]
+                   width height
 
 Creates a beautiful nebula. Percentages show the duration of further program
 execution in ideal conditions! In fact, probability can take its toll.
@@ -67,6 +68,8 @@ Basic options:
                         The background color. Color components must be
                         specified between 0 and 255. The default color is
                         white.
+  -r, --random          Accent colors, reproduce chance, multicolor mode,
+                        fading will be random.
 
 Multicoloring options:
   -m, --multicolor      Enables multicolor mode.
@@ -77,8 +80,9 @@ Multicoloring options:
                         119, 255).
 
 Additional options:
-  -fp FLOAT, --find-percent FLOAT
-                        The program will work until a nebula is filled with a
+  --min-percent FLOAT   The program will work until nebula is filled with a
+                        certain or greater percentage.
+  --max-percent FLOAT   The program will work until a nebula is filled with a
                         certain percentage.
   -fi, --fade-in        The original color is white. The color of each new
                         generation will fade into the specified color.
