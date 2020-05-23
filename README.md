@@ -32,6 +32,9 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
    * if you made `"random": true` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
    * if you made `"random": false` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
 ### Some remarks on usage of Telegram bot
+Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.  
+I recommend using this [VPN](https://windscribe.com).
+
 If you made `"random": false` in [`config.json`](config.json), you don't have to write `-s` and `-p PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
 But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](scripts/constants.py).
 
