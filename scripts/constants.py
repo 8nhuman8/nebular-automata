@@ -35,4 +35,4 @@ NOTIFICATION_MSG_BEFORE_RENDERING = ('\nNow the data will be processed and conve
 
 TELEGRAM_IMAGES_SAVE_PATH = './telegram_images/'
 TELERGAM_IMAGE_PREFIX = '_telegram_'
-CONFIG_PATH = './cfg.json'
+CONFIG_PATH = './config.json'

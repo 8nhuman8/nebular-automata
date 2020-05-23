@@ -27,12 +27,12 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 4. Enjoy the beauty.
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters below.
-2. Add all the required information to the [`cfg.json`](cfg.json) in the root of repository.
+2. Add all the required information to the [`config.json`](config.json) in the root of repository.
 3. Go to the ['scripts'](scripts/) folder:
-   * if you made `"random": true` in [`cfg.json`](cfg.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
-   * if you made `"random": false` in [`cfg.json`](cfg.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
+   * if you made `"random": true` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
+   * if you made `"random": false` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
 ### Some remarks on usage of Telegram bot
-If you made `"random": false` in [`cfg.json`](cfg.json), you don't have to write `-s` and `-p PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
+If you made `"random": false` in [`config.json`](config.json), you don't have to write `-s` and `-p PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
 But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](scripts/constants.py).
 
 ## Command-line arguments description

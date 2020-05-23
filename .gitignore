@@ -17,4 +17,4 @@ gallery_old/
 _telegram_*
 
 # Telegram information
-telegram_cfg.json
+telegram_config.json

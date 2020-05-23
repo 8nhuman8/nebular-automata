@@ -4,7 +4,7 @@ from argparse import ArgumentParser
 from random import uniform, randint
 from json import load
 
-from render import parse_args, render_image
+from renderer import parse_args, render_image
 from constants import TELEGRAM_IMAGES_SAVE_PATH, CONFIG_PATH
 
 
@@ -16,26 +16,26 @@ def get_random_args() -> list:
     return args.split()
 
 
-def send_random_image(cfg: dict, args: list) -> None:
-    args.insert(0, cfg['width'])
-    args.insert(1, cfg['height'])
+def send_random_image(config: dict, args: list) -> None:
+    args.insert(0, config['width'])
+    args.insert(1, config['height'])
     image_path = render_image(parse_args(args), msg_send=True)
-    bot = Bot(cfg['token'])
-    bot.send_photo(cfg['chat_id'], open(image_path, 'rb'))
+    bot = Bot(config['token'])
+    bot.send_photo(config['chat_id'], open(image_path, 'rb'))
 
 
-def send_specific_image(cfg: dict) -> None:
+def send_specific_image(config: dict) -> None:
     image_path = render_image(parse_args(), msg_send=True)
-    bot = Bot(cfg['token'])
-    bot.send_photo(cfg['chat_id'], open(image_path, 'rb'))
+    bot = Bot(config['token'])
+    bot.send_photo(config['chat_id'], open(image_path, 'rb'))
 
 
 if __name__ == '__main__':
-    cfg = None
+    config = None
     with open(CONFIG_PATH, 'r') as json_file:
-        cfg = load(json_file)
+        config = load(json_file)
 
-    if cfg['random']:
-        send_random_image(cfg, get_random_args())
+    if config['random']:
+        send_random_image(config, get_random_args())
     else:
-        send_specific_image(cfg)
+        send_specific_image(config)
