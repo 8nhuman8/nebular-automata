@@ -60,7 +60,7 @@ def parse_args(args: list = None) -> Namespace:
         return parser.parse_args(args)
 
 
-def render_image(args: Namespace, msg_send: bool = False) -> None:
+def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     size = utils.Vector(args.width, args.height)
     max_count = args.max_count
     if max_count is None:
@@ -72,6 +72,9 @@ def render_image(args: Namespace, msg_send: bool = False) -> None:
     if args.random:
         color_accent1 = utils.Color(*utils.get_random_color())
         color_accent2 = utils.Color(*utils.get_random_color())
+        args.color_accent1 = tuple(color_accent1)
+        args.color_accent2 = tuple(color_accent2)
+
         args.reproduce_chance = round(uniform(0.5, 1), 2)
         # bool(getrandbits(1)) -> random boolean value
         args.multicolor = bool(getrandbits(1))
@@ -129,7 +132,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> None:
 
     utils.get_runtime(start_date)
 
-    return image_path
+    return (image_path, vars(args))
 
 
 if __name__ == '__main__':
