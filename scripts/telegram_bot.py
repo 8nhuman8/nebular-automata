@@ -18,15 +18,15 @@ def generate_caption(args_dict: dict) -> str:
     caption = 'width: ' + str(args_dict['width']) + '\n'
     caption += 'height: ' + str(args_dict['height']) + '\n'
     caption += 'reproduce chance: ' + str(args_dict['reproduce_chance']) + '\n'
-    caption += 'accent color 1: (' + ', '.join(map(str, list(args_dict['color_accent1']))) + ')\n'
-    caption += 'accent color 2: (' + ', '.join(map(str, list(args_dict['color_accent2']))) + ')\n'
-    caption += 'color_background: (' + ', '.join(map(str, list(args_dict['color_background']))) + ')\n'
+    caption += 'accent color 1: rgba(' + ', '.join(map(str, list(args_dict['color_accent1']))) + ')\n'
+    caption += 'accent color 2: rgba(' + ', '.join(map(str, list(args_dict['color_accent2']))) + ')\n'
+    caption += 'background color: rgba(' + ', '.join(map(str, list(args_dict['color_background']))) + ')\n'
     caption += 'multicolor: ' + str(args_dict['multicolor']) + '\n'
     caption += 'fade in: ' + str(args_dict['fade_in']) + '\n'
     return caption
 
 
-def send_random_image(config: dict, args: list) -> None:
+def send_random_image(config: dict, args: list, scheduled: bool = False) -> None:
     args.insert(0, config['width'])
     args.insert(1, config['height'])
 
@@ -35,6 +35,10 @@ def send_random_image(config: dict, args: list) -> None:
 
     bot = Bot(config['token'])
     bot.send_photo(config['chat_id'], open(image_path, 'rb'), caption=caption)
+
+    if scheduled:
+        args.pop(0)
+        args.pop(0)
 
 
 def send_specific_image(config: dict) -> None:

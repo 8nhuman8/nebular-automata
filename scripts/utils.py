@@ -17,7 +17,7 @@ def generate_filename(size: int=18) -> str:
 def get_runtime(start_date: datetime) -> None:
     print(f'\nStart date: {start_date.isoformat()}')
     print(f'End date: {datetime.now().isoformat()}')
-    print(f'Program took: {datetime.now() - start_date} to run')
+    print(f'Program took: {datetime.now() - start_date} to run\n')
 
 
 def get_random_color() -> tuple:
