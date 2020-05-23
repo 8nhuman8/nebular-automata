@@ -36,8 +36,10 @@ def parse_args(args: list = None) -> Namespace:
                                   help=c.HELP_COLOR_ACCENT2)
 
     group_additional = parser.add_argument_group('Additional options')
-    group_additional.add_argument('-fp', '--find-percent', metavar='FLOAT',
-                                  type=float, help=c.HELP_FIND_PERCENT)
+    group_additional.add_argument('--min-percent', metavar='FLOAT',
+                                  type=float, help=c.HELP_MIN_PERCENT)
+    group_additional.add_argument('--max-percent', metavar='FLOAT',
+                                  type=float, help=c.HELP_MAX_PERCENT)
     group_additional.add_argument('-fi', '--fade-in', action='store_true',
                                   help=c.HELP_FADE_IN)
 
@@ -68,7 +70,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> None:
     start_date = datetime.now()
 
     nebula = Nebula(size, max_count, args.reproduce_chance)
-    nebula.develop(find_percent=args.find_percent)
+    nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
 
     if args.multicolor:
         gradient = utils.get_gradient(nebula.current_generation, color_accent1, color_accent2)

@@ -83,22 +83,33 @@ class Nebula:
         self.not_reproduced_squares.append([starting_square])
 
 
-    def develop(self, find_percent: float = None) -> None:
+    def develop(self, min_percent: float = None, max_percent: float = None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.not_reproduced_squares.append([starting_square])
 
-        if find_percent:
+        if min_percent:
             while True:
                 while self.not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
                     self._output_debug_info()
                     current_generation_squares = self.not_reproduced_squares.popleft()
                     self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
 
-                    if self.count / self.max_count >= find_percent:
+                if self.count / self.max_count >= min_percent:
+                    break
+                else:
+                    self._destroy()
+        elif max_percent:
+            while True:
+                while self.not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
+                    self._output_debug_info()
+                    current_generation_squares = self.not_reproduced_squares.popleft()
+                    self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
+
+                    if self.count / self.max_count >= max_percent:
                         break
 
-                if self.count / self.max_count >= find_percent:
+                if self.count / self.max_count >= max_percent:
                     break
                 else:
                     self._destroy()

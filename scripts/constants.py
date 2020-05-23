@@ -16,8 +16,10 @@ HELP_COLOR_ACCENT2 = ('The second color of squares if multicolor mode is '
                       'enabled. Color components must be specified between 0 '
                       'and 255. The The default color is (r, g, b): (255, 29, 119, 255).')
 
-HELP_FIND_PERCENT = ('The program will work until a nebula '
-                     'is filled with a certain percentage.')
+HELP_MIN_PERCENT = ('The program will work until nebula is filled '
+                    'with a certain or greater percentage.')
+HELP_MAX_PERCENT = ('The program will work until a nebula '
+                    'is filled with a certain percentage.')
 HELP_FADE_IN = ('The original color is white. The color of each '
                 'new generation will fade into the specified color.')
 
