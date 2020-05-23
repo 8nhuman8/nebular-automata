@@ -3,6 +3,7 @@ from argparse import ArgumentParser, Namespace
 
 from datetime import datetime
 from time import sleep
+from random import uniform, getrandbits
 
 from nebula import Nebula
 import utils
@@ -27,6 +28,8 @@ def parse_args(args: list = None) -> Namespace:
     group_basic.add_argument('-cb', '--color-background', metavar=c.COLORS_METAVAR,
                              nargs=4, type=int, default=(255, 255, 255, 255),
                              help=c.HELP_COLOR_BACKGROUND)
+    group_basic.add_argument('-r', '--random', action='store_true',
+                             help=c.HELP_RANDOM)
 
     group_multicolor = parser.add_argument_group('Multicoloring options')
     group_multicolor.add_argument('-m', '--multicolor', action='store_true',
@@ -66,6 +69,14 @@ def render_image(args: Namespace, msg_send: bool = False) -> None:
     color_accent2 = utils.Color(*args.color_accent2)
     color_background = utils.Color(*args.color_background)
 
+    if args.random:
+        color_accent1 = utils.Color(*utils.get_random_color())
+        color_accent2 = utils.Color(*utils.get_random_color())
+        args.reproduce_chance = round(uniform(0.5, 1), 2)
+        # bool(getrandbits(1)) -> random boolean value
+        args.multicolor = bool(getrandbits(1))
+        args.fade_in = bool(getrandbits(1))
+
 
     start_date = datetime.now()
 
@@ -89,7 +100,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> None:
                     max_gen = nebula.current_generation
                     gen = nebula.squares[x][y].gen
 
-                    alpha = alpha = round((1 - gen / max_gen) * 255)
+                    alpha = round((1 - gen / max_gen) * 255)
                     if args.fade_in:
                         alpha = round(gen / max_gen * 255)
                     color_accent = color_accent1._replace(a=alpha)

@@ -10,6 +10,7 @@ HELP_COLOR_ACCENT1 = ('The first or (primary if multicolor mode is not enabled) 
                       'between 0 and 255. The The default color is aqua')
 HELP_COLOR_BACKGROUND = ('The background color. Color components must be '
                          'specified between 0 and 255. The default color is white.')
+HELP_RANDOM = 'Accent colors, reproduce chance, multicolor mode, fading will be random.'
 
 HELP_MULTICOLOR = 'Enables multicolor mode.'
 HELP_COLOR_ACCENT2 = ('The second color of squares if multicolor mode is '

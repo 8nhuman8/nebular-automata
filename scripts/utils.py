@@ -1,6 +1,6 @@
 from collections import namedtuple
 from string import ascii_lowercase, ascii_uppercase, digits
-from random import choice
+from random import choice, randint
 from datetime import datetime
 
 
@@ -18,6 +18,14 @@ def get_runtime(start_date: datetime) -> None:
     print(f'\nStart date: {start_date.isoformat()}')
     print(f'End date: {datetime.now().isoformat()}')
     print(f'Program took: {datetime.now() - start_date} to run')
+
+
+def get_random_color() -> tuple:
+    r = randint(0, 255)
+    g = randint(0, 255)
+    b = randint(0, 255)
+    a = randint(0, 255)
+    return (r, g, b, a)
 
 
 # gen: int -- generations count

@@ -9,10 +9,7 @@ from constants import TELEGRAM_IMAGES_SAVE_PATH, CONFIG_PATH
 
 
 def get_random_args() -> list:
-    args = f'-rc {round(uniform(0.5, 1), 2)} -m -ca1 '
-    args += f'{randint(0, 255)} {randint(0, 255)} {randint(0, 255)} {randint(0, 255)} -ca2 '
-    args += f'{randint(0, 255)} {randint(0, 255)} {randint(0, 255)} {randint(0, 255)} '
-    args += f'-fp {0.85}'
+    args = f'-r --min-percent {0.5}'
     return args.split()
 
 
