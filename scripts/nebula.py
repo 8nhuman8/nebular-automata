@@ -6,13 +6,14 @@ from utils import Square, Vector
 
 
 class Nebula:
-    def __init__(self, size: Vector, max_count: int, reproduce_chance: float):
+    def __init__(self, size: Vector, max_count: int, reproduce_chance: float, quadratic: bool = False):
         self.size = size
         self.starting_point = Vector(self.size.x // 2, self.size.y // 2)
 
         # The maximum allowable value of squares count
         self.max_count = max_count
         self.reproduce_chance = reproduce_chance
+        self.quadratic = quadratic
 
         # Current squares count
         self.count = 1
@@ -39,14 +40,24 @@ class Nebula:
         x = square.x
         y = square.y
 
+        neighboring_coordinates = None
+
         right = Vector(x + 1, y)
         up = Vector(x, y + 1)
         left = Vector(x - 1, y)
         bottom = Vector(x, y - 1)
 
-        neighboring_coordinates = [right, up, left, bottom]
-        neighboring_squares = []
+        if self.quadratic:
+            right_up = Vector(x + 1, y + 1)
+            right_down = Vector(x + 1, y - 1)
+            left_up = Vector(x - 1, y + 1)
+            left_down = Vector(x - 1, y - 1)
 
+            neighboring_coordinates = [right, up, left, bottom, right_up, right_down, left_up, left_down]
+        else:
+            neighboring_coordinates = [right, up, left, bottom]
+        
+        neighboring_squares = []
         # 'nc' stands for 'neighboring coordinate'
         for nc in neighboring_coordinates:
             if (
@@ -95,6 +106,7 @@ class Nebula:
                     current_generation_squares = self.not_reproduced_squares.popleft()
                     self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
 
+                print()
                 if self.count / self.max_count >= min_percent:
                     break
                 else:
@@ -109,6 +121,7 @@ class Nebula:
                     if self.count / self.max_count >= max_percent:
                         break
 
+                print()
                 if self.count / self.max_count >= max_percent:
                     break
                 else:
@@ -118,3 +131,4 @@ class Nebula:
                 self._output_debug_info()
                 current_generation_squares = self.not_reproduced_squares.popleft()
                 self.not_reproduced_squares.append(self._get_next_generation(current_generation_squares))
+            print()

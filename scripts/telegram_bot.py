@@ -9,20 +9,19 @@ from constants import TELEGRAM_IMAGES_SAVE_PATH, CONFIG_PATH
 
 
 def get_random_args() -> list:
-    args = f'-r --min-percent {0.5}'
+    args = f'-r -rc {uniform(0.498, 0.5)} -m -o --min-percent {0.5}'
     return args.split()
 
 
 def generate_caption(args_dict: dict) -> str:
-    # f-string don't work with dict for some reason
-    caption = 'width: ' + str(args_dict['width']) + '\n'
-    caption += 'height: ' + str(args_dict['height']) + '\n'
-    caption += 'reproduce chance: ' + str(args_dict['reproduce_chance']) + '\n'
-    caption += 'accent color 1: rgba(' + ', '.join(map(str, list(args_dict['color_accent1']))) + ')\n'
-    caption += 'accent color 2: rgba(' + ', '.join(map(str, list(args_dict['color_accent2']))) + ')\n'
-    caption += 'background color: rgba(' + ', '.join(map(str, list(args_dict['color_background']))) + ')\n'
-    caption += 'multicolor: ' + str(args_dict['multicolor']) + '\n'
-    caption += 'fade in: ' + str(args_dict['fade_in']) + '\n'
+    caption = f'width: {args_dict["width"]}\n'
+    caption += f'height: {args_dict["height"]}\n'
+    caption += f'reproduce chance: {args_dict["reproduce_chance"]}\n'
+    caption += f'accent color 1: rgba({", ".join(map(str, list(args_dict["color_accent1"])))})\n'
+    caption += f'accent color 2: rgba({", ".join(map(str, list(args_dict["color_accent2"])))})\n'
+    caption += f'background color: rgba({", ".join(map(str, list(args_dict["color_background"])))})\n'
+    caption += f'multicolor: {args_dict["multicolor"]}\n'
+    caption += f'fade in: {args_dict["fade_in"]}\n'
     return caption
 
 

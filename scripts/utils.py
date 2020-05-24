@@ -28,6 +28,10 @@ def get_random_color() -> tuple:
     return (r, g, b, a)
 
 
+def get_opaque_color(c: Color) -> Color:
+    return c._replace(a=255)
+
+
 # gen: int -- generations count
 # c1: Color -- color 1
 # c2: Color -- color 2

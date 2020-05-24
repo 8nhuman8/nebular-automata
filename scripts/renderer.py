@@ -3,7 +3,7 @@ from argparse import ArgumentParser, Namespace
 
 from datetime import datetime
 from time import sleep
-from random import uniform, getrandbits
+from random import uniform
 
 from nebula import Nebula
 import utils
@@ -28,8 +28,8 @@ def parse_args(args: list = None) -> Namespace:
     group_basic.add_argument('-cb', '--color-background', metavar=c.COLORS_METAVAR,
                              nargs=4, type=int, default=(255, 255, 255, 255),
                              help=c.HELP_COLOR_BACKGROUND)
-    group_basic.add_argument('-r', '--random', action='store_true',
-                             help=c.HELP_RANDOM)
+    group_basic.add_argument('-r', '--random-colors', action='store_true',
+                             help=c.HELP_RANDOM_COLORS)
 
     group_multicolor = parser.add_argument_group('Multicoloring options')
     group_multicolor.add_argument('-m', '--multicolor', action='store_true',
@@ -45,6 +45,10 @@ def parse_args(args: list = None) -> Namespace:
                                   type=float, help=c.HELP_MAX_PERCENT)
     group_additional.add_argument('-fi', '--fade-in', action='store_true',
                                   help=c.HELP_FADE_IN)
+    group_additional.add_argument('-q', '--quadratic', action='store_true',
+                                  help=c.HELP_QUADRATIC)
+    group_additional.add_argument('-o', '--opaque', action='store_true',
+                                  help=c.HELP_OPAQUE)
 
     group_system = parser.add_argument_group('System options')
     group_system.add_argument('-s', '--save', action='store_true',
@@ -62,28 +66,30 @@ def parse_args(args: list = None) -> Namespace:
 
 def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     size = utils.Vector(args.width, args.height)
+
     max_count = args.max_count
     if max_count is None:
         max_count = (size.x * size.y) // 2
+
     color_accent1 = utils.Color(*args.color_accent1)
     color_accent2 = utils.Color(*args.color_accent2)
     color_background = utils.Color(*args.color_background)
 
-    if args.random:
+    if args.random_colors:
         color_accent1 = utils.Color(*utils.get_random_color())
         color_accent2 = utils.Color(*utils.get_random_color())
-        args.color_accent1 = tuple(color_accent1)
-        args.color_accent2 = tuple(color_accent2)
 
-        args.reproduce_chance = round(uniform(0.5, 1), 2)
-        # bool(getrandbits(1)) -> random boolean value
-        args.multicolor = bool(getrandbits(1))
-        args.fade_in = bool(getrandbits(1))
+    if args.opaque:
+        color_accent1 = utils.get_opaque_color(color_accent1)
+        color_accent2 = utils.get_opaque_color(color_accent2)
+
+    args.color_accent1 = tuple(color_accent1)
+    args.color_accent2 = tuple(color_accent2)
 
 
     start_date = datetime.now()
 
-    nebula = Nebula(size, max_count, args.reproduce_chance)
+    nebula = Nebula(size, max_count, args.reproduce_chance, quadratic=args.quadratic)
     nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
 
     if args.multicolor:

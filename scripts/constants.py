@@ -10,7 +10,7 @@ HELP_COLOR_ACCENT1 = ('The first or (primary if multicolor mode is not enabled) 
                       'between 0 and 255. The The default color is aqua')
 HELP_COLOR_BACKGROUND = ('The background color. Color components must be '
                          'specified between 0 and 255. The default color is white.')
-HELP_RANDOM = 'Accent colors, reproduce chance, multicolor mode, fading will be random.'
+HELP_RANDOM_COLORS = 'Accent colors will be random.'
 
 HELP_MULTICOLOR = 'Enables multicolor mode.'
 HELP_COLOR_ACCENT2 = ('The second color of squares if multicolor mode is '
@@ -23,17 +23,20 @@ HELP_MAX_PERCENT = ('The program will work until a nebula '
                     'is filled with a certain percentage.')
 HELP_FADE_IN = ('The original color is white. The color of each '
                 'new generation will fade into the specified color.')
+HELP_QUADRATIC = ('Each square will be surrounded not only '
+                  'on each side, but also on each corner.')
+HELP_OPAQUE = 'All colors will be opaque.'
 
 HELP_SAVE = 'The generated image will be saved in the root if no path is specified.'
-HELP_PATH = ("The path by which the generated image will be saved. Write the path "
-             "without quotes, separating the directories with the usual single slash.")
+HELP_PATH = ('The path by which the generated image will be saved. Write the path '
+             'without quotes, separating the directories with the usual single slash.')
 HELP_SHOW_IMAGE = 'Show image after execution.'
 
 COLORS_METAVAR = ('R', 'G', 'B', 'A')
 
 
-NOTIFICATION_MSG_BEFORE_RENDERING = ('\nNow the data will be processed and converted '
-                                     'to a graphical representation.\nIt can take some time.')
+NOTIFICATION_MSG_BEFORE_RENDERING = ('Now the data will be processed and converted to a '
+                                     'graphical representation.\nIt can take some time.\n')
 
 
 TELEGRAM_IMAGES_SAVE_PATH = './telegram_images/'
