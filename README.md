@@ -43,12 +43,14 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Add all the required information to the [`config.json`](config.json) in the root of repository:
+
     1) Add your Telegram bot `token`.
     2) Add `chat_id` of your channel or chat. You can get it quickly by following my [gist](https://gist.github.com/8nhuman8/25f98c5e4b33d47a54cd510da221f309).
     3) Also set the image size.
     4) After that, you can choose to use arguments from the [`config.json`](config.json) or enter them in the console. The difference is that using the [`config.json`](config.json), you can specify random values of various arguments.
     5) If you chose not to use the [`config.json`](config.json), go to step 3. If not, read on.
     6) After that, you can set the values for different parameters in the `"args"` section:
+    
        * For `--reproduce-chance`, `--min-percent`, `--max-percent` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
          **start <= value <= end**  
          If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
