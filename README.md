@@ -1,9 +1,9 @@
-# Nebular automata
+# Nebular Automata
 A program for visualizing an interesting mathematical idea.
 
 ## Table of contents
 - [Idea](#idea)
-- [Remarks](#remarks)
+- [Some remarks](#some-remarks)
 - [Usage](#usage)
     + [Installation](#installation)
     + [Usage of renderer](#usage-of-renderer-rendererpy)
@@ -21,7 +21,7 @@ We will limit the growth of the population by setting a certain maximum allowabl
 
 As you probably noticed when looking at the images below, the edges of the shapes are more duller then its centre and, conversely, the center of the shape is duller than its edges on in some images. The fact is that with each generation, squares are created more white or more 'colored' specifically so that the process of structure development is visualized.
 
-## Remarks
+## Some remarks
 With **q** tending to **1**, the structure becomes more and more like a *rhombus*, that is not really surprising.  
 If the **q** is less than **0.5**, then the structure is *unlikely to grow*.  
 If **q** approximately equal to **0.5**, the structure is *complete chaos*.  
