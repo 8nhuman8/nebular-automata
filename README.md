@@ -5,10 +5,10 @@ A program for visualizing an interesting mathematical idea.
 - [Idea](#idea)
 - [Some remarks](#some-remarks)
 - [Usage](#usage)
-    + [Installation](#installation)
-    + [Usage of renderer](#usage-of-renderer-rendererpy)
-    + [Usage of Telegram bot](#usage-of-telegram-bot-telegram_botpy)
-    + [Some remarks on usage of Telegram bot](#some-remarks-on-usage-of-telegram-bot)
+  + [Installation](#installation)
+  + [Usage of renderer](#usage-of-renderer-rendererpy)
+  + [Usage of Telegram bot](#usage-of-telegram-bot-telegram_botpy)
+  + [Some remarks on usage of Telegram bot](#some-remarks-on-usage-of-telegram-bot)
 - [Command-line arguments description](#command-line-arguments-description)
 - [License](#license)
 - [Gallery](#gallery-images-created-by-this-program)
@@ -46,35 +46,35 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
     4) After that, you can choose to use arguments from the [`config.json`](config.json) or enter them in the console. The difference is that using the [`config.json`](config.json), you can specify random values of various arguments.
     5) If you chose not to use the [`config.json`](config.json), go to step 3. If not, read on.
     6) After that, you can set the values for different parameters in the `"args"` section:
-        - For `--reproduce-chance`, `--min-percent`, `--max-percent` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
-        **start <= value <= end**  
-        If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
-        - `--max-count` and `--color-background` arguments aren't used by default. The default background color is white, but if you want to set your own, enter the value like this:
-        ```json
-        "--color-background": [0, 2, 25, 255]
-        ```
-        - `--multicolor`, `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
-            + If you want to use some of these parameters, then just set the `"value"` to `true`, and `"random"` to `false` like this:
-            ```json
-            "--multicolor": {
-                "value": true,
-                "random": false
-            }
-            ```
-            + If you don't want to use some of these parameters, then just set both values to `false` like this:
-            ```json
-            "--fade-in": {
-                "value": false,
-                "random": false
-            }
-            ```
-            + If you want to get the value randomly, then specify it like this:
-            ```json
-            "--fade-in": {
-                "value": null,
-                "random": true
-            }
-            ```
+       * For `--reproduce-chance`, `--min-percent`, `--max-percent` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
+         **start <= value <= end**  
+         If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
+       * `--max-count` and `--color-background` arguments aren't used by default. The default background color is white, but if you want to set your own, enter the value like this:
+         ```json
+         "--color-background": [0, 2, 25, 255]
+         ```
+       * `--multicolor`, `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
+         + If you want to use some of these parameters, then just set the `"value"` to `true`, and `"random"` to `false` like this:
+           ```json
+           "--multicolor": {
+               "value": true,
+               "random": false
+           }
+           ```
+         + If you don't want to use some of these parameters, then just set both values to `false` like this:
+           ```json
+           "--fade-in": {
+               "value": false,
+               "random": false
+           }
+           ```
+         + If you want to get the value randomly, then specify it like this:
+           ```json
+           "--fade-in": {
+               "value": null,
+               "random": true
+           }
+           ```
 3. Go to the ['scripts'](scripts/) folder:
     * if you made `"use_config_args": true` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
     * if you made `"use_config_args": false` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
