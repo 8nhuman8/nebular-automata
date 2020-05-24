@@ -33,12 +33,12 @@ If **q** is equals to **1**, the structure becomes a *rhombus*.
 ### Installation
 Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
 ### Usage of renderer ([`renderer.py`](scripts/renderer.py))
-1. Check out all the command-line parameters below.
+1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Go to the ['scripts'](scripts/) folder.
 3. Run the `renderer.py` with `python renderer.py [parameters you need]`.
 4. Enjoy the beauty.
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
-1. Check out all the command-line parameters below.
+1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Add all the required information to the [`config.json`](config.json) in the root of repository:
     1) Add your Telegram bot `token`.
     2) Add `chat_id` of your channel or chat. You can get it quickly by following my [gist](https://gist.github.com/8nhuman8/25f98c5e4b33d47a54cd510da221f309).
