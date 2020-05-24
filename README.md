@@ -42,7 +42,7 @@ But if you want to use another folder, then create it and change the `TELEGRAM_I
 ```
 usage: renderer.py [-h] [-rc FLOAT] [-mc INT] [-ca1 R G B A] [-cb R G B A]
                    [-r] [-m] [-ca2 R G B A] [--min-percent FLOAT]
-                   [--max-percent FLOAT] [-fi] [-s] [-p PATH] [-si]
+                   [--max-percent FLOAT] [-fi] [-q] [-o] [-s] [-p PATH] [-si]
                    width height
 
 Creates a beautiful nebula. Percentages show the duration of further program
@@ -71,8 +71,7 @@ Basic options:
                         The background color. Color components must be
                         specified between 0 and 255. The default color is
                         white.
-  -r, --random          Accent colors, reproduce chance, multicolor mode,
-                        fading will be random.
+  -r, --random-colors   Accent colors will be random.
 
 Multicoloring options:
   -m, --multicolor      Enables multicolor mode.
@@ -89,6 +88,9 @@ Additional options:
                         certain percentage.
   -fi, --fade-in        The original color is white. The color of each new
                         generation will fade into the specified color.
+  -q, --quadratic       Each square will be surrounded not only on each side,
+                        but also on each corner.
+  -o, --opaque          All colors will be opaque.
 
 System options:
   -s, --save            The generated image will be saved in the root if no
