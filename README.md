@@ -1,6 +1,18 @@
 # Nebular automata
 A program for visualizing an interesting mathematical idea.
 
+## Table of contents
+- [Idea](#idea)
+- [Remarks](#remarks)
+- [Usage](#usage)
+    + [Installation](#installation)
+    + [Usage of renderer](#usage-of-renderer-rendererpy)
+    + [Usage of Telegram bot](#usage-of-telegram-bot-telegram_botpy)
+    + [Some remarks on usage of Telegram bot](#some-remarks-on-usage-of-telegram-bot)
+- [Command-line arguments description](#command-line-arguments-description)
+- [License](#license)
+- [Gallery](#gallery-images-created-by-this-program)
+
 ## Idea
 >The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
 
