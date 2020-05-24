@@ -29,7 +29,7 @@ With **q** approximately equal to **0.6**, the structure resembles a *circle*.
 If **q** is in **\[0.7, 1)**, the the structure looks like a *convex rhombus*.  
 If **q** is equals to **1**, the structure becomes a *rhombus*.
 
-In fact, we can also generate squares if we surround each square not only on each side, but also on each corner. Therefore, I added an additional '--quadratic' parameter to generate squares.
+In fact, we can also generate squares if we surround each square not only on each side, but also on each corner. Therefore, I added an additional `--quadratic` parameter to generate squares.
 
 ## Usage
 
