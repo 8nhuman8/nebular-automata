@@ -19,7 +19,7 @@ A program for visualizing an interesting mathematical idea.
 Let a square be surrounded on each side by a new square of the same size with a chance of **q**. Newly formed squares reproduce other squares and so on, to infinity.  
 We will limit the growth of the population by setting a certain maximum allowable number of squares, upon reaching which the program will be completed.
 
-As you probably noticed when looking at the images below, the edges of the shapes are more duller then its centre and, conversely, the center of the shape is duller than its edges on in some images. The fact is that with each generation, squares are created more white or more 'colored' specifically so that the process of structure development is visualized.
+As you probably noticed when looking at the images [below](#gallery-images-created-by-this-program), the edges of the shapes have a different color, into which the initial color smoothly flows. This was done not only to illustrate the process of structure development, but also for greater saturation and prettiness of images.
 
 ## Some remarks
 With **q** tending to **1**, the structure becomes more and more like a *rhombus*, that is not really surprising.  
@@ -28,6 +28,8 @@ If **q** approximately equal to **0.5**, the structure is *complete chaos*.
 With **q** approximately equal to **0.6**, the structure resembles a *circle*.  
 If **q** is in **\[0.7, 1)**, the the structure looks like a *convex rhombus*.  
 If **q** is equals to **1**, the structure becomes a *rhombus*.
+
+In fact, we can also generate squares if we surround each square not only on each side, but also on each corner. Therefore, I added an additional '--quadratic' parameter to generate squares.
 
 ## Usage
 
@@ -91,7 +93,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.  
 I recommend using this [VPN](https://windscribe.com).
 
-If you made `"use_config_args": false` in [`config.json`](config.json), you don't have to write `-s` and `-p PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
+If you made `"use_config_args": false` in [`config.json`](config.json), you don't have to write `--save` and `--path PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
 But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](scripts/constants.py).
 
 ## Command-line arguments description
