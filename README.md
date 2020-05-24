@@ -27,10 +27,45 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 4. Enjoy the beauty.
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters below.
-2. Add all the required information to the [`config.json`](config.json) in the root of repository.
+2. Add all the required information to the [`config.json`](config.json) in the root of repository:
+    1) Add your Telegram bot `token`.
+    2) Add `chat_id` of your channel or chat. You can get it quickly by following my [gist](https://gist.github.com/8nhuman8/25f98c5e4b33d47a54cd510da221f309).
+    3) Also set the image size.
+    4) After that, you can choose to use arguments from the [`config.json`](config.json) or enter them in the console. The difference is that using the [`config.json`](config.json), you can specify random values of various arguments.
+    5) If you chose not to use the [`config.json`](config.json), go to step 3. If not, read on.
+    6) After that, you can set the values for different parameters in the `"args"` section:
+        - For `--reproduce-chance`, `--min-percent`, `--max-percent` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
+        **start <= value <= end**  
+        If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
+        - `--max-count` and `--color-background` arguments aren't used by default. The default background color is white, but if you want to set your own, enter the value like this:
+        ```json
+        "--color-background": [0, 2, 25, 255]
+        ```
+        - `--multicolor`, `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
+            + If you want to use some of these parameters, then just set the `"value"` to `true`, and `"random"` to `false` like this:
+            ```json
+            "--multicolor": {
+                "value": true,
+                "random": false
+            }
+            ```
+            + If you don't want to use some of these parameters, then just set both values to `false` like this:
+            ```json
+            "--fade-in": {
+                "value": false,
+                "random": false
+            }
+            ```
+            + If you want to get the value randomly, then specify it like this:
+            ```json
+            "--fade-in": {
+                "value": null,
+                "random": true
+            }
+            ```
 3. Go to the ['scripts'](scripts/) folder:
-   * if you made `"random": true` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
-   * if you made `"random": false` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
+    * if you made `"use_config_args": true` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
+    * if you made `"use_config_args": false` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
 ### Some remarks on usage of Telegram bot
 Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.  
 I recommend using this [VPN](https://windscribe.com).
