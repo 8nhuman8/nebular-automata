@@ -30,13 +30,16 @@ If **q** is in **\[0.7, 1)**, the the structure looks like a *convex rhombus*.
 If **q** is equals to **1**, the structure becomes a *rhombus*.
 
 ## Usage
+
 ### Installation
 Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
+
 ### Usage of renderer ([`renderer.py`](scripts/renderer.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Go to the ['scripts'](scripts/) folder.
 3. Run the `renderer.py` with `python renderer.py [parameters you need]`.
 4. Enjoy the beauty.
+
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Add all the required information to the [`config.json`](config.json) in the root of repository:
@@ -54,35 +57,39 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
          "--color-background": [0, 2, 25, 255]
          ```
        * `--multicolor`, `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
-         + If you want to use some of these parameters, then just set the `"value"` to `true`, and `"random"` to `false` like this:
-           ```json
-           "--multicolor": {
-               "value": true,
-               "random": false
-           }
-           ```
-         + If you don't want to use some of these parameters, then just set both values to `false` like this:
-           ```json
-           "--fade-in": {
-               "value": false,
-               "random": false
-           }
-           ```
-         + If you want to get the value randomly, then specify it like this:
-           ```json
-           "--fade-in": {
-               "value": null,
-               "random": true
-           }
-           ```
+       
+         If you want to use some of these parameters, then just set the `"value"` to `true`, and `"random"` to `false` like this:
+         ```json
+         "--multicolor": {
+             "value": true,
+             "random": false
+         }
+         
+         ```
+         If you don't want to use some of these parameters, then just set both values to `false` like this:
+         ```json
+         "--fade-in": {
+             "value": false,
+             "random": false
+         }
+         
+         ```
+         If you want to get the value randomly, then specify it like this:
+         ```json
+         "--fade-in": {
+             "value": null,
+             "random": true
+         }
+         ```
 3. Go to the ['scripts'](scripts/) folder:
     * if you made `"use_config_args": true` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
     * if you made `"use_config_args": false` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
+
 ### Some remarks on usage of Telegram bot
 Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.  
 I recommend using this [VPN](https://windscribe.com).
 
-If you made `"random": false` in [`config.json`](config.json), you don't have to write `-s` and `-p PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
+If you made `"use_config_args": false` in [`config.json`](config.json), you don't have to write `-s` and `-p PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
 But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](scripts/constants.py).
 
 ## Command-line arguments description
