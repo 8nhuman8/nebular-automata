@@ -1,7 +1,51 @@
 {
     "token": "",
     "chat_id": "",
+
     "width": "",
     "height": "",
-    "random": true
+
+    "use_config_args": true,
+    "args": {
+        "--reproduce-chance": {
+            "value": 0.5,
+            "start": null,
+            "end": null
+        },
+
+        "--min-percent": {
+            "value": 0.5,
+            "start": null,
+            "end": null
+        },
+        "--max-percent": {
+            "value": null,
+            "start": null,
+            "end": null
+        },
+
+        "--max-count": null,
+        "--color-background": [255, 255, 255, 255],
+
+        "--multicolor": {
+            "value": true,
+            "random": false
+        },
+        "--opaque": {
+            "value": true,
+            "random": false
+        },
+        "--random-colors": {
+            "value": true,
+            "random": false
+        },
+        "--fade-in": {
+            "value": false,
+            "random": false
+        },
+        "--quadratic": {
+            "value": false,
+            "random": false
+        }
+    }
 }

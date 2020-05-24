@@ -1,16 +1,48 @@
 from telegram import Bot
 from argparse import ArgumentParser
 
-from random import uniform, randint
+from random import uniform, getrandbits
 from json import load
 
 from renderer import parse_args, render_image
 from constants import TELEGRAM_IMAGES_SAVE_PATH, CONFIG_PATH
 
 
-def get_random_args() -> list:
-    args = f'-r -rc {uniform(0.498, 0.5)} -m -o --min-percent {0.5}'
-    return args.split()
+def parse_config(config: dict) -> list:
+    args = []
+    for key, value in config['args'].items():
+        if key == '--reproduce-chance':
+            if value['start'] is not None:
+                args.append(key)
+                args.append(str(uniform(value["start"], value["end"])))
+            elif value['value']:
+                args.append(key)
+                args.append(str(value["value"]))
+            else:
+                args.append(key)
+                args.append(str(uniform(0.5, 1)))
+        elif 'percent' in key:
+            if value['start'] is not None:
+                args.append(key)
+                args.append(str(uniform(value["start"], value["end"])))
+            elif value['value']:
+                args.append(key)
+                args.append(str(value["value"]))
+        elif type(value) is list:
+            args.append(key)
+            for i in range(4):
+                args.append(str(value[i]))
+        elif type(value) is int:
+            args.append(key)
+            args.append(str(value))
+        elif type(value) is dict:
+            if value['random']:
+                if bool(getrandbits(1)):
+                    args.append(key)
+            else:
+                if value['value']:
+                    args.append(key)
+    return args
 
 
 def generate_caption(args_dict: dict) -> str:
@@ -25,7 +57,8 @@ def generate_caption(args_dict: dict) -> str:
     return caption
 
 
-def send_random_image(config: dict, args: list, scheduled: bool = False) -> None:
+def send_random_image(config: dict, scheduled: bool = False) -> None:
+    args = parse_config(config)
     args.insert(0, config['width'])
     args.insert(1, config['height'])
 
@@ -53,7 +86,7 @@ if __name__ == '__main__':
     with open(CONFIG_PATH, 'r') as json_file:
         config = load(json_file)
 
-    if config['random']:
-        send_random_image(config, get_random_args())
+    if config['use_config_args']:
+        send_random_image(config)
     else:
         send_specific_image(config)
