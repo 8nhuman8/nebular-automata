@@ -125,7 +125,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     image_path = None
     if args.save or msg_send:
         if args.path:
-            image.save(args.path + image_name, 'PNG')
+            image.save(args.path + image_name, format='PNG', optimize=True, quality=1)
             image_path = args.path + image_name
         elif msg_send:
             image.save(c.TELEGRAM_IMAGES_SAVE_PATH + c.TELERGAM_IMAGE_PREFIX + image_name, 'PNG')
