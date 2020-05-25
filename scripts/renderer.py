@@ -121,7 +121,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
             else:
                 draw.point([x, y], color_background)
 
-    image_name = f'{size.x}x{size.y}_({nebula.count}#{max_count})_{args.reproduce_chance}_{utils.generate_filename()}.png'
+    image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
     if args.save or msg_send:
         if args.path:
