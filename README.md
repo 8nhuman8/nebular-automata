@@ -126,7 +126,7 @@ Basic options:
 Multicoloring options:
   -r, --random-colors   Accent colors will be random.
   -cn INT, --colors-number INT
-                        How many colors will be used.
+                        How many colors will be used. By default it is 3.
   -o, --opaque          All colors will be opaque.
 
 Additional options:
@@ -157,3 +157,16 @@ System options:
 Copyright (c) 2020 Artyom Bezmenov
 
 ## Gallery (images created by this program)
+![](gallery/1.png)
+![](gallery/2.png)
+![](gallery/3.png)
+![](gallery/4.png)
+![](gallery/5.png)
+![](gallery/6.png)
+![](gallery/7.png)
+![](gallery/8.png)
+![](gallery/9.png)
+![](gallery/10.png)
+![](gallery/11.png)
+![](gallery/12.png)
+![](gallery/13.png)

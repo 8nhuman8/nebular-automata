@@ -33,7 +33,8 @@ def parse_args(args: list = None) -> Namespace:
     group_multicolor.add_argument('-r', '--random-colors', action='store_true',
                                   help=c.HELP_RANDOM_COLORS)
     group_multicolor.add_argument('-cn', '--colors-number', metavar='INT',
-                                  type=int, help=c.HELP_COLORS_NUMBER)
+                                  type=int, default=3,
+                                  help=c.HELP_COLORS_NUMBER)
     group_multicolor.add_argument('-o', '--opaque', action='store_true',
                                   help=c.HELP_OPAQUE)
 
