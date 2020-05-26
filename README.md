@@ -54,15 +54,15 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
        * For `--reproduce-chance`, `--min-percent`, `--max-percent` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
          **start <= value <= end**  
          If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
-       * `--max-count` and `--color-background` arguments aren't used by default. The default background color is white, but if you want to set your own, enter the value like this:
+       * `--max-count` and `--color-background` arguments aren't used by default. The default background color is white, but if you want to set your own, enter the value as RGBA like this:
          ```json
          "--color-background": [0, 2, 25, 255]
          ```
-       * `--multicolor`, `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
+       * `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
 
          If you want to use some of these parameters, then just set the `"value"` to `true`, and `"random"` to `false` like this:
          ```json
-         "--multicolor": {
+         "--quadratic": {
              "value": true,
              "random": false
          }
@@ -78,7 +78,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
          ```
          If you want to get the value randomly, then specify it like this:
          ```json
-         "--fade-in": {
+         "--opaque": {
              "value": null,
              "random": true
          }

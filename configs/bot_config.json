@@ -27,10 +27,6 @@
         "--max-count": null,
         "--color-background": null,
 
-        "--multicolor": {
-            "value": true,
-            "random": false
-        },
         "--opaque": {
             "value": true,
             "random": false
