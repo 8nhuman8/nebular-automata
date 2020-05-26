@@ -57,6 +57,14 @@ def generate_caption(args_dict: dict, colors: list) -> str:
     return caption
 
 
+def send_image(config: dict, image_path: str, caption: str) -> None:
+    bot = Bot(config['token'])
+    if config['use_caption']:
+        bot.send_photo(config['chat_id'], open(image_path, 'rb'), caption=caption)
+    else:
+        bot.send_photo(config['chat_id'], open(image_path, 'rb'))
+
+
 def send_random_image(config: dict, scheduled: bool = False) -> None:
     args = parse_config_args(config)
     args.insert(0, config['width'])
@@ -65,8 +73,7 @@ def send_random_image(config: dict, scheduled: bool = False) -> None:
     image_path, args_dict, colors = render_image(parse_args(args), msg_send=True)
     caption = generate_caption(args_dict, colors)
 
-    bot = Bot(config['token'])
-    bot.send_photo(config['chat_id'], open(image_path, 'rb'), caption=caption)
+    send_image(config, image_path, caption)
 
     if scheduled:
         args.pop(0)
@@ -76,9 +83,7 @@ def send_random_image(config: dict, scheduled: bool = False) -> None:
 def send_specific_image(config: dict) -> None:
     image_path, args_dict, colors = render_image(parse_args(), msg_send=True)
     caption = generate_caption(args_dict, colors)
-
-    bot = Bot(config['token'])
-    bot.send_photo(config['chat_id'], open(image_path, 'rb'), caption=caption)
+    send_image(config, image_path, caption)
 
 
 if __name__ == '__main__':

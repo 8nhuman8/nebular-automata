@@ -5,6 +5,7 @@
     "width": "1000",
     "height": "1000",
 
+    "use_caption": true,
     "use_config_args": true,
     "args": {
         "--reproduce-chance": {
