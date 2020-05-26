@@ -38,9 +38,8 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 
 ### Usage of renderer ([`renderer.py`](scripts/renderer.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
-2. Go to the ['scripts'](scripts/) folder.
-3. Run the `renderer.py` with `python renderer.py [parameters you need]`.
-4. Enjoy the beauty.
+2. Run the `renderer.py` with `python scripts/renderer.py [parameters you need]`.
+3. Enjoy the beauty.
 
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
@@ -85,22 +84,21 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
          }
          ```
 
-3. Go to the ['scripts'](scripts/) folder:
-    * if you made `"use_config_args": true` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
-    * if you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
+3.  * if you made `"use_config_args": true` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python scripts/telegram_bot.py`.
+    * if you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python scripts/telegram_bot.py [parameters you need]`.
 
 ### Some remarks on usage of Telegram bot
 Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.  
 I recommend using this [VPN](https://windscribe.com).
 
-If you made `"use_config_args": false` in [`config.json`](config.json), you don't have to write `--save` and `--path PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
+If you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json), you don't have to write `--save` and `--path PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
 But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](scripts/constants.py).
 
 ## Command-line arguments description
 ```
-usage: renderer.py [-h] [-rc FLOAT] [-mc INT] [-ca1 R G B A] [-cb R G B A]
-                   [-r] [-m] [-ca2 R G B A] [--min-percent FLOAT]
-                   [--max-percent FLOAT] [-fi] [-q] [-o] [-s] [-p PATH] [-si]
+usage: renderer.py [-h] [-rc FLOAT] [-mc INT] [-cb R G B A] [-r] [-cn INT]
+                   [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH]
+                   [-dsi]
                    width height
 
 Creates a beautiful nebula. Percentages show the duration of further program
@@ -120,35 +118,28 @@ Basic options:
                         The maximum number of squares in the image. By
                         default, this is half of all pixels in the future
                         image.
-  -ca1 R G B A, --color-accent1 R G B A
-                        The first or (primary if multicolor mode is not
-                        enabled) color of squares. Color components must be
-                        specified between 0 and 255. The The default color is
-                        aqua
   -cb R G B A, --color-background R G B A
                         The background color. Color components must be
                         specified between 0 and 255. The default color is
                         white.
-  -r, --random-colors   Accent colors will be random.
 
 Multicoloring options:
-  -m, --multicolor      Enables multicolor mode.
-  -ca2 R G B A, --color-accent2 R G B A
-                        The second color of squares if multicolor mode is
-                        enabled. Color components must be specified between 0
-                        and 255. The The default color is (r, g, b): (255, 29,
-                        119, 255).
+  -r, --random-colors   Accent colors will be random.
+  -cn INT, --colors-number INT
+                        How many colors will be used.
+  -o, --opaque          All colors will be opaque.
 
 Additional options:
-  --min-percent FLOAT   The program will work until nebula is filled with a
+  -minp FLOAT, --min-percent FLOAT
+                        The program will work until nebula is filled with a
                         certain or greater percentage.
-  --max-percent FLOAT   The program will work until a nebula is filled with a
+  -maxp FLOAT, --max-percent FLOAT
+                        The program will work until a nebula is filled with a
                         certain percentage.
   -fi, --fade-in        The original color is white. The color of each new
                         generation will fade into the specified color.
   -q, --quadratic       Each square will be surrounded not only on each side,
                         but also on each corner.
-  -o, --opaque          All colors will be opaque.
 
 System options:
   -s, --save            The generated image will be saved in the root if no
@@ -156,7 +147,8 @@ System options:
   -p PATH, --path PATH  The path by which the generated image will be saved.
                         Write the path without quotes, separating the
                         directories with the usual single slash.
-  -si, --show-image     Show image after execution.
+  -dsi, --dont-show-image
+                        Do not show image after execution.
 ```
 
 ## License

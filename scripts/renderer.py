@@ -20,44 +20,40 @@ def parse_args(args: list = None) -> Namespace:
 
     group_basic = parser.add_argument_group('Basic options')
     group_basic.add_argument('-rc', '--reproduce-chance', metavar='FLOAT',
-                             type=float, default=0.51, help=c.HELP_REPRODUCE_CHANCE)
+                             type=float, default=0.51,
+                             help=c.HELP_REPRODUCE_CHANCE)
     group_basic.add_argument('-mc', '--max-count', metavar='INT',
                              type=int, help=c.HELP_MAX_COUNT)
-    group_basic.add_argument('-ca1', '--color-accent1', metavar=c.COLORS_METAVAR,
-                             nargs=4, type=int, default=(0, 255, 255, 255),
-                             help=c.HELP_COLOR_ACCENT1)
-    group_basic.add_argument('-cb', '--color-background', metavar=c.COLORS_METAVAR,
-                             nargs=4, type=int, default=(255, 255, 255, 255),
+    group_basic.add_argument('-cb', '--color-background',
+                             metavar=('R', 'G', 'B', 'A'), nargs=4, type=int,
+                             default=(255, 255, 255, 255),
                              help=c.HELP_COLOR_BACKGROUND)
-    group_basic.add_argument('-r', '--random-colors', action='store_true',
-                             help=c.HELP_RANDOM_COLORS)
 
     group_multicolor = parser.add_argument_group('Multicoloring options')
-    group_multicolor.add_argument('-m', '--multicolor', action='store_true',
-                                  help=c.HELP_MULTICOLOR)
-    group_multicolor.add_argument('-ca2', '--color-accent2', metavar=c.COLORS_METAVAR,
-                                  nargs=4, type=int, default=(255, 29, 119, 255),
-                                  help=c.HELP_COLOR_ACCENT2)
+    group_multicolor.add_argument('-r', '--random-colors', action='store_true',
+                                  help=c.HELP_RANDOM_COLORS)
+    group_multicolor.add_argument('-cn', '--colors-number', metavar='INT',
+                                  type=int, help=c.HELP_COLORS_NUMBER)
+    group_multicolor.add_argument('-o', '--opaque', action='store_true',
+                                  help=c.HELP_OPAQUE)
 
     group_additional = parser.add_argument_group('Additional options')
-    group_additional.add_argument('--min-percent', metavar='FLOAT',
+    group_additional.add_argument('-minp', '--min-percent', metavar='FLOAT',
                                   type=float, help=c.HELP_MIN_PERCENT)
-    group_additional.add_argument('--max-percent', metavar='FLOAT',
+    group_additional.add_argument('-maxp', '--max-percent', metavar='FLOAT',
                                   type=float, help=c.HELP_MAX_PERCENT)
     group_additional.add_argument('-fi', '--fade-in', action='store_true',
                                   help=c.HELP_FADE_IN)
     group_additional.add_argument('-q', '--quadratic', action='store_true',
                                   help=c.HELP_QUADRATIC)
-    group_additional.add_argument('-o', '--opaque', action='store_true',
-                                  help=c.HELP_OPAQUE)
 
     group_system = parser.add_argument_group('System options')
     group_system.add_argument('-s', '--save', action='store_true',
                               help=c.HELP_SAVE)
     group_system.add_argument('-p', '--path', metavar='PATH',
                               type=str, help=c.HELP_PATH)
-    group_system.add_argument('-si', '--show-image', action='store_true',
-                              help=c.HELP_SHOW_IMAGE)
+    group_system.add_argument('-dsi', '--dont-show-image', action='store_false',
+                              help=c.HELP_DONT_SHOW_IMAGE)
 
     if args is None:
         return parser.parse_args()
@@ -69,8 +65,7 @@ def get_config_colors() -> list:
     colors_dict = None
     with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
-    colors = list(colors_dict.values())
-    return [utils.Color(*color) for color in colors]
+    return list(colors_dict.values())
 
 
 def render_image(args: Namespace, msg_send: bool = False) -> tuple:
@@ -80,29 +75,24 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     if max_count is None:
         max_count = (size.x * size.y) // 2
 
-    color_accent1 = utils.Color(*args.color_accent1)
-    color_accent2 = utils.Color(*args.color_accent2)
-    color_background = utils.Color(*args.color_background)
-
-    if args.random_colors:
-        color_accent1 = utils.Color(*utils.get_random_color())
-        color_accent2 = utils.Color(*utils.get_random_color())
-
-    if args.opaque:
-        color_accent1 = utils.get_opaque_color(color_accent1)
-        color_accent2 = utils.get_opaque_color(color_accent2)
-
-    args.color_accent1 = tuple(color_accent1)
-    args.color_accent2 = tuple(color_accent2)
-
+    color_background = tuple(args.color_background)
 
     start_date = datetime.now()
 
     nebula = Nebula(size, max_count, args.reproduce_chance, quadratic=args.quadratic)
     nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
 
-    if args.multicolor:
-        gradient = utils.get_gradient(nebula.current_generation, get_config_colors())
+    colors = get_config_colors()
+
+    if args.random_colors:
+        colors = utils.get_random_colors(args.colors_number)
+        gradient = utils.get_gradient(nebula.current_generation, colors)
+    elif len(colors) > 1:
+        gradient = utils.get_gradient(nebula.current_generation, colors)
+
+    if args.opaque:
+        for color in colors:
+            color[3] = 255
 
     print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
     sleep(1)
@@ -114,16 +104,17 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
         print(f'[{datetime.now().isoformat()}]', 'Image drawing:', '{:.5f}'.format(x / size.x * 100) + ' %', sep='\t')
         for y in range(size.y + 1):
             if nebula.squares[x][y]:
-                if not args.multicolor:
+                if len(colors) == 1:
                     max_gen = nebula.current_generation
                     gen = nebula.squares[x][y].gen
 
                     alpha = round((1 - gen / max_gen) * 255)
                     if args.fade_in:
                         alpha = round(gen / max_gen * 255)
-                    color_accent = color_accent1._replace(a=alpha)
 
-                    draw.point([x, y], fill=color_accent)
+                    colors[0][3] = alpha
+
+                    draw.point([x, y], fill=tuple(colors[0]))
                 else:
                     gen = nebula.squares[x][y].gen - 1
                     draw.point([x, y], fill=gradient[gen])
@@ -142,12 +133,12 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
         else:
             image.save(image_name, 'PNG')
             image_path = image_name
-    if args.show_image:
+    if args.dont_show_image:
         image.show()
 
     utils.get_runtime(start_date)
 
-    return image_path, vars(args)
+    return image_path, vars(args), colors
 
 
 if __name__ == '__main__':

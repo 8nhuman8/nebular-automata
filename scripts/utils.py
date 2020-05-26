@@ -20,24 +20,19 @@ def get_runtime(start_date: datetime) -> None:
     print(f'Program took: {datetime.now() - start_date} to run\n')
 
 
-def get_renadom_colors(n: int) -> list:
+def get_random_colors(n: int) -> list:
+    def get_random_color() -> tuple:
+        r = randint(0, 255)
+        g = randint(0, 255)
+        b = randint(0, 255)
+        a = randint(0, 255)
+        return [r, g, b, a]
     return [get_random_color() for _ in range(n)]
-
-
-def get_random_color() -> tuple:
-    r = randint(0, 255)
-    g = randint(0, 255)
-    b = randint(0, 255)
-    a = randint(0, 255)
-    return (r, g, b, a)
-
-
-def get_opaque_color(c: Color) -> Color:
-    return c._replace(a=255)
 
 
 # gens: int -- generations count
 def get_gradient(gens: int, colors: list) -> list:
+    colors = [Color(*color) for color in colors]
     gradient = get_gradient2(gens // (len(colors) - 1), colors[0], colors[1])
 
     grads = []
