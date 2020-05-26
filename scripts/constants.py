@@ -41,4 +41,5 @@ NOTIFICATION_MSG_BEFORE_RENDERING = ('Now the data will be processed and convert
 
 TELEGRAM_IMAGES_SAVE_PATH = './telegram_images/'
 TELERGAM_IMAGE_PREFIX = '_telegram_'
-CONFIG_PATH = './config.json'
+BOT_CONFIG_PATH = './configs/bot_config.json'
+COLORS_CONFIG_PATH = './configs/colors_config.json'

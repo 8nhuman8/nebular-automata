@@ -4,6 +4,7 @@ from argparse import ArgumentParser, Namespace
 from datetime import datetime
 from time import sleep
 from random import uniform
+from json import load
 
 from nebula import Nebula
 import utils
@@ -64,6 +65,14 @@ def parse_args(args: list = None) -> Namespace:
         return parser.parse_args(args)
 
 
+def get_config_colors() -> list:
+    colors_dict = None
+    with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
+        colors_dict = load(json_file)
+    colors = list(colors_dict.values())
+    return [utils.Color(*color) for color in colors]
+
+
 def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     size = utils.Vector(args.width, args.height)
 
@@ -93,7 +102,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
 
     if args.multicolor:
-        gradient = utils.get_gradient(nebula.current_generation, color_accent1, color_accent2)
+        gradient = utils.get_gradient(nebula.current_generation, get_config_colors())
 
     print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
     sleep(1)
@@ -114,12 +123,12 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
                         alpha = round(gen / max_gen * 255)
                     color_accent = color_accent1._replace(a=alpha)
 
-                    draw.point([x, y], color_accent)
+                    draw.point([x, y], fill=color_accent)
                 else:
                     gen = nebula.squares[x][y].gen - 1
-                    draw.point([x, y], gradient[gen])
+                    draw.point([x, y], fill=gradient[gen])
             else:
-                draw.point([x, y], color_background)
+                draw.point([x, y], fill=color_background)
 
     image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
@@ -138,7 +147,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
 
     utils.get_runtime(start_date)
 
-    return (image_path, vars(args))
+    return image_path, vars(args)
 
 
 if __name__ == '__main__':

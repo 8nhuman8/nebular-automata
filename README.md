@@ -44,13 +44,13 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
-2. Add all the required information to the [`config.json`](config.json) in the root of repository:
+2. Add all the required information to the [`bot_config.json`](configs/bot_config.json) in the root of repository:
 
     1) Add your Telegram bot `token`.
     2) Add `chat_id` of your channel or chat. You can get it quickly by following my [gist](https://gist.github.com/8nhuman8/25f98c5e4b33d47a54cd510da221f309).
     3) Also set the image size.
-    4) After that, you can choose to use arguments from the [`config.json`](config.json) or enter them in the console. The difference is that using the [`config.json`](config.json), you can specify random values of various arguments.
-    5) If you chose not to use the [`config.json`](config.json), go to step 3. If not, read on.
+    4) After that, you can choose to use arguments from the [`bot_config.json`](configs/bot_config.json) or enter them in the console. The difference is that using the [`bot_config.json`](configs/bot_config.json), you can specify random values of various arguments.
+    5) If you chose not to use the [`bot_config.json`](configs/bot_config.json), go to step 3. If not, read on.
     6) After that, you can set the values for different parameters in the `"args"` section:
        * For `--reproduce-chance`, `--min-percent`, `--max-percent` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
          **start <= value <= end**  
@@ -86,8 +86,8 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
          ```
 
 3. Go to the ['scripts'](scripts/) folder:
-    * if you made `"use_config_args": true` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
-    * if you made `"use_config_args": false` in [`config.json`](config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
+    * if you made `"use_config_args": true` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py`.
+    * if you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python telegram_bot.py [parameters you need]`.
 
 ### Some remarks on usage of Telegram bot
 Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.  

@@ -5,29 +5,29 @@ from random import uniform, getrandbits
 from json import load
 
 from renderer import parse_args, render_image
-from constants import TELEGRAM_IMAGES_SAVE_PATH, CONFIG_PATH
+from constants import TELEGRAM_IMAGES_SAVE_PATH, BOT_CONFIG_PATH
 
 
-def parse_config(config: dict) -> list:
+def parse_config_args(config: dict) -> list:
     args = []
     for key, value in config['args'].items():
         if key == '--reproduce-chance':
             if value['start'] is not None:
                 args.append(key)
-                args.append(str(uniform(value["start"], value["end"])))
+                args.append(str(uniform(value['start'], value['end'])))
             elif value['value']:
                 args.append(key)
-                args.append(str(value["value"]))
+                args.append(str(value['value']))
             else:
                 args.append(key)
                 args.append(str(uniform(0.5, 1)))
         elif 'percent' in key:
             if value['start'] is not None:
                 args.append(key)
-                args.append(str(uniform(value["start"], value["end"])))
+                args.append(str(uniform(value['start'], value['end'])))
             elif value['value']:
                 args.append(key)
-                args.append(str(value["value"]))
+                args.append(str(value['value']))
         elif type(value) is list:
             args.append(key)
             for i in range(4):
@@ -58,7 +58,7 @@ def generate_caption(args_dict: dict) -> str:
 
 
 def send_random_image(config: dict, scheduled: bool = False) -> None:
-    args = parse_config(config)
+    args = parse_config_args(config)
     args.insert(0, config['width'])
     args.insert(1, config['height'])
 
@@ -83,7 +83,7 @@ def send_specific_image(config: dict) -> None:
 
 if __name__ == '__main__':
     config = None
-    with open(CONFIG_PATH, 'r') as json_file:
+    with open(BOT_CONFIG_PATH, 'r') as json_file:
         config = load(json_file)
 
     if config['use_config_args']:
