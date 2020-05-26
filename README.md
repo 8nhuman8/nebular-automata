@@ -170,3 +170,5 @@ Copyright (c) 2020 Artyom Bezmenov
 ![](gallery/11.png)
 ![](gallery/12.png)
 ![](gallery/13.png)
+![](gallery/14.png)
+![](gallery/15.png)
