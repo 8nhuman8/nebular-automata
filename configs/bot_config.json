@@ -2,8 +2,8 @@
     "token": "",
     "chat_id": "",
 
-    "width": "",
-    "height": "",
+    "width": "1000",
+    "height": "1000",
 
     "use_config_args": true,
     "args": {
@@ -25,10 +25,11 @@
         },
 
         "--max-count": null,
+        "--colors-number": null,
         "--color-background": null,
 
         "--opaque": {
-            "value": true,
+            "value": false,
             "random": false
         },
         "--random-colors": {

@@ -42,17 +42,17 @@ def parse_config_args(config: dict) -> list:
             else:
                 if value['value']:
                     args.append(key)
+    args.append('--dont-show-image')
     return args
 
 
-def generate_caption(args_dict: dict) -> str:
+def generate_caption(args_dict: dict, colors: list) -> str:
     caption = f'width: {args_dict["width"]}\n'
     caption += f'height: {args_dict["height"]}\n'
     caption += f'reproduce chance: {args_dict["reproduce_chance"]}\n'
-    caption += f'accent color 1: rgba({", ".join(map(str, list(args_dict["color_accent1"])))})\n'
-    caption += f'accent color 2: rgba({", ".join(map(str, list(args_dict["color_accent2"])))})\n'
+    for i in range(len(colors)):
+        caption += f'accent color {i + 1}: rgba({", ".join(map(str, colors[i]))})\n'
     caption += f'background color: rgba({", ".join(map(str, list(args_dict["color_background"])))})\n'
-    caption += f'multicolor: {args_dict["multicolor"]}\n'
     caption += f'fade in: {args_dict["fade_in"]}\n'
     return caption
 
@@ -62,8 +62,8 @@ def send_random_image(config: dict, scheduled: bool = False) -> None:
     args.insert(0, config['width'])
     args.insert(1, config['height'])
 
-    image_path, args_dict = render_image(parse_args(args), msg_send=True)
-    caption = generate_caption(args_dict)
+    image_path, args_dict, colors = render_image(parse_args(args), msg_send=True)
+    caption = generate_caption(args_dict, colors)
 
     bot = Bot(config['token'])
     bot.send_photo(config['chat_id'], open(image_path, 'rb'), caption=caption)
@@ -74,8 +74,8 @@ def send_random_image(config: dict, scheduled: bool = False) -> None:
 
 
 def send_specific_image(config: dict) -> None:
-    image_path, args_dict = render_image(parse_args(), msg_send=True)
-    caption = generate_caption(args_dict)
+    image_path, args_dict, colors = render_image(parse_args(), msg_send=True)
+    caption = generate_caption(args_dict, colors)
 
     bot = Bot(config['token'])
     bot.send_photo(config['chat_id'], open(image_path, 'rb'), caption=caption)
