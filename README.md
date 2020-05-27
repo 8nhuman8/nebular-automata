@@ -94,6 +94,11 @@ I recommend using this [VPN](https://windscribe.com).
 If you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json), you don't have to write `--save` and `--path PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
 But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](scripts/constants.py).
 
+You can disable `"use_caption"` option in [`bot_config.json`](configs/bot_config.json) to remove the attachment of text to the message with the image:
+```json
+"use_caption": false,
+```
+
 ## Command-line arguments description
 ```
 usage: renderer.py [-h] [-rc FLOAT] [-mc INT] [-cb R G B A] [-r] [-cn INT]
