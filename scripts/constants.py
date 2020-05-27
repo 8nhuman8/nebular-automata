@@ -13,7 +13,8 @@ HELP_COLOR_BACKGROUND = ('The background color. Color components must be '
 # Multicolor options
 HELP_RANDOM_COLORS = 'Accent colors will be random.'
 HELP_OPAQUE = 'All colors will be opaque.'
-HELP_COLORS_NUMBER = 'How many colors will be used. By default it is 3.'
+HELP_COLORS_NUMBER = ('How many colors will be used. By default it is 3.'
+                      "Must be used with '--random-colors' argument.")
 
 # Additional options
 HELP_MIN_PERCENT = ('The program will work until nebula is filled '

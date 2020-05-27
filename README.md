@@ -38,8 +38,15 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 
 ### Usage of renderer ([`renderer.py`](scripts/renderer.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
-2. Run the `renderer.py` with `python scripts/renderer.py [parameters you need]`.
-3. Enjoy the beauty.
+2. Then you can specify the colors you need in the [`colors_config.json`](configs/colors_config.json).  
+   You can use only one color if you want, like this:
+   ```json
+   {
+     "1": [255, 0, 0, 255]
+   }
+   ```
+3. Run the `renderer.py` with `python scripts/renderer.py [parameters you need]`.
+4. Enjoy the beauty.
 
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
@@ -131,7 +138,8 @@ Basic options:
 Multicoloring options:
   -r, --random-colors   Accent colors will be random.
   -cn INT, --colors-number INT
-                        How many colors will be used. By default it is 3.
+                        How many colors will be used. By default it is 3.Must
+                        be used with '--random-colors' argument.
   -o, --opaque          All colors will be opaque.
 
 Additional options:
