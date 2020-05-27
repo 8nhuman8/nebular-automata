@@ -58,12 +58,22 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
     4) After that, you can choose to use arguments from the [`bot_config.json`](configs/bot_config.json) or enter them in the console. The difference is that using the [`bot_config.json`](configs/bot_config.json), you can specify random values of various arguments.
     5) If you chose not to use the [`bot_config.json`](configs/bot_config.json), go to step 3. If not, read on.
     6) After that, you can set the values for different parameters in the `"args"` section:
-       * For `--reproduce-chance`, `--min-percent`, `--max-percent` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
+       * For `--reproduce-chance`, `--min-percent`, `--max-percent`, `--max-count` and `--colors-number` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:  
          **start <= value <= end**  
          If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
-       * `--max-count` and `--color-background` arguments aren't used by default. The default background color is white, but if you want to set your own, enter the value as RGBA like this:
+       * `--color-background` argument isn't used by default. The default background color is white, but if you want to set your own, enter the value as RGBA like this:
          ```json
-         "--color-background": [0, 2, 25, 255]
+         "--color-background": {
+             "value": [255, 128, 64, 255],
+             "random": false
+         }
+         ```
+         If you want a random background color, then fill it like this:
+         ```json
+         "--color-background": {
+             "value": null,
+             "random": true
+         }
          ```
        * `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
 
@@ -103,7 +113,7 @@ But if you want to use another folder, then create it and change the `TELEGRAM_I
 
 You can disable `"use_caption"` option in [`bot_config.json`](configs/bot_config.json) to remove the attachment of text to the message with the image:
 ```json
-"use_caption": false,
+"use_caption": false
 ```
 
 ## Command-line arguments description

@@ -1,11 +1,12 @@
 from telegram import Bot
 from argparse import ArgumentParser
 
-from random import uniform, getrandbits
+from random import uniform, getrandbits, randint
 from json import load
 
 from renderer import parse_args, render_image
 from constants import TELEGRAM_IMAGES_SAVE_PATH, BOT_CONFIG_PATH
+from utils import get_random_color
 
 
 def parse_config_args(config: dict) -> list:
@@ -28,20 +29,30 @@ def parse_config_args(config: dict) -> list:
             elif value['value']:
                 args.append(key)
                 args.append(str(value['value']))
-        elif type(value) is list:
-            args.append(key)
-            for i in range(4):
-                args.append(str(value[i]))
-        elif type(value) is int:
-            args.append(key)
-            args.append(str(value))
+        elif key == '--color-background':
+            if value['random']:
+                args.append(key)
+                # cc - color component
+                for cc in get_random_color():
+                    args.append(str(cc))
+            elif value['value']:
+                args.append(key)
+                # cc - color component
+                for cc in value['value']:
+                    args.append(str(cc))
+        elif key == '--max-count' or key == '--colors-number':
+            if value['start'] is not None:
+                args.append(key)
+                args.append(str(randint(value['start'], value['end'])))
+            elif value['value']:
+                args.append(key)
+                args.append(str(value['value']))
         elif type(value) is dict:
             if value['random']:
                 if bool(getrandbits(1)):
                     args.append(key)
-            else:
-                if value['value']:
-                    args.append(key)
+            elif value['value']:
+                args.append(key)
     args.append('--dont-show-image')
     return args
 

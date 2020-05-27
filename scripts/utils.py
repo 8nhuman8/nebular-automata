@@ -21,28 +21,30 @@ def get_runtime(start_date: datetime) -> None:
 
 
 def get_random_colors(n: int) -> list:
-    def get_random_color() -> tuple:
-        r = randint(0, 255)
-        g = randint(0, 255)
-        b = randint(0, 255)
-        a = randint(0, 255)
-        return [r, g, b, a]
     return [get_random_color() for _ in range(n)]
+
+
+def get_random_color() -> tuple:
+    r = randint(0, 255)
+    g = randint(0, 255)
+    b = randint(0, 255)
+    a = randint(0, 255)
+    return [r, g, b, a]
 
 
 # gens: int -- generations count
 def get_gradient(gens: int, colors: list) -> list:
     colors = [Color(*color) for color in colors]
-    gradient = get_gradient2(gens // (len(colors) - 1), colors[0], colors[1])
 
     grads = []
-    for i in range(1, len(colors) - 1):
+    for i in range(len(colors) - 1):
         if i == len(colors) - 2:
             remaining_gens = gens - (len(colors) - 2) * (gens // (len(colors) - 1))
             grads.append(get_gradient2(remaining_gens, colors[i], colors[i + 1]))
         else:
             grads.append(get_gradient2(gens // (len(colors) - 1), colors[i], colors[i + 1]))
 
+    gradient = []
     for grad in grads:
         gradient.extend(grad)
 

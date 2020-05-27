@@ -25,9 +25,21 @@
             "end": null
         },
 
-        "--max-count": null,
-        "--colors-number": null,
-        "--color-background": null,
+        "--max-count": {
+            "value": null,
+            "start": null,
+            "end": null
+        },
+        "--colors-number": {
+            "value": null,
+            "start": null,
+            "end": null
+        },
+
+        "--color-background": {
+            "value": null,
+            "random": false
+        },
 
         "--opaque": {
             "value": false,
