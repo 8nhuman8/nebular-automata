@@ -1,7 +1,9 @@
 # Nebular Automata
 ### A program for visualizing an interesting mathematical idea
 
-![image7](gallery/7.png)
+![intro_image_1](gallery/intro_images/1.png)
+![intro_image_2](gallery/intro_images/2.png)
+![intro_image_3](gallery/intro_images/3.png)
 
 ## Table of contents
 - [My Telegram channel](#my-telegram-channel)
@@ -200,18 +202,18 @@ System options:
 Copyright (c) 2020 Artyom Bezmenov
 
 ## Gallery (images created by this program)
-![image1](gallery/1.png)
-![image2](gallery/2.png)
-![image3](gallery/3.png)
-![image4](gallery/4.png)
-![image5](gallery/5.png)
-![image6](gallery/6.png)
-![image7](gallery/7.png)
-![image8](gallery/8.png)
-![image9](gallery/9.png)
-![image10](gallery/10.png)
-![image11](gallery/11.png)
-![image12](gallery/12.png)
-![image13](gallery/13.png)
-![image14](gallery/14.png)
-![image15](gallery/15.png)
+![image_1](gallery/1.png)
+![image_2](gallery/2.png)
+![image_3](gallery/3.png)
+![image_4](gallery/4.png)
+![image_5](gallery/5.png)
+![image_6](gallery/6.png)
+![image_7](gallery/7.png)
+![image_8](gallery/8.png)
+![image_9](gallery/9.png)
+![image_10](gallery/10.png)
+![image_11](gallery/11.png)
+![image_12](gallery/12.png)
+![image_13](gallery/13.png)
+![image_14](gallery/14.png)
+![image_15](gallery/15.png)
