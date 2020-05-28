@@ -9,6 +9,7 @@ A program for visualizing an interesting mathematical idea.
   + [Usage of renderer](#usage-of-renderer-rendererpy)
   + [Usage of Telegram bot](#usage-of-telegram-bot-telegram_botpy)
   + [Some remarks on usage of Telegram bot](#some-remarks-on-usage-of-telegram-bot)
+  + [Usage of scheduler](#usage-of-scheduler-schedulerpy)
 - [Command-line arguments description](#command-line-arguments-description)
 - [License](#license)
 - [Gallery](#gallery-images-created-by-this-program)
@@ -50,7 +51,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 
 ### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
-2. Add all the required information to the [`bot_config.json`](configs/bot_config.json) in the root of repository:
+2. Add all the required information to the [`bot_config.json`](configs/bot_config.json):
 
     1) Add your Telegram bot `token`.
     2) Add `chat_id` of your channel or chat. You can get it quickly by following my [gist](https://gist.github.com/8nhuman8/25f98c5e4b33d47a54cd510da221f309).
@@ -115,6 +116,19 @@ You can disable `"use_caption"` option in [`bot_config.json`](configs/bot_config
 ```json
 "use_caption": false
 ```
+
+### Usage of scheduler ([`scheduler.py`](scripts/scheduler.py))
+1. Check out all the command-line parameters [below](#command-line-arguments-description).
+2. Add all the necessary information to the [`scheduler_config.json`](configs/scheduler_config.json).
+
+   You can also specify the starting date and ending dates for the schedule through the `"start_date"` and `"end_date"` parameters, respectively. They can be given as a date/datetime object or text (in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format) like this:
+   ```json
+   "start_date": "2010-10-10 09:30:00",
+   "end_time": "2014-06-15 11:00:00"
+   ```
+
+   If the start date is in the past, the trigger will not fire many times retroactively but instead calculates the next run time from the current time, based on the past start time.
+3. Run the [`scheduler.py`](scripts/scheduler.py) with `python scripts/scheduler.py`.
 
 ## Command-line arguments description
 ```
