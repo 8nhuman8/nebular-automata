@@ -124,7 +124,7 @@ You can disable `"use_caption"` option in [`bot_config.json`](configs/bot_config
    You can also specify the starting date and ending dates for the schedule through the `"start_date"` and `"end_date"` parameters, respectively. They can be given as a date/datetime object or text (in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format) like this:
    ```json
    "start_date": "2010-10-10 09:30:00",
-   "end_time": "2014-06-15 11:00:00"
+   "end_date": "2014-06-15 11:00:00"
    ```
 
    If the start date is in the past, the trigger will not fire many times retroactively but instead calculates the next run time from the current time, based on the past start time.
