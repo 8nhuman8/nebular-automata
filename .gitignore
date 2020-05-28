@@ -13,5 +13,8 @@ images/
 # Generated images for Telegram channel
 _telegram_*
 
-# Telegram information
-telegram_info.json
+# Telegram and schedule info
+info/
+
+# Config templates
+templates/
