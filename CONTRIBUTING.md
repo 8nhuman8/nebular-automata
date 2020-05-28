@@ -7,10 +7,10 @@ We love your input! We want to make contributing to this project as easy and tra
 - Proposing new features
 - Becoming a maintainer
 
-## We Develop with [GitHub](https://github.com)
+## We develop with [GitHub](https://github.com)
 We use [GitHub](https://github.com) to host code, to track issues and feature requests, as well as accept pull requests.
 
-## We Use [Github Flow](https://guides.github.com/introduction/flow/), So All Code Changes Happen Through Pull Requests
+## We use [Github Flow](https://guides.github.com/introduction/flow/), So All Code Changes Happen Through Pull Requests
 Pull requests are the best way to propose changes to the codebase (we use [Github Flow](https://guides.github.com/introduction/flow/)). We actively welcome your pull requests:
 
 1. Fork the repo and create your branch from `master`.
@@ -38,11 +38,20 @@ We use [GitHub issues](https://help.github.com/en/github/managing-your-work-on-g
 
 People *love* thorough bug reports. I'm not even kidding.
 
-## Use a Consistent Coding Style
+## Styleguides
+
+### Use a consistent coding style
+
+### Git commit messages
+
+* Use the present tense ("Add feature" not "Added feature")
+* Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
+* Limit the first line to 72 characters or less
+* Reference issues and pull requests liberally after the first line
+
+### Python styleguide
+
 If possible, stick to [PEP-8](https://www.python.org/dev/peps/pep-0008/), but don't bother too much :)
 
 ## License
 By contributing, you agree that your contributions will be licensed under its [MIT License](https://github.com/8nhuman8/nebular-automata/blob/master/LICENSE).
-
-## References
-This document was adapted from the open-source contribution guidelines for [Facebook's Draft](https://github.com/facebook/draft-js/blob/a9316a723f9e918afde44dea68b5f9f39b7d9b00/CONTRIBUTING.md).
