@@ -15,6 +15,3 @@ _telegram_*
 
 # Telegram information
 telegram_info.json
-
-# Telegram image sending scheduler
-scheduler.py
