@@ -1,5 +1,5 @@
 # Nebular Automata
-### A program for visualizing an interesting mathematical idea.
+### A program for visualizing an interesting mathematical idea
 
 ![image7](gallery/7.png)
 
