@@ -1,7 +1,10 @@
 # Nebular Automata
-A program for visualizing an interesting mathematical idea.
+### A program for visualizing an interesting mathematical idea.
+
+![image7](gallery/7.png)
 
 ## Table of contents
+- [My Telegram channel](#my-telegram-channel)
 - [Idea](#idea)
 - [Some remarks](#some-remarks)
 - [Usage](#usage)
@@ -13,6 +16,9 @@ A program for visualizing an interesting mathematical idea.
 - [Command-line arguments description](#command-line-arguments-description)
 - [License](#license)
 - [Gallery](#gallery-images-created-by-this-program)
+
+## My Telegram channel
+I created a [Telegram channel](https://t.me/nebular_automata) in which the bot generates and uploads images with detailed characteristics every two hours.
 
 ## Idea
 >The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
