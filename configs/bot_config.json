@@ -8,16 +8,6 @@
     "use_caption": true,
     "use_config_args": true,
 
-    "scheduler": {
-        "seconds": 30,
-        "minutes": 1,
-        "hours": 0,
-        "days": 0,
-        "weeks": 0,
-        "start_date": null,
-        "end_time": null
-    },
-
     "args": {
         "--reproduce-chance": {
             "value": 0.5,

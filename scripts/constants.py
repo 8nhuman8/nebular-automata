@@ -36,8 +36,11 @@ HELP_DONT_SHOW_IMAGE = 'Do not show image after execution.'
 NOTIFICATION_MSG_BEFORE_RENDERING = ('Now the data will be processed and converted to a '
                                      'graphical representation.\nIt can take some time.\n')
 
-# Paths
+# Telegram paths
 TELEGRAM_IMAGES_SAVE_PATH = './telegram_images/'
 TELERGAM_IMAGE_PREFIX = '_telegram_'
+
+# Configs paths
 BOT_CONFIG_PATH = './configs/bot_config.json'
 COLORS_CONFIG_PATH = './configs/colors_config.json'
+SCHEDULER_CONFIG_PATH = './configs/scheduler_config.json'
