@@ -16,6 +16,7 @@
   + [Some remarks on usage of Telegram bot](#some-remarks-on-usage-of-telegram-bot)
   + [Usage of scheduler](#usage-of-scheduler-schedulerpy)
 - [Command-line arguments description](#command-line-arguments-description)
+- [Credits and references](#credits-and-references)
 - [License](#license)
 - [Gallery](#gallery-images-created-by-this-program)
 
@@ -195,6 +196,9 @@ System options:
   -dsi, --dont-show-image
                         Do not show image after execution.
 ```
+
+## Credits and references
+The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
 
 ## License
 [Nebular Automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](LICENSE).
