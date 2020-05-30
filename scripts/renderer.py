@@ -63,7 +63,6 @@ def parse_args(args: list = None) -> Namespace:
 
 
 def get_config_colors() -> list:
-    colors_dict = None
     with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
     return list(colors_dict.values())

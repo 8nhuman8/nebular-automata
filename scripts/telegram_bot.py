@@ -98,7 +98,6 @@ def send_specific_image(config: dict) -> None:
 
 
 if __name__ == '__main__':
-    config = None
     with open(BOT_CONFIG_PATH, 'r') as json_file:
         config = load(json_file)
 

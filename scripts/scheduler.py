@@ -7,7 +7,6 @@ from telegram_bot import send_random_image
 
 
 if __name__ == '__main__':
-    bot_config = scheduler_config = None
     with open(BOT_CONFIG_PATH, 'r') as json_bot_file, \
          open(SCHEDULER_CONFIG_PATH, 'r') as json_scheduler_file:
         bot_config = load(json_bot_file)

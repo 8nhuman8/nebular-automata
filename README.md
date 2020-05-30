@@ -197,7 +197,7 @@ System options:
 ```
 
 ## License
-[Nebular automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](LICENSE).
+[Nebular Automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](LICENSE).
 
 Copyright (c) 2020 Artyom Bezmenov
 
