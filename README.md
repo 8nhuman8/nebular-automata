@@ -201,7 +201,7 @@ System options:
 The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
 
 ## License
-[Nebular Automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](LICENSE).
+[Nebular Automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](https://github.com/8nhuman8/nebular-automata/blob/master/LICENSE).
 
 Copyright (c) 2020 Artyom Bezmenov
 
