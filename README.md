@@ -46,7 +46,7 @@ In fact, we can also generate squares if we surround each square not only on eac
 ### Installation
 Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
 
-### Usage of renderer ([`renderer.py`](scripts/renderer.py))
+### Usage of renderer ([`renderer.py`](src/renderer.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Then you can specify the colors you need in the [`colors_config.json`](configs/colors_config.json).  
    You can use only one color if you want, like this:
@@ -55,10 +55,10 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
      "1": [255, 0, 0, 255]
    }
    ```
-3. Run the `renderer.py` with `python scripts/renderer.py [parameters you need]`.
+3. Run the `renderer.py` with `python src/renderer.py [parameters you need]`.
 4. Enjoy the beauty.
 
-### Usage of Telegram bot ([`telegram_bot.py`](scripts/telegram_bot.py))
+### Usage of Telegram bot ([`telegram_bot.py`](src/telegram_bot.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Add all the required information to the [`bot_config.json`](configs/bot_config.json):
 
@@ -111,22 +111,22 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
          }
          ```
 
-3.  * if you made `"use_config_args": true` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python scripts/telegram_bot.py`.
-    * if you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](scripts/telegram_bot.py) with `python scripts/telegram_bot.py [parameters you need]`.
+3.  * if you made `"use_config_args": true` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](src/telegram_bot.py) with `python src/telegram_bot.py`.
+    * if you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](src/telegram_bot.py) with `python src/telegram_bot.py [parameters you need]`.
 
 ### Some remarks on usage of Telegram bot
 Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.  
 I recommend using this [VPN](https://windscribe.com).
 
 If you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json), you don't have to write `--save` and `--path PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.  
-But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](scripts/constants.py).
+But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](src/constants.py).
 
 You can disable `"use_caption"` option in [`bot_config.json`](configs/bot_config.json) to remove the attachment of text to the message with the image:
 ```json
 "use_caption": false
 ```
 
-### Usage of scheduler ([`scheduler.py`](scripts/scheduler.py))
+### Usage of scheduler ([`scheduler.py`](src/scheduler.py))
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Add all the necessary information to the [`scheduler_config.json`](configs/scheduler_config.json).
 
@@ -137,7 +137,7 @@ You can disable `"use_caption"` option in [`bot_config.json`](configs/bot_config
    ```
 
    If the start date is in the past, the trigger will not fire many times retroactively but instead calculates the next run time from the current time, based on the past start time.
-3. Run the [`scheduler.py`](scripts/scheduler.py) with `python scripts/scheduler.py`.
+3. Run the [`scheduler.py`](src/scheduler.py) with `python src/scheduler.py`.
 
 ## Command-line arguments description
 ```
