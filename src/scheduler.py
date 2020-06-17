@@ -1,6 +1,6 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
-
 from json import load
+
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 from constants import BOT_CONFIG_PATH, SCHEDULER_CONFIG_PATH
 from telegram_bot import send_random_image

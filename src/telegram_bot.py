@@ -1,12 +1,12 @@
-from telegram import Bot
-from argparse import ArgumentParser
-
 from random import uniform, getrandbits, randint
 from json import load
 
+from telegram import Bot
+from argparse import ArgumentParser
+
 from renderer import parse_args, render_image
 from constants import TELEGRAM_IMAGES_SAVE_PATH, BOT_CONFIG_PATH
-from utils import get_random_color
+from utils import random_color
 
 
 def parse_config_args(config: dict) -> list:
@@ -33,7 +33,7 @@ def parse_config_args(config: dict) -> list:
             if value['random']:
                 args.append(key)
                 # cc - color component
-                for cc in get_random_color():
+                for cc in random_color():
                     args.append(str(cc))
             elif value['value']:
                 args.append(key)

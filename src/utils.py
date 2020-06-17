@@ -20,11 +20,11 @@ def get_runtime(start_date: datetime) -> None:
     print(f'Program took: {datetime.now() - start_date} to run\n')
 
 
-def get_random_colors(n: int) -> list:
+def random_colors(n: int) -> list:
     return [get_random_color() for _ in range(n)]
 
 
-def get_random_color() -> tuple:
+def random_color() -> tuple:
     r = randint(0, 255)
     g = randint(0, 255)
     b = randint(0, 255)
@@ -33,16 +33,16 @@ def get_random_color() -> tuple:
 
 
 # gens: int -- generations count
-def get_gradient(gens: int, colors: list) -> list:
+def gradient(gens: int, colors: list) -> list:
     colors = [Color(*color) for color in colors]
 
     grads = []
     for i in range(len(colors) - 1):
         if i == len(colors) - 2:
             remaining_gens = gens - (len(colors) - 2) * (gens // (len(colors) - 1))
-            grads.append(get_gradient2(remaining_gens, colors[i], colors[i + 1]))
+            grads.append(gradient2(remaining_gens, colors[i], colors[i + 1]))
         else:
-            grads.append(get_gradient2(gens // (len(colors) - 1), colors[i], colors[i + 1]))
+            grads.append(gradient2(gens // (len(colors) - 1), colors[i], colors[i + 1]))
 
     gradient = []
     for grad in grads:
@@ -54,7 +54,7 @@ def get_gradient(gens: int, colors: list) -> list:
 # gens: int -- generations count
 # c1: Color -- color 1
 # c2: Color -- color 2
-def get_gradient2(gens: int, c1: Color, c2: Color) -> list:
+def gradient2(gens: int, c1: Color, c2: Color) -> list:
     # differences
     d_r = abs(c1.r - c2.r) / gens
     d_g = abs(c1.g - c2.g) / gens

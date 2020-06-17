@@ -1,10 +1,10 @@
-from PIL import Image, ImageDraw
-from argparse import ArgumentParser, Namespace
-
 from datetime import datetime
 from time import sleep
 from random import uniform
 from json import load
+
+from PIL import Image, ImageDraw
+from argparse import ArgumentParser, Namespace
 
 from nebula import Nebula
 import utils
@@ -62,7 +62,7 @@ def parse_args(args: list = None) -> Namespace:
         return parser.parse_args(args)
 
 
-def get_config_colors() -> list:
+def config_colors() -> list:
     with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
     return list(colors_dict.values())
@@ -82,13 +82,13 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     nebula = Nebula(size, max_count, args.reproduce_chance, quadratic=args.quadratic)
     nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
 
-    colors = get_config_colors()
+    colors = config_colors()
 
     if args.random_colors:
-        colors = utils.get_random_colors(args.colors_number)
-        gradient = utils.get_gradient(nebula.current_generation, colors)
+        colors = utils.random_colors(args.colors_number)
+        gradient = utils.gradient(nebula.current_generation, colors)
     elif len(colors) > 1:
-        gradient = utils.get_gradient(nebula.current_generation, colors)
+        gradient = utils.gradient(nebula.current_generation, colors)
 
     if args.opaque:
         for color in colors:
