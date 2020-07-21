@@ -13,9 +13,6 @@ _telegram_*
 # Telegram and schedule info
 info/
 
-# Config templates
-templates/
-
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

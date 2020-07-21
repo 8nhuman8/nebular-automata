@@ -1,5 +1,5 @@
 from collections import namedtuple
-from string import ascii_lowercase, ascii_uppercase, digits
+from string import ascii_letters, digits
 from random import choice, randint
 from datetime import datetime
 
@@ -10,7 +10,7 @@ Color = namedtuple('Color', ['r', 'g', 'b', 'a'])
 
 
 def generate_filename(size: int=18) -> str:
-    chars = ascii_lowercase + ascii_uppercase + digits
+    chars = ascii_letters + digits
     return ''.join(choice(chars) for _ in range(size))
 
 
@@ -21,7 +21,7 @@ def get_runtime(start_date: datetime) -> None:
 
 
 def random_colors(n: int) -> list:
-    return [get_random_color() for _ in range(n)]
+    return [random_color() for _ in range(n)]
 
 
 def random_color() -> tuple:
