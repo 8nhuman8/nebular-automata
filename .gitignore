@@ -13,6 +13,9 @@ _telegram_*
 # Telegram and schedule info
 info/
 
+# Batch files
+*.cmd
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

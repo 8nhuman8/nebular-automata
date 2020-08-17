@@ -171,7 +171,7 @@ Basic options:
 Multicoloring options:
   -r, --random-colors   Accent colors will be random.
   -cn INT, --colors-number INT
-                        How many colors will be used. By default it is 3.Must
+                        How many colors will be used. By default it is 3. Must
                         be used with '--random-colors' argument.
   -o, --opaque          All colors will be opaque.
 
