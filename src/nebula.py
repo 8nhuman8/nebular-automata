@@ -20,7 +20,7 @@ class Nebula:
         self.current_generation = 1
 
         self.squares = [[None for y in range(self.size.y + 1)] for x in range(self.size.x + 1)]
-        self._not_reproduced_squares = deque()
+        self.__not_reproduced_squares = deque()
 
 
     def __able_to_reproduce(self) -> bool:
@@ -56,7 +56,7 @@ class Nebula:
             neighboring_coordinates = [right, up, left, bottom, right_up, right_down, left_up, left_down]
         else:
             neighboring_coordinates = [right, up, left, bottom]
-        
+
         neighboring_squares = []
         # 'nc' stands for 'neighboring coordinate'
         for nc in neighboring_coordinates:
@@ -87,24 +87,24 @@ class Nebula:
         self.squares = [[None for y in range(self.size.y + 1)] for x in range(self.size.x + 1)]
         self.count = 1
         self.current_generation = 1
-        self._not_reproduced_squares = deque()
+        self.__not_reproduced_squares = deque()
 
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.squares[starting_square.x][starting_square.y] = starting_square
-        self._not_reproduced_squares.append([starting_square])
+        self.__not_reproduced_squares.append([starting_square])
 
 
     def develop(self, min_percent: float = None, max_percent: float = None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.squares[starting_square.x][starting_square.y] = starting_square
-        self._not_reproduced_squares.append([starting_square])
+        self.__not_reproduced_squares.append([starting_square])
 
         if min_percent:
             while True:
-                while self._not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
+                while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
                     self.__output_debug_info()
-                    current_generation_squares = self._not_reproduced_squares.popleft()
-                    self._not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
+                    current_generation_squares = self.__not_reproduced_squares.popleft()
+                    self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
 
                 print()
                 if self.count / self.max_count >= min_percent:
@@ -113,10 +113,10 @@ class Nebula:
                     self.__destroy()
         elif max_percent:
             while True:
-                while self._not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
+                while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
                     self.__output_debug_info()
-                    current_generation_squares = self._not_reproduced_squares.popleft()
-                    self._not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
+                    current_generation_squares = self.__not_reproduced_squares.popleft()
+                    self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
 
                     if self.count / self.max_count >= max_percent:
                         break
@@ -127,8 +127,8 @@ class Nebula:
                 else:
                     self.__destroy()
         else:
-            while self._not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
+            while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
                 self.__output_debug_info()
-                current_generation_squares = self._not_reproduced_squares.popleft()
-                self._not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
+                current_generation_squares = self.__not_reproduced_squares.popleft()
+                self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
             print()
