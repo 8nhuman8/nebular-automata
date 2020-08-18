@@ -28,7 +28,7 @@ I created a [Telegram channel](https://t.me/nebular_automata) in which the bot g
 
 ## Idea
 
->The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
+> The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46382), and the author is this [person](https://vk.com/id504076319).
 
 Let a square be surrounded on each side by a new square of the same size with a chance of **q**. Newly formed squares reproduce other squares and so on, to infinity.
 We will limit the growth of the population by setting a certain maximum allowable number of squares, upon reaching which the program will be completed.
