@@ -1,4 +1,4 @@
-pillow==7.1.2
-argparse==1.4.0
-python-telegram-bot==12.7
-apscheduler==3.6.3
+pillow>=7.1.2
+argparse>=1.4.0
+python-telegram-bot>=12.7
+apscheduler>=3.6.3
