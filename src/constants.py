@@ -4,6 +4,7 @@ DESCRIPTION = ('Creates a beautiful nebula. Percentages show the duration '
                'probability can take its toll.')
 
 # Basic options
+HELP_STARTING_POINT = "The coordinate of a starting point. By default it's in the middle."
 HELP_REPRODUCE_CHANCE = 'The chance the square can produce other squares.'
 HELP_MAX_COUNT = ('The maximum number of squares in the image. By '
                   'default, this is half of all pixels in the future image.')
@@ -13,7 +14,7 @@ HELP_COLOR_BACKGROUND = ('The background color. Color components must be '
 # Multicolor options
 HELP_RANDOM_COLORS = 'Accent colors will be random.'
 HELP_OPAQUE = 'All colors will be opaque.'
-HELP_COLORS_NUMBER = ('How many colors will be used. By default it is 3. '
+HELP_COLORS_NUMBER = ("How many colors will be used. By default it's 3. "
                       "Must be used with '--random-colors' argument.")
 
 # Additional options

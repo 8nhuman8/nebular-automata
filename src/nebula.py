@@ -1,14 +1,22 @@
 from random import random
 from collections import deque
 from datetime import datetime
+from typing import Optional
 
 from utils import Square, Vector
 
 
 class Nebula:
-    def __init__(self, size: Vector, max_count: int, reproduce_chance: float, quadratic: bool = False):
+    def __init__(
+        self,
+        size: Vector,
+        max_count: int,
+        reproduce_chance: float,
+        starting_point: Optional[Vector] = None,
+        quadratic: bool = False
+    ):
         self.size = size
-        self.starting_point = Vector(self.size.x // 2, self.size.y // 2)
+        self.starting_point = starting_point
 
         # The maximum allowable value of squares count
         self.max_count = max_count

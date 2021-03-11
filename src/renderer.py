@@ -19,6 +19,8 @@ def parse_args(args: list = None) -> Namespace:
     group_required.add_argument('height', type=int, help='The height of the image.')
 
     group_basic = parser.add_argument_group('Basic options')
+    group_basic.add_argument('-sp', '--starting-point', metavar=('X', 'Y'),
+                             nargs=2, type=int, help=c.HELP_STARTING_POINT)
     group_basic.add_argument('-rc', '--reproduce-chance', metavar='FLOAT',
                              type=float, default=0.51,
                              help=c.HELP_REPRODUCE_CHANCE)
@@ -71,6 +73,12 @@ def config_colors() -> list:
 def render_image(args: Namespace, msg_send: bool = False) -> tuple:
     size = utils.Vector(args.width, args.height)
 
+    starting_point = args.starting_point
+    if starting_point is None:
+        starting_point = utils.Vector(size.x // 2, size.y // 2)
+    else:
+        starting_point = utils.Vector(*args.starting_point)
+
     max_count = args.max_count
     if max_count is None:
         max_count = (size.x * size.y) // 2
@@ -79,7 +87,13 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
 
     start_date = datetime.now()
 
-    nebula = Nebula(size, max_count, args.reproduce_chance, quadratic=args.quadratic)
+    nebula = Nebula(
+        size,
+        max_count,
+        args.reproduce_chance,
+        quadratic=args.quadratic,
+        starting_point=starting_point
+    )
     nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
 
     colors = config_colors()
@@ -121,7 +135,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
             else:
                 draw.point([x, y], fill=color_background)
 
-    image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
+    image_name = f'{size.x}x{size.y}_{starting_point.x}x{starting_point.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
     if args.save or msg_send:
         if args.path:
