@@ -81,6 +81,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
        - For `--reproduce-chance`, `--min-percent`, `--max-percent`, `--max-count` and `--colors-number` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:
          **start <= value <= end**
          If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
+
        - `--color-background` argument isn't used by default. The default background color is white, but if you want to set your own, enter the value as RGBA like this:
 
          ```json
@@ -96,6 +97,26 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
          "--color-background": {
              "value": null,
              "random": true
+         }
+         ```
+
+         `--starting-point` argument isn't used by default. The default starting point is placed in the middle of the image, but if you want to set your own, enter the value like this:
+
+         ```json
+         "--starting-point": {
+            "valueX": 500,
+            "valueY": 1,
+            "random": false
+         }
+         ```
+
+         If you want a random starting point, then fill it like this:
+
+         ```json
+         "--starting-point": {
+            "valueX": null,
+            "valueY": null,
+            "random": true
          }
          ```
 

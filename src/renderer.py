@@ -145,7 +145,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> Tuple[Union[None, s
     if args.dont_show_image:
         image.show()
 
-    return image_path, vars(args), colors
+    return image_path, vars(args), colors, nebula.starting_point
 
 
 if __name__ == '__main__':

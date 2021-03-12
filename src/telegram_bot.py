@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 
 from renderer import parse_args, render_image
 from constants import TELEGRAM_IMAGES_SAVE_PATH, BOT_CONFIG_PATH
-from utils import random_color
+from utils import random_color, Vector
 
 
 def parse_config_args(config: dict) -> list:
@@ -28,17 +28,12 @@ def parse_config_args(config: dict) -> list:
                 args.append(key)
                 args.append(str(value['value']))
         elif key == '--starting-point':
-            args.append(key)
             if value['random']:
+                args.append(key)
                 args.append(str(randint(1, int(config['width']))))
                 args.append(str(randint(1, int(config['height']))))
-            elif value['valueX'] and not value['valueY']:
-                args.append(str(value['valueX']))
-                args.append(str(randint(1, int(config['height']))))
-            elif not value['valueX'] and value['valueY']:
-                args.append(str(randint(1, int(config['width']))))
-                args.append(str(value['valueY']))
-            else:
+            elif value['valueX']:
+                args.append(key)
                 args.append(str(value['valueX']))
                 args.append(str(value['valueY']))
         elif key == '--color-background':
@@ -69,11 +64,11 @@ def parse_config_args(config: dict) -> list:
     return args
 
 
-def generate_caption(args_dict: dict, colors: list) -> str:
+def generate_caption(args_dict: dict, colors: list, starting_point: Vector) -> str:
     caption = f'width: {args_dict["width"]}\n'
     caption += f'height: {args_dict["height"]}\n'
     caption += f'reproduce chance: {args_dict["reproduce_chance"]}\n'
-    caption += f'starting point: ({args_dict["starting_point"][0]}, {args_dict["starting_point"][1]})\n'
+    caption += f'starting point: ({starting_point.x}, {starting_point.y})\n'
     for i in range(len(colors)):
         caption += f'accent color {i + 1}: rgba({", ".join(map(str, colors[i]))})\n'
     caption += f'background color: rgba({", ".join(map(str, list(args_dict["color_background"])))})\n'
@@ -94,8 +89,8 @@ def send_random_image(config: dict, scheduled: bool = False) -> None:
     args.insert(0, config['width'])
     args.insert(1, config['height'])
 
-    image_path, args_dict, colors = render_image(parse_args(args), msg_send=True)
-    caption = generate_caption(args_dict, colors)
+    image_path, args_dict, colors, starting_point = render_image(parse_args(args), msg_send=True)
+    caption = generate_caption(args_dict, colors, starting_point)
 
     send_image(config, image_path, caption)
 
@@ -105,8 +100,8 @@ def send_random_image(config: dict, scheduled: bool = False) -> None:
 
 
 def send_specific_image(config: dict) -> None:
-    image_path, args_dict, colors = render_image(parse_args(), msg_send=True)
-    caption = generate_caption(args_dict, colors)
+    image_path, args_dict, colors, starting_point = render_image(parse_args(), msg_send=True)
+    caption = generate_caption(args_dict, colors, starting_point)
     send_image(config, image_path, caption)
 
 
