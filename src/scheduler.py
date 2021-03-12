@@ -12,29 +12,39 @@ if __name__ == '__main__':
         bot_config = load(json_bot_file)
         scheduler_config = load(json_scheduler_file)
 
+    args = [bot_config, True]
+    trigger = 'interval'
+    seconds = scheduler_config['seconds']
+    minutes = scheduler_config['minutes']
+    hours = scheduler_config['hours']
+    days = scheduler_config['days']
+    weeks = scheduler_config['weeks']
+    start_date = scheduler_config['start_date']
+    end_date = scheduler_config['end_date']
+
     scheduler = BlockingScheduler()
     if scheduler_config['start_date']:
         scheduler.add_job(
             send_random_image,
-            args=[bot_config, True],
-            trigger='interval',
-            seconds=scheduler_config['seconds'],
-            minutes=scheduler_config['minutes'],
-            hours=scheduler_config['hours'],
-            days=scheduler_config['days'],
-            weeks=scheduler_config['weeks'],
-            start_date=scheduler_config['start_date'],
-            end_date=scheduler_config['end_date']
+            args=args,
+            trigger=trigger,
+            seconds=seconds,
+            minutes=minutes,
+            hours=hours,
+            days=days,
+            weeks=weeks,
+            start_date=start_date,
+            end_date=end_date
         )
     else:
         scheduler.add_job(
             send_random_image,
-            args=[bot_config, True],
-            trigger='interval',
-            seconds=scheduler_config['seconds'],
-            minutes=scheduler_config['minutes'],
-            hours=scheduler_config['hours'],
-            days=scheduler_config['days'],
-            weeks=scheduler_config['weeks']
+            args=args,
+            trigger=trigger,
+            seconds=seconds,
+            minutes=minutes,
+            hours=hours,
+            days=days,
+            weeks=weeks
         )
     scheduler.start()

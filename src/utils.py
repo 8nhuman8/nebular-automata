@@ -1,7 +1,7 @@
 from collections import namedtuple
 from string import ascii_letters, digits
 from random import choice, randint
-from datetime import datetime
+from typing import Callable
 
 
 Square = namedtuple('Square', ['x', 'y', 'gen'])
@@ -14,10 +14,19 @@ def generate_filename(size: int = 18) -> str:
     return ''.join(choice(chars) for _ in range(size))
 
 
-def get_runtime(start_date: datetime) -> None:
-    print(f'\nStart date: {start_date.isoformat()}')
-    print(f'End date: {datetime.now().isoformat()}')
-    print(f'Program took: {datetime.now() - start_date} to run\n')
+def benchmark(func: Callable) -> Callable:
+    from datetime import datetime
+
+    def wrapper(*args):
+        start_datetime = datetime.now()
+        func(*args)
+        end_datetime = datetime.now()
+
+        print(f'\nStart date: {start_datetime.isoformat()}')
+        print(f'End date: {end_datetime.isoformat()}')
+        print(f'Program took: {end_datetime - start_datetime} to run\n')
+
+    return wrapper
 
 
 def random_colors(n: int) -> list:

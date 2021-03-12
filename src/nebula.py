@@ -16,10 +16,18 @@ class Nebula:
         quadratic: bool = False
     ):
         self.size = size
+
+        if starting_point is None:
+            starting_point = Vector(size.x // 2, size.y // 2)
+        elif not ((1 <= starting_point.x <= size.x) or (1 <= starting_point.y <= size.y)):
+            raise IndexError('Starting point coordinate components must be less than or equal to the size of an image.')
         self.starting_point = starting_point
 
         # The maximum allowable value of squares count
+        if max_count is None:
+            max_count = (size.x * size.y) // 2
         self.max_count = max_count
+
         self.reproduce_chance = reproduce_chance
         self.quadratic = quadratic
 
@@ -102,41 +110,40 @@ class Nebula:
         self.__not_reproduced_squares.append([starting_square])
 
 
-    def develop(self, min_percent: float = None, max_percent: float = None) -> None:
+    def __develop_one_generation(self) -> None:
+        self.__output_debug_info()
+        current_generation_squares = self.__not_reproduced_squares.popleft()
+        self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
+
+
+    def develop(self, min_percent: Optional[float] = None, max_percent: Optional[float] = None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.__not_reproduced_squares.append([starting_square])
 
-        if min_percent:
-            while True:
-                while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
-                    self.__output_debug_info()
-                    current_generation_squares = self.__not_reproduced_squares.popleft()
-                    self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
+        minp_exists = min_percent is not None
+        maxp_exists = max_percent is not None
+        pass_once = True
 
-                print()
-                if self.count / self.max_count >= min_percent:
-                    break
-                else:
-                    self.__destroy()
-        elif max_percent:
-            while True:
-                while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
-                    self.__output_debug_info()
-                    current_generation_squares = self.__not_reproduced_squares.popleft()
-                    self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
+        while minp_exists or maxp_exists or pass_once:
 
+            while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
+                self.__develop_one_generation()
+                if maxp_exists:
                     if self.count / self.max_count >= max_percent:
                         break
 
-                print()
+            pass_once = False
+            print()
+
+            if maxp_exists:
                 if self.count / self.max_count >= max_percent:
                     break
                 else:
                     self.__destroy()
-        else:
-            while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
-                self.__output_debug_info()
-                current_generation_squares = self.__not_reproduced_squares.popleft()
-                self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
-            print()
+
+            if minp_exists:
+                if self.count / self.max_count >= min_percent:
+                    break
+                else:
+                    self.__destroy()

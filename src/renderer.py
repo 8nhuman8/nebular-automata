@@ -2,6 +2,7 @@ from datetime import datetime
 from time import sleep
 from random import uniform
 from json import load
+from typing import Optional, Tuple, Union
 
 from PIL import Image, ImageDraw
 from argparse import ArgumentParser, Namespace
@@ -11,7 +12,7 @@ import utils
 import constants as c
 
 
-def parse_args(args: list = None) -> Namespace:
+def parse_args(args: Optional[list] = None) -> Namespace:
     parser = ArgumentParser(description=c.DESCRIPTION)
 
     group_required = parser.add_argument_group('Required options')
@@ -70,26 +71,20 @@ def config_colors() -> list:
     return list(colors_dict.values())
 
 
-def render_image(args: Namespace, msg_send: bool = False) -> tuple:
+@utils.benchmark
+def render_image(args: Namespace, msg_send: bool = False) -> Tuple[Union[None, str], dict, list]:
     size = utils.Vector(args.width, args.height)
 
     starting_point = args.starting_point
-    if starting_point is None:
-        starting_point = utils.Vector(size.x // 2, size.y // 2)
-    else:
-        starting_point = utils.Vector(*args.starting_point)
-
-    max_count = args.max_count
-    if max_count is None:
-        max_count = (size.x * size.y) // 2
+    if starting_point is not None:
+        # For the user to use the coordinate indexing starting at one
+        starting_point = utils.Vector(*[x - 1 for x in args.starting_point])
 
     color_background = tuple(args.color_background)
 
-    start_date = datetime.now()
-
     nebula = Nebula(
         size,
-        max_count,
+        args.max_count,
         args.reproduce_chance,
         quadratic=args.quadratic,
         starting_point=starting_point
@@ -135,7 +130,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
             else:
                 draw.point([x, y], fill=color_background)
 
-    image_name = f'{size.x}x{size.y}_{starting_point.x}x{starting_point.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
+    image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
     if args.save or msg_send:
         if args.path:
@@ -149,8 +144,6 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple:
             image_path = image_name
     if args.dont_show_image:
         image.show()
-
-    utils.get_runtime(start_date)
 
     return image_path, vars(args), colors
 
