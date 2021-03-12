@@ -19,14 +19,14 @@ def benchmark(func: Callable) -> Callable:
 
     def wrapper(*args, **kwargs):
         start_datetime = datetime.now()
-        _return = func(*args, **kwargs)
+        return_value = func(*args, **kwargs)
         end_datetime = datetime.now()
 
         print(f'\nStart date: {start_datetime.isoformat()}')
         print(f'End date: {end_datetime.isoformat()}')
         print(f'Program took: {end_datetime - start_datetime} to run\n')
 
-        return _return
+        return return_value
 
     return wrapper
 
@@ -55,11 +55,11 @@ def gradient(gens: int, colors: list) -> list:
         else:
             grads.append(gradient2(gens // (len(colors) - 1), colors[i], colors[i + 1]))
 
-    gradient = []
+    gradient_ = []
     for grad in grads:
-        gradient.extend(grad)
+        gradient_.extend(grad)
 
-    return gradient
+    return gradient_
 
 
 # gens: int -- generations count
@@ -78,45 +78,25 @@ def gradient2(gens: int, c1: Color, c2: Color) -> list:
     grad_b = [c1.b]
     grad_a = [c1.a]
 
-    # t: int -- temporary copy of the color component
-    t = c1.r
-    if c1.r < c2.r:
-        for _ in range(gens - 1):
-            t += d_r
-            grad_r.append(round(t))
-    else:
-        for _ in range(gens - 1):
-            t -= d_r
-            grad_r.append(round(t))
+    # cc1 - color component of the 1st color
+    # cc2 - color component of the 2nd color
+    # d_c - difference
+    def fill_grad(cc1: int, cc2: int, d_c: int, grad_list: list) -> list:
+        # t: int -- temporary copy of the color component
+        t = cc1
+        if cc1 < cc2:
+            for _ in range(gens - 1):
+                t += d_c
+                grad_list.append(round(t))
+        else:
+            for _ in range(gens - 1):
+                t -= d_c
+                grad_list.append(round(t))
+        return grad_list
 
-    t = c1.g
-    if c1.g < c2.g:
-        for _ in range(gens - 1):
-            t += d_g
-            grad_g.append(round(t))
-    else:
-        for _ in range(gens - 1):
-            t -= d_g
-            grad_g.append(round(t))
-
-    t = c1.b
-    if c1.b < c2.b:
-        for _ in range(gens - 1):
-            t += d_b
-            grad_b.append(round(t))
-    else:
-        for _ in range(gens - 1):
-            t -= d_b
-            grad_b.append(round(t))
-
-    t = c1.a
-    if c1.a < c2.a:
-        for _ in range(gens - 1):
-            t += d_a
-            grad_a.append(round(t))
-    else:
-        for _ in range(gens - 1):
-            t -= d_a
-            grad_a.append(round(t))
+    grad_r = fill_grad(c1.r, c2.r, d_r, grad_r)
+    grad_g = fill_grad(c1.g, c2.g, d_g, grad_g)
+    grad_b = fill_grad(c1.b, c2.b, d_b, grad_b)
+    grad_a = fill_grad(c1.a, c2.a, d_a, grad_a)
 
     return list(zip(grad_r, grad_g, grad_b, grad_a))
