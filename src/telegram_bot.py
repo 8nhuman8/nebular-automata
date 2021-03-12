@@ -13,14 +13,12 @@ def parse_config_args(config: dict) -> list:
     args = []
     for key, value in config['args'].items():
         if key == '--reproduce-chance':
+            args.append(key)
             if value['start'] is not None:
-                args.append(key)
                 args.append(str(uniform(value['start'], value['end'])))
             elif value['value']:
-                args.append(key)
                 args.append(str(value['value']))
             else:
-                args.append(key)
                 args.append(str(uniform(0.5, 1)))
         elif 'percent' in key:
             if value['start'] is not None:
@@ -29,6 +27,20 @@ def parse_config_args(config: dict) -> list:
             elif value['value']:
                 args.append(key)
                 args.append(str(value['value']))
+        elif key == '--starting-point':
+            args.append(key)
+            if value['random']:
+                args.append(str(randint(1, int(config['width']))))
+                args.append(str(randint(1, int(config['height']))))
+            elif value['valueX'] and not value['valueY']:
+                args.append(str(value['valueX']))
+                args.append(str(randint(1, int(config['height']))))
+            elif not value['valueX'] and value['valueY']:
+                args.append(str(randint(1, int(config['width']))))
+                args.append(str(value['valueY']))
+            else:
+                args.append(str(value['valueX']))
+                args.append(str(value['valueY']))
         elif key == '--color-background':
             if value['random']:
                 args.append(key)
@@ -61,6 +73,7 @@ def generate_caption(args_dict: dict, colors: list) -> str:
     caption = f'width: {args_dict["width"]}\n'
     caption += f'height: {args_dict["height"]}\n'
     caption += f'reproduce chance: {args_dict["reproduce_chance"]}\n'
+    caption += f'starting point: ({args_dict["starting_point"][0]}, {args_dict["starting_point"][1]})\n'
     for i in range(len(colors)):
         caption += f'accent color {i + 1}: rgba({", ".join(map(str, colors[i]))})\n'
     caption += f'background color: rgba({", ".join(map(str, list(args_dict["color_background"])))})\n'

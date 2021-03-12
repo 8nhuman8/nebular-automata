@@ -17,14 +17,16 @@ def generate_filename(size: int = 18) -> str:
 def benchmark(func: Callable) -> Callable:
     from datetime import datetime
 
-    def wrapper(*args):
+    def wrapper(*args, **kwargs):
         start_datetime = datetime.now()
-        func(*args)
+        _return = func(*args, **kwargs)
         end_datetime = datetime.now()
 
         print(f'\nStart date: {start_datetime.isoformat()}')
         print(f'End date: {end_datetime.isoformat()}')
         print(f'Program took: {end_datetime - start_datetime} to run\n')
+
+        return _return
 
     return wrapper
 

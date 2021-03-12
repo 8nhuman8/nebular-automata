@@ -37,6 +37,11 @@
             "end": null
         },
 
+        "--starting-point": {
+            "valueX": null,
+            "valueY": null,
+            "random": false
+        },
         "--color-background": {
             "value": null,
             "random": false
