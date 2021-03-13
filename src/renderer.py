@@ -72,7 +72,7 @@ def config_colors() -> list:
 
 
 @utils.benchmark
-def render_image(args: Namespace, msg_send: bool = False) -> Tuple[Union[None, str], dict, list]:
+def render_image(args: Namespace, msg_send: bool = False) -> Tuple[Union[None, str], dict, list, utils.Vector]:
     size = utils.Vector(args.width, args.height)
 
     starting_point = args.starting_point
