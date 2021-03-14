@@ -5,7 +5,7 @@ DESCRIPTION = ('Creates a beautiful nebula. Percentages show the duration '
 
 # Basic options
 HELP_STARTING_POINT = "The coordinate of a starting point. By default it's in the middle."
-HELP_REPRODUCE_CHANCE = 'The chance the square can produce other squares.'
+HELP_REPRODUCE_CHANCE = "The chance the square can produce other squares. By default it's 0.51"
 HELP_MAX_COUNT = ('The maximum number of squares in the image. By '
                   'default, this is half of all pixels in the future image.')
 HELP_COLOR_BACKGROUND = ('The background color. Color components must be '

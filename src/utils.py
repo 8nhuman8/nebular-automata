@@ -82,16 +82,12 @@ def gradient2(gens: int, c1: Color, c2: Color) -> list:
     # cc2 - color component of the 2nd color
     # d_c - difference
     def fill_grad(cc1: int, cc2: int, d_c: int, grad_list: list) -> list:
-        # t: int -- temporary copy of the color component
+        sign = lambda x: (x > 0) - (x < 0)
         t = cc1
-        if cc1 < cc2:
-            for _ in range(gens - 1):
-                t += d_c
-                grad_list.append(round(t))
-        else:
-            for _ in range(gens - 1):
-                t -= d_c
-                grad_list.append(round(t))
+        d_cc = cc2 - cc1
+        for _ in range(gens - 1):
+            t += sign(d_cc) * d_c
+            grad_list.append(round(t))
         return grad_list
 
     grad_r = fill_grad(c1.r, c2.r, d_r, grad_r)
