@@ -1,4 +1,5 @@
 from collections import namedtuple
+from math import ceil
 from random import choice, randint
 from string import ascii_letters, digits
 from typing import Callable
@@ -46,14 +47,15 @@ def random_color() -> list[int]:
 # gens: int -- generations count
 def gradient(gens: int, colors: list[list[int]]) -> list[tuple[int, int, int, int]]:
     colors = [Color(*color) for color in colors]
+    gens_for_color = ceil(gens / (len(colors) - 1))
 
     grads = []
     for i in range(len(colors) - 1):
-        if i == len(colors) - 2:
-            remaining_gens = gens - (len(colors) - 2) * (gens // (len(colors) - 1))
-            grads.append(gradient2(remaining_gens, colors[i], colors[i + 1]))
-        else:
-            grads.append(gradient2(gens // (len(colors) - 1), colors[i], colors[i + 1]))
+        grads.append(gradient2(gens_for_color, colors[i], colors[i + 1]))
+
+    remaining_gens = gens - (len(colors) - 2) * gens_for_color
+    remaining_gens = remaining_gens if remaining_gens != 0 else 1
+    grads.append(gradient2(remaining_gens, colors[len(colors) - 2], colors[len(colors) - 1]))
 
     gradient_ = []
     for grad in grads:
