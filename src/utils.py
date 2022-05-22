@@ -1,6 +1,6 @@
 from collections import namedtuple
-from string import ascii_letters, digits
 from random import choice, randint
+from string import ascii_letters, digits
 from typing import Callable
 
 
@@ -31,11 +31,11 @@ def benchmark(func: Callable) -> Callable:
     return wrapper
 
 
-def random_colors(n: int) -> list:
+def random_colors(n: int) -> list[list[int]]:
     return [random_color() for _ in range(n)]
 
 
-def random_color() -> tuple:
+def random_color() -> list[int]:
     r = randint(0, 255)
     g = randint(0, 255)
     b = randint(0, 255)
@@ -44,7 +44,7 @@ def random_color() -> tuple:
 
 
 # gens: int -- generations count
-def gradient(gens: int, colors: list) -> list:
+def gradient(gens: int, colors: list[list[int]]) -> list[tuple[int, int, int, int]]:
     colors = [Color(*color) for color in colors]
 
     grads = []
@@ -65,7 +65,7 @@ def gradient(gens: int, colors: list) -> list:
 # gens: int -- generations count
 # c1: Color -- color 1
 # c2: Color -- color 2
-def gradient2(gens: int, c1: Color, c2: Color) -> list:
+def gradient2(gens: int, c1: Color, c2: Color) -> list[tuple[int, int, int, int]]:
     # differences
     d_r = abs(c1.r - c2.r) / gens
     d_g = abs(c1.g - c2.g) / gens
@@ -81,7 +81,7 @@ def gradient2(gens: int, c1: Color, c2: Color) -> list:
     # cc1 - color component of the 1st color
     # cc2 - color component of the 2nd color
     # d_c - difference
-    def fill_grad(cc1: int, cc2: int, d_c: int, grad_list: list) -> list:
+    def fill_grad(cc1: int, cc2: int, d_c: int, grad_list: list[int]) -> list[int]:
         sign = lambda x: (x > 0) - (x < 0)
         t = cc1
         d_cc = cc2 - cc1

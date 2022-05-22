@@ -1,25 +1,17 @@
-from random import random
 from collections import deque
 from datetime import datetime
-from typing import Optional
+from random import random
 
 from utils import Square, Vector
 
 
 class Nebula:
-    def __init__(
-        self,
-        size: Vector,
-        max_count: int,
-        reproduce_chance: float,
-        starting_point: Optional[Vector] = None,
-        quadratic: bool = False
-    ):
+    def __init__(self, size: Vector, max_count: int, reproduce_chance: float, starting_point: Vector | None = None, quadratic: bool = False):
         self.size = size
 
         if starting_point is None:
             starting_point = Vector(size.x // 2, size.y // 2)
-        elif not ((1 <= starting_point.x <= size.x) or (1 <= starting_point.y <= size.y)):
+        elif not (1 <= starting_point.x <= size.x) or (1 <= starting_point.y <= size.y):
             raise IndexError('Starting point coordinate components must be less than or equal to the size of an image.')
         self.starting_point = starting_point
 
@@ -35,7 +27,7 @@ class Nebula:
         self.count = 1
         self.current_generation = 1
 
-        self.squares = [[None for y in range(self.size.y + 1)] for x in range(self.size.x + 1)]
+        self.squares = [[None for _ in range(self.size.y + 1)] for _ in range(self.size.x + 1)]
         self.__not_reproduced_squares = deque()
 
 
@@ -50,7 +42,7 @@ class Nebula:
         print(f'({self.count} / {self.max_count})')
 
 
-    def __square_reproduce(self, square: Square, generation: int) -> list:
+    def __square_reproduce(self, square: Square, generation: int) -> list[Square]:
         self.count += 1
 
         x = square.x
@@ -90,7 +82,7 @@ class Nebula:
         return neighboring_squares
 
 
-    def __get_next_generation(self, current_generation_squares: list) -> list:
+    def __get_next_generation(self, current_generation_squares: list[Square]) -> list[Square]:
         self.current_generation += 1
 
         next_generation_squares = []
@@ -100,7 +92,7 @@ class Nebula:
 
 
     def __destroy(self) -> None:
-        self.squares = [[None for y in range(self.size.y + 1)] for x in range(self.size.x + 1)]
+        self.squares = [[None for _ in range(self.size.y + 1)] for _ in range(self.size.x + 1)]
         self.count = 1
         self.current_generation = 1
         self.__not_reproduced_squares = deque()
@@ -116,7 +108,7 @@ class Nebula:
         self.__not_reproduced_squares.append(self.__get_next_generation(current_generation_squares))
 
 
-    def develop(self, min_percent: Optional[float] = None, max_percent: Optional[float] = None) -> None:
+    def develop(self, min_percent: float | None = None, max_percent: float | None = None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.__not_reproduced_squares.append([starting_square])

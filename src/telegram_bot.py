@@ -1,15 +1,15 @@
-from random import uniform, getrandbits, randint
 from json import load
+from random import getrandbits, randint, uniform
+from typing import Any
 
 from telegram import Bot
-from argparse import ArgumentParser
 
+from constants import BOT_CONFIG_PATH
 from renderer import parse_args, render_image
-from constants import TELEGRAM_IMAGES_SAVE_PATH, BOT_CONFIG_PATH
 from utils import random_color, Vector
 
 
-def parse_config_args(config: dict) -> list:
+def parse_config_args(config: dict[str, Any]) -> list[str]:
     args = []
     for key, value in config['args'].items():
         if key == '--reproduce-chance':
@@ -64,7 +64,7 @@ def parse_config_args(config: dict) -> list:
     return args
 
 
-def generate_caption(args_dict: dict, colors: list, starting_point: Vector) -> str:
+def generate_caption(args_dict: dict[str, Any], colors: list[list[int]], starting_point: Vector) -> str:
     caption = f'width: {args_dict["width"]}\n'
     caption += f'height: {args_dict["height"]}\n'
     caption += f'reproduce chance: {args_dict["reproduce_chance"]}\n'
@@ -76,15 +76,17 @@ def generate_caption(args_dict: dict, colors: list, starting_point: Vector) -> s
     return caption
 
 
-def send_image(config: dict, image_path: str, caption: str) -> None:
+def send_image(config: dict[str, Any], image_path: str, caption: str) -> None:
     bot = Bot(config['token'])
+
+    # Use 'send_document' for sending image without compression
     if config['use_caption']:
         bot.send_photo(config['chat_id'], open(image_path, 'rb'), caption=caption)
     else:
         bot.send_photo(config['chat_id'], open(image_path, 'rb'))
 
 
-def send_random_image(config: dict, scheduled: bool = False) -> None:
+def send_random_image(config: dict[str, Any], scheduled: bool = False) -> None:
     args = parse_config_args(config)
     args.insert(0, config['width'])
     args.insert(1, config['height'])
@@ -99,7 +101,7 @@ def send_random_image(config: dict, scheduled: bool = False) -> None:
         args.pop(0)
 
 
-def send_specific_image(config: dict) -> None:
+def send_specific_image(config: dict[str, Any]) -> None:
     image_path, args_dict, colors, starting_point = render_image(parse_args(), msg_send=True)
     caption = generate_caption(args_dict, colors, starting_point)
     send_image(config, image_path, caption)

@@ -1,18 +1,17 @@
-from datetime import datetime
-from time import sleep
-from random import uniform
 from json import load
-from typing import Optional, Tuple, Union
+from time import sleep
+from typing import Any, Sequence
+from datetime import datetime
 
-from PIL import Image, ImageDraw
 from argparse import ArgumentParser, Namespace
+from PIL import Image, ImageDraw
 
+import constants as c
 from nebula import Nebula
 import utils
-import constants as c
 
 
-def parse_args(args: Optional[list] = None) -> Namespace:
+def parse_args(args: Sequence[str] | None = None) -> Namespace:
     parser = ArgumentParser(description=c.DESCRIPTION)
 
     group_required = parser.add_argument_group('Required options')
@@ -65,14 +64,14 @@ def parse_args(args: Optional[list] = None) -> Namespace:
         return parser.parse_args(args)
 
 
-def config_colors() -> list:
+def config_colors() -> list[list[int]]:
     with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
     return list(colors_dict.values())
 
 
 @utils.benchmark
-def render_image(args: Namespace, msg_send: bool = False) -> Tuple[Union[None, str], dict, list, utils.Vector]:
+def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, dict[str, Any], list[list[int]], utils.Vector]:
     size = utils.Vector(args.width, args.height)
 
     starting_point = args.starting_point
