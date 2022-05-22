@@ -1,6 +1,7 @@
 from json import load
 
 from apscheduler.schedulers.blocking import BlockingScheduler
+from tzlocal import get_localzone
 
 from constants import BOT_CONFIG_PATH, SCHEDULER_CONFIG_PATH
 from telegram_bot import send_random_image
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     start_date = scheduler_config['start_date']
     end_date = scheduler_config['end_date']
 
-    scheduler = BlockingScheduler()
+    scheduler = BlockingScheduler(timezone=str(get_localzone()))
     if scheduler_config['start_date']:
         scheduler.add_job(
             send_random_image,
