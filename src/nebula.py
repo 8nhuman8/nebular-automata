@@ -38,7 +38,7 @@ class Nebula:
     def __output_debug_info(self) -> None:
         print(self.current_generation, end='\t')
         print(f'[{datetime.now().isoformat()}]', end='\t')
-        print('{:.5f}'.format(self.count / self.max_count * 100), '%', end='\t')
+        print(f'{self.count / self.max_count * 100 : .5f} %', end='\t')
         print(f'({self.count} / {self.max_count})')
 
 

@@ -109,7 +109,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
     draw = ImageDraw.Draw(image)
 
     for x in range(size.x + 1):
-        print(f'[{datetime.now().time()}]', 'Image drawing:', '{:.5f}'.format(x / size.x * 100) + ' %', sep='\t')
+        print(f'[{datetime.now().time()}]', 'Image drawing:', f'{x / size.x * 100 : .5f} %', sep='\t')
         for y in range(size.y + 1):
             if nebula.squares[x][y]:
                 if len(colors) == 1:
