@@ -74,29 +74,40 @@ def config_colors() -> list[list[int]]:
 def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, dict[str, Any], list[list[int]], utils.Vector]:
     size = utils.Vector(args.width, args.height)
 
+    # The maximum allowable value of squares count
+    max_count = args.max_count
+    if max_count is None:
+        max_count = (size.x * size.y) // 2
+
     starting_point = args.starting_point
-    if starting_point is not None:
+    if starting_point is None:
+        starting_point = utils.Vector(size.x // 2, size.y // 2)
+    else:
         # For the user to use the coordinate indexing starting at one
         starting_point = utils.Vector(*[x - 1 for x in args.starting_point])
 
-    color_background = tuple(args.color_background)
-
     nebula = Nebula(
         size,
-        args.max_count,
+        max_count,
         args.reproduce_chance,
-        quadratic=args.quadratic,
-        starting_point=starting_point
+        starting_point,
+        args.quadratic
     )
     nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
 
     colors = config_colors()
+    color_background = tuple(args.color_background)
 
     if args.random_colors:
         colors = utils.random_colors(args.colors_number)
         gradient = utils.gradient(nebula.current_generation, colors)
     elif len(colors) > 1:
+        colors = [utils.Color(*color) for color in colors]
         gradient = utils.gradient(nebula.current_generation, colors)
+    else:
+        raise Exception('Colors were not set.')
+
+    colors = [list(color) for color in list(colors)]
 
     if args.opaque:
         for color in colors:
@@ -111,10 +122,11 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
     for x in range(size.x + 1):
         print(f'[{datetime.now().time()}]', 'Image drawing:', f'{x / size.x * 100 : .5f} %', sep='\t')
         for y in range(size.y + 1):
-            if nebula.squares[x][y]:
+            square = nebula.squares[x][y]
+            if square:
                 if len(colors) == 1:
                     max_gen = nebula.current_generation
-                    gen = nebula.squares[x][y].gen
+                    gen = square.gen
 
                     alpha = round((1 - gen / max_gen) * 255)
                     if args.fade_in:
@@ -124,13 +136,14 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
 
                     draw.point([x, y], fill=tuple(colors[0]))
                 else:
-                    gen = nebula.squares[x][y].gen - 1
+                    gen = square.gen - 1
                     draw.point([x, y], fill=gradient[gen])
             else:
                 draw.point([x, y], fill=color_background)
 
     image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
+
     if args.save or msg_send:
         if args.path:
             image.save(args.path + image_name, format='PNG', optimize=True, quality=1)
@@ -141,6 +154,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
         else:
             image.save(image_name, 'PNG')
             image_path = image_name
+
     if args.dont_show_image:
         image.show()
 

@@ -32,21 +32,20 @@ def benchmark(func: Callable) -> Callable:
     return wrapper
 
 
-def random_colors(n: int) -> list[list[int]]:
+def random_colors(n: int) -> list[Color]:
     return [random_color() for _ in range(n)]
 
 
-def random_color() -> list[int]:
+def random_color() -> Color:
     r = randint(0, 255)
     g = randint(0, 255)
     b = randint(0, 255)
     a = randint(0, 255)
-    return [r, g, b, a]
+    return Color(r, g, b, a)
 
 
 # gens: int -- generations count
-def gradient(gens: int, colors: list[list[int]]) -> list[tuple[int, int, int, int]]:
-    colors = [Color(*color) for color in colors]
+def gradient(gens: int, colors: list[Color]) -> list[Color]:
     gens_for_color = ceil(gens / (len(colors) - 1))
 
     grads = []
@@ -67,7 +66,7 @@ def gradient(gens: int, colors: list[list[int]]) -> list[tuple[int, int, int, in
 # gens: int -- generations count
 # c1: Color -- color 1
 # c2: Color -- color 2
-def gradient2(gens: int, c1: Color, c2: Color) -> list[tuple[int, int, int, int]]:
+def gradient2(gens: int, c1: Color, c2: Color) -> list[Color]:
     # differences
     d_r = abs(c1.r - c2.r) / gens
     d_g = abs(c1.g - c2.g) / gens
@@ -97,4 +96,4 @@ def gradient2(gens: int, c1: Color, c2: Color) -> list[tuple[int, int, int, int]
     grad_b = fill_grad(c1.b, c2.b, d_b, grad_b)
     grad_a = fill_grad(c1.a, c2.a, d_a, grad_a)
 
-    return list(zip(grad_r, grad_g, grad_b, grad_a))
+    return [Color(*color) for color in list(zip(grad_r, grad_g, grad_b, grad_a))]

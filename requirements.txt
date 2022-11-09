@@ -1,4 +1,4 @@
-Pillow>=9.1.1
-python-telegram-bot>=13.11
+Pillow>=9.3.0
+python-telegram-bot>=13.14
 APScheduler>=3.6.3
 tzlocal>=4.2

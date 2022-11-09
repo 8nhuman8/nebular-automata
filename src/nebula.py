@@ -6,21 +6,15 @@ from utils import Square, Vector
 
 
 class Nebula:
-    def __init__(self, size: Vector, max_count: int, reproduce_chance: float, starting_point: Vector | None = None, quadratic: bool = False):
+    def __init__(self, size: Vector, max_count: int, reproduce_chance: float, starting_point: Vector, quadratic: bool):
         self.size = size
+        self.max_count = max_count
+        self.reproduce_chance = reproduce_chance
 
-        if starting_point is None:
-            starting_point = Vector(size.x // 2, size.y // 2)
-        elif not (1 <= starting_point.x <= size.x) or (1 <= starting_point.y <= size.y):
+        if starting_point.x < 1 or starting_point.y < 1 or starting_point.x > size.x or starting_point.y > size.y:
             raise IndexError('Starting point coordinate components must be less than or equal to the size of an image.')
         self.starting_point = starting_point
 
-        # The maximum allowable value of squares count
-        if max_count is None:
-            max_count = (size.x * size.y) // 2
-        self.max_count = max_count
-
-        self.reproduce_chance = reproduce_chance
         self.quadratic = quadratic
 
         # Current squares count
