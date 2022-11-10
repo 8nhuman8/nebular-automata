@@ -11,6 +11,37 @@ from nebula import Nebula
 import utils
 
 
+def validate_input(args: Namespace) -> Namespace:
+    if args.width <= 0 or args.height <= 0:
+        raise ValueError('Size components must be natural numbers.')
+
+    size = utils.Vector(args.width, args.height)
+
+    if args.max_count is None:
+        args.max_count = (size.x * size.y) // 2
+    elif args.max_count <= 0:
+        raise ValueError('\'max_count\' value must be natural number.')
+
+    if args.reproduce_chance <= 0:
+        raise ValueError('\'reproduce_chance\' value must be in the interval (0, 1).')
+
+    if args.starting_point is None:
+        args.starting_point = utils.Vector(size.x // 2, size.y // 2)
+    else:
+        args.starting_point = utils.Vector(*[x - 1 for x in args.starting_point])
+
+    if not (0 <= args.starting_point.x < size.x and 0 <= args.starting_point.y < size.y):
+        raise ValueError('Starting point coordinate components (x or y) must be in the interval [1, size(x or y)].')
+
+    return args
+
+
+def config_colors() -> list[list[int]]:
+    with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
+        colors_dict = load(json_file)
+    return list(colors_dict.values())
+
+
 def parse_args(args: Sequence[str] | None = None) -> Namespace:
     parser = ArgumentParser(description=c.DESCRIPTION)
 
@@ -64,33 +95,16 @@ def parse_args(args: Sequence[str] | None = None) -> Namespace:
         return parser.parse_args(args)
 
 
-def config_colors() -> list[list[int]]:
-    with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
-        colors_dict = load(json_file)
-    return list(colors_dict.values())
-
-
 @utils.benchmark
 def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, dict[str, Any], list[list[int]], utils.Vector]:
+    args = validate_input(args)
     size = utils.Vector(args.width, args.height)
-
-    # The maximum allowable value of squares count
-    max_count = args.max_count
-    if max_count is None:
-        max_count = (size.x * size.y) // 2
-
-    starting_point = args.starting_point
-    if starting_point is None:
-        starting_point = utils.Vector(size.x // 2, size.y // 2)
-    else:
-        # For the user to use the coordinate indexing starting at one
-        starting_point = utils.Vector(*[x - 1 for x in args.starting_point])
 
     nebula = Nebula(
         size,
-        max_count,
+        args.max_count,
         args.reproduce_chance,
-        starting_point,
+        args.starting_point,
         args.quadratic
     )
     nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
@@ -100,13 +114,8 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
 
     if args.random_colors:
         colors = utils.random_colors(args.colors_number)
-        gradient = utils.gradient(nebula.current_generation, colors)
-    elif len(colors) > 1:
-        colors = [utils.Color(*color) for color in colors]
-        gradient = utils.gradient(nebula.current_generation, colors)
-    else:
-        raise Exception('Colors were not set.')
 
+    gradient = utils.gradient(nebula.current_generation, [utils.Color(*color) for color in colors])
     colors = [list(color) for color in list(colors)]
 
     if args.opaque:
@@ -116,7 +125,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
     print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
     sleep(1)
 
-    image = Image.new('RGBA', (size.x, size.y))
+    image = Image.new('RGBA', size)
     draw = ImageDraw.Draw(image)
 
     for x in range(size.x + 1):
@@ -140,6 +149,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
                     draw.point([x, y], fill=gradient[gen])
             else:
                 draw.point([x, y], fill=color_background)
+    print()
 
     image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None

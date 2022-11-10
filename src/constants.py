@@ -14,8 +14,8 @@ HELP_COLOR_BACKGROUND = ('The background color. Color components must be '
 # Multicolor options
 HELP_RANDOM_COLORS = 'Accent colors will be random.'
 HELP_OPAQUE = 'All colors will be opaque.'
-HELP_COLORS_NUMBER = ("How many colors will be used. By default it's 3. "
-                      "Must be used with '--random-colors' argument.")
+HELP_COLORS_NUMBER = ('How many colors will be used. By default it\'s 3. '
+                      'Must be used with \'--random-colors\' argument.')
 
 # Additional options
 HELP_MIN_PERCENT = ('The program will work until nebula is filled '
@@ -34,7 +34,7 @@ HELP_PATH = ('The path by which the generated image will be saved. Write the pat
 HELP_DONT_SHOW_IMAGE = 'Do not show image after execution.'
 
 # Notification messages
-NOTIFICATION_MSG_BEFORE_RENDERING = ('Now the data will be processed and converted to a '
+NOTIFICATION_MSG_BEFORE_RENDERING = ('\nNow the data will be processed and converted to a '
                                      'graphical representation.\nIt can take some time.\n')
 
 # Telegram paths

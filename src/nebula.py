@@ -10,15 +10,11 @@ class Nebula:
         self.size = size
         self.max_count = max_count
         self.reproduce_chance = reproduce_chance
-
-        if starting_point.x < 1 or starting_point.y < 1 or starting_point.x > size.x or starting_point.y > size.y:
-            raise IndexError('Starting point coordinate components must be less than or equal to the size of an image.')
         self.starting_point = starting_point
-
         self.quadratic = quadratic
 
         # Current squares count
-        self.count = 1
+        self.current_count = 1
         self.current_generation = 1
 
         self.squares = [[None for _ in range(self.size.y + 1)] for _ in range(self.size.x + 1)]
@@ -32,12 +28,12 @@ class Nebula:
     def __output_debug_info(self) -> None:
         print(self.current_generation, end='\t')
         print(f'[{datetime.now().isoformat()}]', end='\t')
-        print(f'{self.count / self.max_count * 100 : .5f} %', end='\t')
-        print(f'({self.count} / {self.max_count})')
+        print(f'{self.current_count / self.max_count * 100 : .5f} %', end='\t')
+        print(f'({self.current_count} / {self.max_count})')
 
 
     def __square_reproduce(self, square: Square, generation: int) -> list[Square]:
-        self.count += 1
+        self.current_count += 1
 
         x = square.x
         y = square.y
@@ -62,16 +58,13 @@ class Nebula:
         neighboring_squares = []
         # 'nc' stands for 'neighboring coordinate'
         for nc in neighboring_coordinates:
-            if (
-                nc.x <= self.size.x
-                and nc.x >= 0
-                and nc.y <= self.size.y
-                and nc.y >= 0
-                and self.__able_to_reproduce()
+            if (0 <= nc.x <= self.size.x and
+                0 <= nc.y <= self.size.y and
+                self.__able_to_reproduce() and
+                self.squares[nc.x][nc.y] is None
             ):
-                if self.squares[nc.x][nc.y] is None:
-                    self.squares[nc.x][nc.y] = Square(nc.x, nc.y, generation)
-                    neighboring_squares.append(self.squares[nc.x][nc.y])
+                self.squares[nc.x][nc.y] = Square(nc.x, nc.y, generation)
+                neighboring_squares.append(self.squares[nc.x][nc.y])
 
         return neighboring_squares
 
@@ -87,7 +80,7 @@ class Nebula:
 
     def __destroy(self) -> None:
         self.squares = [[None for _ in range(self.size.y + 1)] for _ in range(self.size.x + 1)]
-        self.count = 1
+        self.current_count = 1
         self.current_generation = 1
         self.__not_reproduced_squares = deque()
 
@@ -107,29 +100,25 @@ class Nebula:
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.__not_reproduced_squares.append([starting_square])
 
-        minp_exists = min_percent is not None
-        maxp_exists = max_percent is not None
         pass_once = True
 
-        while minp_exists or maxp_exists or pass_once:
-
-            while self.__not_reproduced_squares != deque([[]]) and self.count <= self.max_count:
+        while min_percent or max_percent or pass_once:
+            while self.__not_reproduced_squares != deque([[]]) and self.current_count <= self.max_count:
                 self.__develop_one_generation()
-                if maxp_exists:
-                    if self.count / self.max_count >= max_percent:
+                if max_percent:
+                    if self.current_count / self.max_count >= max_percent:
                         break
 
             pass_once = False
-            print()
 
-            if maxp_exists:
-                if self.count / self.max_count >= max_percent:
+            if max_percent:
+                if self.current_count / self.max_count >= max_percent:
                     break
                 else:
                     self.__destroy()
 
-            if minp_exists:
-                if self.count / self.max_count >= min_percent:
+            if min_percent:
+                if self.current_count / self.max_count >= min_percent:
                     break
                 else:
                     self.__destroy()

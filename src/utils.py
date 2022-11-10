@@ -23,7 +23,7 @@ def benchmark(func: Callable) -> Callable:
         return_value = func(*args, **kwargs)
         end_datetime = datetime.now()
 
-        print(f'\nStart date: {start_datetime.isoformat()}')
+        print(f'Start date: {start_datetime.isoformat()}')
         print(f'End date: {end_datetime.isoformat()}')
         print(f'Program took: {end_datetime - start_datetime} to run\n')
 
@@ -64,8 +64,6 @@ def gradient(gens: int, colors: list[Color]) -> list[Color]:
 
 
 # gens: int -- generations count
-# c1: Color -- color 1
-# c2: Color -- color 2
 def gradient2(gens: int, c1: Color, c2: Color) -> list[Color]:
     # differences
     d_r = abs(c1.r - c2.r) / gens
