@@ -4,8 +4,10 @@ TODO.txt
 # VS Code workspace settings
 .vscode/
 
-# Generated images
+# Generated images, videos and GIFs
 images/
+videos/
+gifs/
 
 # Generated images for Telegram channel
 _telegram_*

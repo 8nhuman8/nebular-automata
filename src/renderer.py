@@ -1,9 +1,13 @@
-from json import load
-from time import sleep
-from typing import Any, Sequence
-from datetime import datetime
-
 from argparse import ArgumentParser, Namespace
+from functools import reduce
+from json import load
+from operator import iconcat
+from os import remove
+from typing import Any, Sequence
+
+import cv2
+import ffmpeg
+from numpy import array
 from PIL import Image, ImageDraw
 
 import constants as c
@@ -40,6 +44,42 @@ def config_colors() -> list[list[int]]:
     with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
     return list(colors_dict.values())
+
+
+def draw_pixels(image: Image.Image, squares: list[utils.Square], max_gen: int, colors: list[list[int]], gradient: list[utils.Color] | None):
+    draw = ImageDraw.Draw(image)
+
+    for square in squares:
+        coord = [square.x, square.y]
+        gen = square.gen
+
+        # ADD OPTION FOR MAKING SOLID COLOR, NOT SLIGHLTY TRANSPARENT AT THE ENDS
+        alpha = round((1 - gen / max_gen) * 255)
+        if args.fade_in:
+            alpha = round(gen / max_gen * 255)
+
+        colors[0][3] = alpha
+
+        if gradient:
+            draw.point(coord, fill=gradient[gen - 1])
+        else:
+            draw.point(coord, fill=tuple(colors[0]))
+
+    return image
+
+
+def compress_video(video_path: str, output_path: str, target_size: int):
+    probe = ffmpeg.probe(video_path)
+    duration = float(probe['format']['duration'])
+    video_bitrate = (target_size * 1024 * 8) / (1.073741824 * duration)
+    (
+        ffmpeg
+        .input(video_path)
+        .output(output_path, **{'c:v': 'libx264', 'b:v': video_bitrate, 'f': 'mp4'})
+        .overwrite_output()
+        .global_args('-loglevel', 'error')
+        .run()
+    )
 
 
 def parse_args(args: Sequence[str] | None = None) -> Namespace:
@@ -107,56 +147,36 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
         args.starting_point,
         args.quadratic
     )
-    nebula.develop(min_percent=args.min_percent, max_percent=args.max_percent)
+    nebula.develop(args.min_percent, args.max_percent)
+    max_gen = nebula.current_generation
 
-    colors = config_colors()
     color_background = tuple(args.color_background)
 
+    colors = config_colors()
     if args.random_colors:
         colors = utils.random_colors(args.colors_number)
 
-    gradient = utils.gradient(nebula.current_generation, [utils.Color(*color) for color in colors])
-    colors = [list(color) for color in list(colors)]
+    gradient = None
+    if len(colors) != 1:
+        gradient = utils.gradient(nebula.current_generation, [utils.Color(*color) for color in colors])
 
+    colors = [list(color) for color in list(colors)]
     if args.opaque:
         for color in colors:
             color[3] = 255
 
     print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
-    sleep(1)
 
     image = Image.new('RGBA', size)
-    draw = ImageDraw.Draw(image)
-
-    for x in range(size.x + 1):
-        print(f'[{datetime.now().time()}]', 'Image drawing:', f'{x / size.x * 100 : .5f} %', sep='\t')
-        for y in range(size.y + 1):
-            square = nebula.squares[x][y]
-            if square:
-                if len(colors) == 1:
-                    max_gen = nebula.current_generation
-                    gen = square.gen
-
-                    alpha = round((1 - gen / max_gen) * 255)
-                    if args.fade_in:
-                        alpha = round(gen / max_gen * 255)
-
-                    colors[0][3] = alpha
-
-                    draw.point([x, y], fill=tuple(colors[0]))
-                else:
-                    gen = square.gen - 1
-                    draw.point([x, y], fill=gradient[gen])
-            else:
-                draw.point([x, y], fill=color_background)
-    print()
+    image.paste(color_background, [0, 0, size.x, size.y])
+    image = draw_pixels(image, reduce(iconcat, nebula.population, []), max_gen, colors, gradient)
 
     image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
     image_path = None
 
     if args.save or msg_send:
         if args.path:
-            image.save(args.path + image_name, format='PNG', optimize=True, quality=1)
+            image.save(args.path + image_name, 'PNG', optimize=True, quality=1)
             image_path = args.path + image_name
         elif msg_send:
             image.save(c.TELEGRAM_IMAGES_SAVE_PATH + c.TELERGAM_IMAGE_PREFIX + image_name, 'PNG')
@@ -167,6 +187,24 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
 
     if args.dont_show_image:
         image.show()
+
+    image = Image.new('RGBA', size)
+    image.paste(color_background, [0, 0, size.x, size.y])
+    image = draw_pixels(image, nebula.population[0], max_gen, colors, gradient)
+    images = [image]
+
+    for gen_index, generation in enumerate(nebula.population[1:]):
+        current_image = draw_pixels(images[gen_index].copy(), generation, max_gen, colors, gradient)
+        images.append(current_image)
+
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
+    video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
+    for image in images:
+        video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
+    video.release()
+    compress_video('videos/temp_video.mp4', 'videos/video.mp4', 8 * 1000)
+    remove('videos/temp_video.mp4')
+    #images[0].save(f'all.webp', 'WEBP', minimize=False, save_all=True, append_images=images[1:], duration=50, loop=0)
 
     return image_path, vars(args), colors, nebula.starting_point
 

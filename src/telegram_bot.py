@@ -6,7 +6,7 @@ from telegram import Bot
 
 from constants import BOT_CONFIG_PATH
 from renderer import parse_args, render_image
-from utils import Vector, random_color
+from utils import random_color, Vector
 
 
 def parse_config_args(config: dict[str, Any]) -> list[str]:

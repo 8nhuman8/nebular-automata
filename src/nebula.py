@@ -19,6 +19,7 @@ class Nebula:
 
         self.squares = [[None for _ in range(self.size.y + 1)] for _ in range(self.size.x + 1)]
         self.__not_reproduced_squares = deque()
+        self.population = []
 
 
     def __able_to_reproduce(self) -> bool:
@@ -75,6 +76,9 @@ class Nebula:
         next_generation_squares = []
         for square in current_generation_squares:
             next_generation_squares.extend(self.__square_reproduce(square, self.current_generation))
+
+        self.population.append(next_generation_squares)
+
         return next_generation_squares
 
 
@@ -85,6 +89,8 @@ class Nebula:
         self.__not_reproduced_squares = deque()
 
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
+        self.population = []
+
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.__not_reproduced_squares.append([starting_square])
 
@@ -97,6 +103,8 @@ class Nebula:
 
     def develop(self, min_percent: float | None = None, max_percent: float | None = None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
+        self.population.append([starting_square])
+
         self.squares[starting_square.x][starting_square.y] = starting_square
         self.__not_reproduced_squares.append([starting_square])
 
@@ -109,6 +117,7 @@ class Nebula:
                     if self.current_count / self.max_count >= max_percent:
                         break
 
+            print()
             pass_once = False
 
             if max_percent:
