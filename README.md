@@ -14,9 +14,6 @@
 - [Usage](#usage)
   - [Installation](#installation)
   - [Usage of renderer](#usage-of-renderer-rendererpy)
-  - [Usage of Telegram bot](#usage-of-telegram-bot-telegram_botpy)
-  - [Some remarks on usage of Telegram bot](#some-remarks-on-usage-of-telegram-bot)
-  - [Usage of scheduler](#usage-of-scheduler-schedulerpy)
 - [Command-line arguments description](#command-line-arguments-description)
 - [Credits and references](#credits-and-references)
 - [License](#license)
@@ -56,139 +53,17 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Then you can specify the colors you need in the [`colors_config.json`](configs/colors_config.json).
-   You can use only one color if you want, like this:
-
-   ```json
-   {
-     "1": [255, 0, 0, 255]
-   }
-   ```
-
 3. Run the `renderer.py` with `python src/renderer.py [parameters you need]`.
 4. Enjoy the beauty.
-
-### Usage of Telegram bot ([`telegram_bot.py`](src/telegram_bot.py))
-
-1. Check out all the command-line parameters [below](#command-line-arguments-description).
-2. Add all the required information to the [`bot_config.json`](configs/bot_config.json):
-
-    1) Add your Telegram bot `token`.
-    2) Add `chat_id` of your channel or chat. You can get it quickly by following my [gist](https://gist.github.com/8nhuman8/25f98c5e4b33d47a54cd510da221f309).
-    3) Also set the image size.
-    4) After that, you can choose to use arguments from the [`bot_config.json`](configs/bot_config.json) or enter them in the console. The difference is that using the [`bot_config.json`](configs/bot_config.json), you can specify random values of various arguments.
-    5) If you chose not to use the [`bot_config.json`](configs/bot_config.json), go to step 3. If not, read on.
-    6) After that, you can set the values for different parameters in the `"args"` section:
-       - For `--reproduce-chance`, `--min-percent`, `--max-percent`, `--max-count` and `--colors-number` arguments, you can specify either a specific value or an interval by specifying the `"start"` and `"end"` values. If you chose the second option, the value will be determined randomly and will lie in the interval:
-         **start <= value <= end**
-         If you don't want to use these parameters, then fill them with `null` values. If you fill `--reproduce-chance` parameter with `null` values, then by default it will be randomly determined in the range from **0.5** to **1**, including the final values.
-
-       - `--color-background` argument isn't used by default. The default background color is white, but if you want to set your own, enter the value as RGBA like this:
-
-         ```json
-         "--color-background": {
-             "value": [255, 128, 64, 255],
-             "random": false
-         }
-         ```
-
-         If you want a random background color, then fill it like this:
-
-         ```json
-         "--color-background": {
-             "value": null,
-             "random": true
-         }
-         ```
-
-         `--starting-point` argument isn't used by default. The default starting point is placed in the middle of the image, but if you want to set your own, enter the value like this:
-
-         ```json
-         "--starting-point": {
-            "valueX": 500,
-            "valueY": 1,
-            "random": false
-         }
-         ```
-
-         If you want a random starting point, then fill it like this:
-
-         ```json
-         "--starting-point": {
-            "valueX": null,
-            "valueY": null,
-            "random": true
-         }
-         ```
-
-       - `--opaque`, `--random-colors`, `--fade-in` and `--quadratic` parameters are flag parameters. Their JSON represantion consists of two values: `"value"` and `"random"`:
-
-         If you want to use some of these parameters, then just set the `"value"` to `true`, and `"random"` to `false` like this:
-
-         ```json
-         "--quadratic": {
-             "value": true,
-             "random": false
-         }
-         ```
-
-         If you don't want to use some of these parameters, then just set both values to `false` like this:
-
-         ```json
-         "--fade-in": {
-             "value": false,
-             "random": false
-         }
-         ```
-
-         If you want to get the value randomly, then specify it like this:
-
-         ```json
-         "--opaque": {
-             "value": null,
-             "random": true
-         }
-         ```
-
-3.  - if you made `"use_config_args": true` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](src/telegram_bot.py) with `python src/telegram_bot.py`.
-    - if you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json): Run the [`telegram_bot.py`](src/telegram_bot.py) with `python src/telegram_bot.py [parameters you need]`.
-
-### Some remarks on usage of Telegram bot
-
-Most likely you will need a VPN to use the Telegram bot if you live in a country where Telegram is forbidden.
-I recommend using this [VPN](https://windscribe.com).
-
-If you made `"use_config_args": false` in [`bot_config.json`](configs/bot_config.json), you don't have to write `--save` and `--path PATH` parameters, because all generated images are automatically saved in ['telegram_images'](telegram_images/) folder.
-But if you want to use another folder, then create it and change the `TELEGRAM_IMAGES_SAVE_PATH` constant variable in [`constants.py`](src/constants.py).
-
-You can disable `"use_caption"` option in [`bot_config.json`](configs/bot_config.json) to remove the attachment of text to the message with the image:
-
-```json
-"use_caption": false
-```
-
-### Usage of scheduler ([`scheduler.py`](src/scheduler.py))
-
-1. Check out all the command-line parameters [below](#command-line-arguments-description).
-2. Add all the necessary information to the [`scheduler_config.json`](configs/scheduler_config.json).
-
-   You can also specify the starting date and ending dates for the schedule through the `"start_date"` and `"end_date"` parameters, respectively. They can be given as a date/datetime object or text (in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format) like this:
-
-   ```json
-   "start_date": "2010-10-10 09:30:00",
-   "end_date": "2014-06-15 11:00:00"
-   ```
-
-   If the start date is in the past, the trigger will not fire many times retroactively but instead calculates the next run time from the current time, based on the past start time.
-3. Run the [`scheduler.py`](src/scheduler.py) with `python src/scheduler.py`.
 
 ## Command-line arguments description
 
 ```
-usage: renderer.py [-h] [-sp X Y] [-rc FLOAT] [-mc INT] [-cb R G B A] [-r] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
+usage: renderer.py [-h] [-sp X Y] [-rc FLOAT] [-mc INT] [-r] [-rbg] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
 
 Creates a beautiful nebula. Percentages show the duration of further program execution in ideal conditions! In fact, probability can take its toll.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
 
 Required options:
@@ -199,14 +74,14 @@ Basic options:
   -sp X Y, --starting-point X Y
                         The coordinate of a starting point. By default it's in the middle.
   -rc FLOAT, --reproduce-chance FLOAT
-                        The chance the square can produce other squares.
+                        The chance the square can produce other squares. By default it's 0.51
   -mc INT, --max-count INT
                         The maximum number of squares in the image. By default, this is half of all pixels in the future image.
-  -cb R G B A, --color-background R G B A
-                        The background color. Color components must be specified between 0 and 255. The default color is white.
 
 Multicoloring options:
-  -r, --random-colors   Accent colors will be random.
+  -r, --random-colors   All colors will be random.
+  -rbg, --random-background
+                        Background color will be random
   -cn INT, --colors-number INT
                         How many colors will be used. By default it's 3. Must be used with '--random-colors' argument.
   -o, --opaque          All colors will be opaque.
