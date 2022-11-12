@@ -64,7 +64,7 @@ def draw_image(
     squares: list[Square],
     args: Namespace,
     max_gen: int,
-    gradient: list[Color]
+    grad: list[Color]
 ) -> Image.Image:
     draw = ImageDraw.Draw(image)
 
@@ -72,17 +72,17 @@ def draw_image(
         coord = [square.x, square.y]
         gen = square.gen
 
-        if len(gradient) == 1:
+        if len(grad) == 1:
             alpha = round((1 - gen / max_gen) * 255)
             if args.fade_in:
                 alpha = round(gen / max_gen * 255)
             if args.opaque:
                 alpha = 255
 
-            fill_color = gradient[0]
+            fill_color = grad[0]
             fill_color.a = alpha
         else:
-            fill_color = gradient[gen - 1]
+            fill_color = grad[gen - 1]
 
         draw.point(coord, fill=astuple(fill_color))
 
@@ -141,7 +141,7 @@ def arg_parse(args: Sequence[str] | None = None) -> Namespace:
     group_system = parser.add_argument_group('System options')
     group_system.add_argument('-s', '--save', action='store_true', help=HELP_SAVE)
     group_system.add_argument('-p', '--path', metavar='PATH', type=str, help=HELP_PATH)
-    group_system.add_argument('-dsi', '--dont-show-image', action='store_false',
+    group_system.add_argument('-dsi', '--dont-show-image', action='store_true',
                               help=HELP_DONT_SHOW_IMAGE)
 
     if args is None:
@@ -190,25 +190,31 @@ def render_image(args: Namespace):
         else:
             im.save(im_name, 'PNG', optimize=True, quality=1)
 
-    if args.dont_show_image:
+    if not args.dont_show_image:
         im.show()
 
-    # image = Image.new('RGBA', size)
-    # image.paste(color_background, [0, 0, size.x, size.y])
-    # image = draw_pixels(image, nebula.population[0], args, max_gen, gradient)
-    # images = [image]
+    image = Image.new('RGBA', size)
+    image.paste(astuple(color_bg), [0, 0, size.x, size.y])
+    image = draw_image(image, nebula.population[0], args, max_gen, grad)
+    images = [image]
 
-    # for gen_index, generation in enumerate(nebula.population[1:]):
-    #     current_image = draw_pixels(images[gen_index].copy(), generation, args, max_gen, gradient)
-    #     images.append(current_image)
+    for gen_index, generation in enumerate(nebula.population[1:]):
+        current_image = draw_image(images[gen_index].copy(), generation, args, max_gen, grad)
+        images.append(current_image)
 
-    # fourcc = cv2.VideoWriter_fourcc(*'avc1')
-    # video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
-    # for image in images:
-    #     video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
-    # video.release()
-    # compress_video('videos/temp_video.mp4', 'videos/video.mp4', 8)
-    # remove('videos/temp_video.mp4')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
+    video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
+    for image in images:
+        video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
+    video.release()
+
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
+    video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
+    for image in images:
+        video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
+    video.release()
+    compress_video('videos/temp_video.mp4', 'videos/video.mp4', 1)
+    remove('videos/temp_video.mp4')
     # #images[0].save(f'gif.gif', 'GIF', minimize=True, save_all=True, append_images=images[1:], duration=50, loop=0)
 
 
