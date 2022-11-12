@@ -9,9 +9,6 @@ images/
 videos/
 gifs/
 
-# Generated images for Telegram channel
-_telegram_*
-
 # Telegram and schedule info
 info/
 

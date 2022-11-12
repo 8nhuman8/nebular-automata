@@ -1,9 +1,10 @@
 from argparse import ArgumentParser, Namespace
+from dataclasses import astuple
 from functools import reduce
 from json import load
 from operator import iconcat
 from os import remove
-from typing import Any, Sequence
+from typing import Sequence
 
 import cv2
 import ffmpeg
@@ -40,30 +41,38 @@ def validate_input(args: Namespace) -> Namespace:
     return args
 
 
-def config_colors() -> list[list[int]]:
+def config_colors() -> list[utils.Color]:
     with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
-    return list(colors_dict.values())
+    return [utils.Color(*color) for color in list(colors_dict.values())]
 
 
-def draw_pixels(image: Image.Image, squares: list[utils.Square], max_gen: int, colors: list[list[int]], gradient: list[utils.Color] | None):
+def draw_pixels(
+    image: Image.Image,
+    squares: list[utils.Square],
+    args: Namespace,
+    max_gen: int,
+    gradient: list[utils.Color]
+) -> Image.Image:
     draw = ImageDraw.Draw(image)
 
     for square in squares:
         coord = [square.x, square.y]
         gen = square.gen
 
-        # ADD OPTION FOR MAKING SOLID COLOR, NOT SLIGHLTY TRANSPARENT AT THE ENDS
-        alpha = round((1 - gen / max_gen) * 255)
-        if args.fade_in:
-            alpha = round(gen / max_gen * 255)
+        if len(gradient) == 1:
+            alpha = round((1 - gen / max_gen) * 255)
+            if args.fade_in:
+                alpha = round(gen / max_gen * 255)
+            if args.opaque:
+                alpha = 255
 
-        colors[0][3] = alpha
-
-        if gradient:
-            draw.point(coord, fill=gradient[gen - 1])
+            fill_color = gradient[0]
+            fill_color.a = alpha
         else:
-            draw.point(coord, fill=tuple(colors[0]))
+            fill_color = gradient[gen - 1]
+
+        draw.point(coord, fill=astuple(fill_color))
 
     return image
 
@@ -93,21 +102,18 @@ def parse_args(args: Sequence[str] | None = None) -> Namespace:
     group_basic.add_argument('-sp', '--starting-point', metavar=('X', 'Y'),
                              nargs=2, type=int, help=c.HELP_STARTING_POINT)
     group_basic.add_argument('-rc', '--reproduce-chance', metavar='FLOAT',
-                             type=float, default=0.51,
-                             help=c.HELP_REPRODUCE_CHANCE)
-    group_basic.add_argument('-mc', '--max-count', metavar='INT',
-                             type=int, help=c.HELP_MAX_COUNT)
-    group_basic.add_argument('-cb', '--color-background',
-                             metavar=('R', 'G', 'B', 'A'), nargs=4, type=int,
-                             default=(255, 255, 255, 255),
+                             type=float, default=0.51, help=c.HELP_REPRODUCE_CHANCE)
+    group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int,
+                             help=c.HELP_MAX_COUNT)
+    group_basic.add_argument('-cb', '--color-background', metavar=('R', 'G', 'B', 'A'),
+                             nargs=4, type=int, default=(255, 255, 255, 255),
                              help=c.HELP_COLOR_BACKGROUND)
 
     group_multicolor = parser.add_argument_group('Multicoloring options')
     group_multicolor.add_argument('-r', '--random-colors', action='store_true',
                                   help=c.HELP_RANDOM_COLORS)
     group_multicolor.add_argument('-cn', '--colors-number', metavar='INT',
-                                  type=int, default=3,
-                                  help=c.HELP_COLORS_NUMBER)
+                                  type=int, default=3, help=c.HELP_COLORS_NUMBER)
     group_multicolor.add_argument('-o', '--opaque', action='store_true',
                                   help=c.HELP_OPAQUE)
 
@@ -122,10 +128,8 @@ def parse_args(args: Sequence[str] | None = None) -> Namespace:
                                   help=c.HELP_QUADRATIC)
 
     group_system = parser.add_argument_group('System options')
-    group_system.add_argument('-s', '--save', action='store_true',
-                              help=c.HELP_SAVE)
-    group_system.add_argument('-p', '--path', metavar='PATH',
-                              type=str, help=c.HELP_PATH)
+    group_system.add_argument('-s', '--save', action='store_true', help=c.HELP_SAVE)
+    group_system.add_argument('-p', '--path', metavar='PATH', type=str, help=c.HELP_PATH)
     group_system.add_argument('-dsi', '--dont-show-image', action='store_false',
                               help=c.HELP_DONT_SHOW_IMAGE)
 
@@ -136,7 +140,7 @@ def parse_args(args: Sequence[str] | None = None) -> Namespace:
 
 
 @utils.benchmark
-def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, dict[str, Any], list[list[int]], utils.Vector]:
+def render_image(args: Namespace):
     args = validate_input(args)
     size = utils.Vector(args.width, args.height)
 
@@ -151,50 +155,39 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
     max_gen = nebula.current_generation
 
     color_background = tuple(args.color_background)
-
     colors = config_colors()
     if args.random_colors:
         colors = utils.random_colors(args.colors_number)
-
-    gradient = None
-    if len(colors) != 1:
-        gradient = utils.gradient(nebula.current_generation, [utils.Color(*color) for color in colors])
-
-    colors = [list(color) for color in list(colors)]
     if args.opaque:
         for color in colors:
-            color[3] = 255
+            color.a = 255
+
+    gradient = utils.gradient(nebula.current_generation, colors)
 
     print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
 
     image = Image.new('RGBA', size)
     image.paste(color_background, [0, 0, size.x, size.y])
-    image = draw_pixels(image, reduce(iconcat, nebula.population, []), max_gen, colors, gradient)
+    image = draw_pixels(image, reduce(iconcat, nebula.population, []), args, max_gen, gradient)
 
     image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
-    image_path = None
 
-    if args.save or msg_send:
+    if args.save:
         if args.path:
             image.save(args.path + image_name, 'PNG', optimize=True, quality=1)
-            image_path = args.path + image_name
-        elif msg_send:
-            image.save(c.TELEGRAM_IMAGES_SAVE_PATH + c.TELERGAM_IMAGE_PREFIX + image_name, 'PNG')
-            image_path = c.TELEGRAM_IMAGES_SAVE_PATH + c.TELERGAM_IMAGE_PREFIX + image_name
         else:
-            image.save(image_name, 'PNG')
-            image_path = image_name
+            image.save(image_name, 'PNG', optimize=True, quality=1)
 
     if args.dont_show_image:
         image.show()
 
     image = Image.new('RGBA', size)
     image.paste(color_background, [0, 0, size.x, size.y])
-    image = draw_pixels(image, nebula.population[0], max_gen, colors, gradient)
+    image = draw_pixels(image, nebula.population[0], args, max_gen, gradient)
     images = [image]
 
     for gen_index, generation in enumerate(nebula.population[1:]):
-        current_image = draw_pixels(images[gen_index].copy(), generation, max_gen, colors, gradient)
+        current_image = draw_pixels(images[gen_index].copy(), generation, args, max_gen, gradient)
         images.append(current_image)
 
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
@@ -204,9 +197,7 @@ def render_image(args: Namespace, msg_send: bool = False) -> tuple[str | None, d
     video.release()
     compress_video('videos/temp_video.mp4', 'videos/video.mp4', 8 * 1000)
     remove('videos/temp_video.mp4')
-    #images[0].save(f'all.webp', 'WEBP', minimize=False, save_all=True, append_images=images[1:], duration=50, loop=0)
-
-    return image_path, vars(args), colors, nebula.starting_point
+    #images[0].save(f'gif.gif', 'GIF', minimize=True, save_all=True, append_images=images[1:], duration=50, loop=0)
 
 
 if __name__ == '__main__':

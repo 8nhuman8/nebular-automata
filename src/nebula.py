@@ -59,7 +59,8 @@ class Nebula:
         neighboring_squares = []
         # 'nc' stands for 'neighboring coordinate'
         for nc in neighboring_coordinates:
-            if (0 <= nc.x <= self.size.x and
+            if (
+                0 <= nc.x <= self.size.x and
                 0 <= nc.y <= self.size.y and
                 self.__able_to_reproduce() and
                 self.squares[nc.x][nc.y] is None

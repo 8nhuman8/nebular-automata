@@ -1,4 +1,6 @@
 from collections import namedtuple
+from dataclasses import dataclass
+from datetime import datetime
 from math import ceil
 from random import choice, randint
 from string import ascii_letters, digits
@@ -7,17 +9,21 @@ from typing import Callable
 
 Square = namedtuple('Square', ['x', 'y', 'gen'])
 Vector = namedtuple('Vector', ['x', 'y'])
-Color = namedtuple('Color', ['r', 'g', 'b', 'a'])
+
+@dataclass
+class Color:
+    r: int
+    g: int
+    b: int
+    a: int
 
 
-def generate_filename(size: int = 18) -> str:
+def generate_filename(size: int = 5) -> str:
     chars = ascii_letters + digits
     return ''.join(choice(chars) for _ in range(size))
 
 
 def benchmark(func: Callable) -> Callable:
-    from datetime import datetime
-
     def wrapper(*args, **kwargs):
         start_datetime = datetime.now()
         return_value = func(*args, **kwargs)
@@ -46,6 +52,9 @@ def random_color() -> Color:
 
 # gens: int -- generations count
 def gradient(gens: int, colors: list[Color]) -> list[Color]:
+    if len(colors) == 1:
+        return [colors[0]]
+
     gens_for_color = ceil(gens / (len(colors) - 1))
 
     grads = []
