@@ -31,7 +31,7 @@ def benchmark(func: Callable) -> Callable:
 
         print(f'\nStart date: {start_datetime.isoformat()}')
         print(f'End date: {end_datetime.isoformat()}')
-        print(f'Program took: {end_datetime - start_datetime} to run\n')
+        print(f'Program took {end_datetime - start_datetime} to run\n')
 
         return return_value
 

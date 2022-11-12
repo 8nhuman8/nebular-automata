@@ -1,4 +1,4 @@
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from dataclasses import astuple
 from functools import reduce
 from json import load
@@ -11,48 +11,60 @@ import ffmpeg
 from numpy import array
 from PIL import Image, ImageDraw
 
-import constants as c
+from constants import *
 from nebula import Nebula
-import utils
+from utils import *
 
 
 def validate_input(args: Namespace) -> Namespace:
-    if args.width <= 0 or args.height <= 0:
-        raise ValueError('Size components must be natural numbers.')
+    if args.width <= 1 or args.height <= 1:
+        raise ArgumentTypeError('width, height ∈ [2..∞]')
 
-    size = utils.Vector(args.width, args.height)
+    size = Vector(args.width, args.height)
 
     if args.max_count is None:
         args.max_count = (size.x * size.y) // 2
     elif args.max_count <= 0:
-        raise ValueError('\'max_count\' value must be natural number.')
+        raise ArgumentTypeError('max_count ∈ N')
 
-    if args.reproduce_chance <= 0:
-        raise ValueError('\'reproduce_chance\' value must be in the interval (0, 1).')
+    if args.colors_number <= 0:
+        raise ArgumentTypeError('colors_number ∈ N')
+
+    if not 0 <= args.reproduce_chance <= 1:
+        raise ArgumentTypeError('reproduce_chance ∈ [0, 1]')
+    if args.min_percent is not None:
+        if not 0 <= args.min_percent <= 1:
+            raise ArgumentTypeError('min_percent ∈ [0, 1]')
+    if args.max_percent is not None:
+        if not 0 <= args.max_percent <= 1:
+            raise ArgumentTypeError('max_percent ∈ [0, 1]')
 
     if args.starting_point is None:
-        args.starting_point = utils.Vector(size.x // 2, size.y // 2)
+        args.starting_point = Vector(size.x // 2, size.y // 2)
     else:
-        args.starting_point = utils.Vector(*[x - 1 for x in args.starting_point])
-
-    if not (0 <= args.starting_point.x < size.x and 0 <= args.starting_point.y < size.y):
-        raise ValueError('Starting point coordinate components (x or y) must be in the interval [1, size(x or y)].')
+        args.starting_point = Vector(args.starting_point[0] - 1, args.starting_point[1] - 1)
+    if not (1 <= args.starting_point.x + 1 <= size.x and 1 <= args.starting_point.y + 1 <= size.y):
+        raise ArgumentTypeError('starting_point.x ∈ [1, width], starting_point.y ∈ [1, height]')
 
     return args
 
 
-def config_colors() -> list[utils.Color]:
-    with open(c.COLORS_CONFIG_PATH, 'r') as json_file:
+def get_palette() -> tuple[list[Color], Color]:
+    with open(COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
-    return [utils.Color(*color) for color in list(colors_dict.values())]
+
+    colors = [Color(*color) for color in list(colors_dict['colors'].values())]
+    color_bg = Color(*colors_dict['color_bg'])
+
+    return colors, color_bg
 
 
-def draw_pixels(
+def draw_image(
     image: Image.Image,
-    squares: list[utils.Square],
+    squares: list[Square],
     args: Namespace,
     max_gen: int,
-    gradient: list[utils.Color]
+    gradient: list[Color]
 ) -> Image.Image:
     draw = ImageDraw.Draw(image)
 
@@ -80,7 +92,7 @@ def draw_pixels(
 def compress_video(video_path: str, output_path: str, target_size: int):
     probe = ffmpeg.probe(video_path)
     duration = float(probe['format']['duration'])
-    video_bitrate = (target_size * 1024 * 8) / (1.073741824 * duration)
+    video_bitrate = (target_size * 1024 * 1024 * 8) / (duration * 1.073741824)
     (
         ffmpeg
         .input(video_path)
@@ -91,8 +103,8 @@ def compress_video(video_path: str, output_path: str, target_size: int):
     )
 
 
-def parse_args(args: Sequence[str] | None = None) -> Namespace:
-    parser = ArgumentParser(description=c.DESCRIPTION)
+def arg_parse(args: Sequence[str] | None = None) -> Namespace:
+    parser = ArgumentParser(description=DESCRIPTION)
 
     group_required = parser.add_argument_group('Required options')
     group_required.add_argument('width', type=int, help='The width of the image.')
@@ -100,38 +112,37 @@ def parse_args(args: Sequence[str] | None = None) -> Namespace:
 
     group_basic = parser.add_argument_group('Basic options')
     group_basic.add_argument('-sp', '--starting-point', metavar=('X', 'Y'),
-                             nargs=2, type=int, help=c.HELP_STARTING_POINT)
+                             nargs=2, type=int, help=HELP_STARTING_POINT)
     group_basic.add_argument('-rc', '--reproduce-chance', metavar='FLOAT',
-                             type=float, default=0.51, help=c.HELP_REPRODUCE_CHANCE)
+                             type=float, default=0.51, help=HELP_REPRODUCE_CHANCE)
     group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int,
-                             help=c.HELP_MAX_COUNT)
-    group_basic.add_argument('-cb', '--color-background', metavar=('R', 'G', 'B', 'A'),
-                             nargs=4, type=int, default=(255, 255, 255, 255),
-                             help=c.HELP_COLOR_BACKGROUND)
+                             help=HELP_MAX_COUNT)
 
     group_multicolor = parser.add_argument_group('Multicoloring options')
     group_multicolor.add_argument('-r', '--random-colors', action='store_true',
-                                  help=c.HELP_RANDOM_COLORS)
+                                  help=HELP_RANDOM_COLORS)
+    group_multicolor.add_argument('-rbg', '--random-background', action='store_true',
+                                  help=HELP_RANDOM_BACKGROUND)
     group_multicolor.add_argument('-cn', '--colors-number', metavar='INT',
-                                  type=int, default=3, help=c.HELP_COLORS_NUMBER)
+                                  type=int, default=3, help=HELP_COLORS_NUMBER)
     group_multicolor.add_argument('-o', '--opaque', action='store_true',
-                                  help=c.HELP_OPAQUE)
+                                  help=HELP_OPAQUE)
 
     group_additional = parser.add_argument_group('Additional options')
     group_additional.add_argument('-minp', '--min-percent', metavar='FLOAT',
-                                  type=float, help=c.HELP_MIN_PERCENT)
+                                  type=float, help=HELP_MIN_PERCENT)
     group_additional.add_argument('-maxp', '--max-percent', metavar='FLOAT',
-                                  type=float, help=c.HELP_MAX_PERCENT)
+                                  type=float, help=HELP_MAX_PERCENT)
     group_additional.add_argument('-fi', '--fade-in', action='store_true',
-                                  help=c.HELP_FADE_IN)
+                                  help=HELP_FADE_IN)
     group_additional.add_argument('-q', '--quadratic', action='store_true',
-                                  help=c.HELP_QUADRATIC)
+                                  help=HELP_QUADRATIC)
 
     group_system = parser.add_argument_group('System options')
-    group_system.add_argument('-s', '--save', action='store_true', help=c.HELP_SAVE)
-    group_system.add_argument('-p', '--path', metavar='PATH', type=str, help=c.HELP_PATH)
+    group_system.add_argument('-s', '--save', action='store_true', help=HELP_SAVE)
+    group_system.add_argument('-p', '--path', metavar='PATH', type=str, help=HELP_PATH)
     group_system.add_argument('-dsi', '--dont-show-image', action='store_false',
-                              help=c.HELP_DONT_SHOW_IMAGE)
+                              help=HELP_DONT_SHOW_IMAGE)
 
     if args is None:
         return parser.parse_args()
@@ -139,10 +150,10 @@ def parse_args(args: Sequence[str] | None = None) -> Namespace:
         return parser.parse_args(args)
 
 
-@utils.benchmark
+@benchmark
 def render_image(args: Namespace):
     args = validate_input(args)
-    size = utils.Vector(args.width, args.height)
+    size = Vector(args.width, args.height)
 
     nebula = Nebula(
         size,
@@ -154,52 +165,53 @@ def render_image(args: Namespace):
     nebula.develop(args.min_percent, args.max_percent)
     max_gen = nebula.current_generation
 
-    color_background = tuple(args.color_background)
-    colors = config_colors()
+    colors, color_bg = get_palette()
     if args.random_colors:
-        colors = utils.random_colors(args.colors_number)
+        colors = random_colors(args.colors_number)
+    if args.random_background:
+        color_bg = random_color()
     if args.opaque:
         for color in colors:
             color.a = 255
 
-    gradient = utils.gradient(nebula.current_generation, colors)
+    grad = gradient(nebula.current_generation, colors)
 
-    print(c.NOTIFICATION_MSG_BEFORE_RENDERING)
+    print(NOTIFICATION_MSG_BEFORE_RENDERING)
 
-    image = Image.new('RGBA', size)
-    image.paste(color_background, [0, 0, size.x, size.y])
-    image = draw_pixels(image, reduce(iconcat, nebula.population, []), args, max_gen, gradient)
+    im = Image.new('RGBA', size)
+    im.paste(astuple(color_bg), [0, 0, size.x, size.y])
+    im = draw_image(im, reduce(iconcat, nebula.population, []), args, max_gen, grad)
 
-    image_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{utils.generate_filename()}.png'
+    im_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{generate_filename()}.png'
 
     if args.save:
         if args.path:
-            image.save(args.path + image_name, 'PNG', optimize=True, quality=1)
+            im.save(args.path + im_name, 'PNG', optimize=True, quality=1)
         else:
-            image.save(image_name, 'PNG', optimize=True, quality=1)
+            im.save(im_name, 'PNG', optimize=True, quality=1)
 
     if args.dont_show_image:
-        image.show()
+        im.show()
 
-    image = Image.new('RGBA', size)
-    image.paste(color_background, [0, 0, size.x, size.y])
-    image = draw_pixels(image, nebula.population[0], args, max_gen, gradient)
-    images = [image]
+    # image = Image.new('RGBA', size)
+    # image.paste(color_background, [0, 0, size.x, size.y])
+    # image = draw_pixels(image, nebula.population[0], args, max_gen, gradient)
+    # images = [image]
 
-    for gen_index, generation in enumerate(nebula.population[1:]):
-        current_image = draw_pixels(images[gen_index].copy(), generation, args, max_gen, gradient)
-        images.append(current_image)
+    # for gen_index, generation in enumerate(nebula.population[1:]):
+    #     current_image = draw_pixels(images[gen_index].copy(), generation, args, max_gen, gradient)
+    #     images.append(current_image)
 
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
-    video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
-    for image in images:
-        video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
-    video.release()
-    compress_video('videos/temp_video.mp4', 'videos/video.mp4', 8 * 1000)
-    remove('videos/temp_video.mp4')
-    #images[0].save(f'gif.gif', 'GIF', minimize=True, save_all=True, append_images=images[1:], duration=50, loop=0)
+    # fourcc = cv2.VideoWriter_fourcc(*'avc1')
+    # video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
+    # for image in images:
+    #     video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
+    # video.release()
+    # compress_video('videos/temp_video.mp4', 'videos/video.mp4', 8)
+    # remove('videos/temp_video.mp4')
+    # #images[0].save(f'gif.gif', 'GIF', minimize=True, save_all=True, append_images=images[1:], duration=50, loop=0)
 
 
 if __name__ == '__main__':
-    args = parse_args()
+    args = arg_parse()
     render_image(args)

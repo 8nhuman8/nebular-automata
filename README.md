@@ -59,11 +59,11 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 ## Command-line arguments description
 
 ```
-usage: renderer.py [-h] [-sp X Y] [-rc FLOAT] [-mc INT] [-cb R G B A] [-r] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
+usage: renderer.py [-h] [-sp X Y] [-rc FLOAT] [-mc INT] [-r] [-rbg] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
 
 Creates a beautiful nebula. Percentages show the duration of further program execution in ideal conditions! In fact, probability can take its toll.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
 
 Required options:
@@ -74,14 +74,14 @@ Basic options:
   -sp X Y, --starting-point X Y
                         The coordinate of a starting point. By default it's in the middle.
   -rc FLOAT, --reproduce-chance FLOAT
-                        The chance the square can produce other squares.
+                        The chance the square can produce other squares. By default it's 0.51
   -mc INT, --max-count INT
                         The maximum number of squares in the image. By default, this is half of all pixels in the future image.
-  -cb R G B A, --color-background R G B A
-                        The background color. Color components must be specified between 0 and 255. The default color is white.
 
 Multicoloring options:
-  -r, --random-colors   Accent colors will be random.
+  -r, --random-colors   All colors will be random.
+  -rbg, --random-background
+                        Background color will be random
   -cn INT, --colors-number INT
                         How many colors will be used. By default it's 3. Must be used with '--random-colors' argument.
   -o, --opaque          All colors will be opaque.

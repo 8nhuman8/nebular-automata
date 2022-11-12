@@ -4,15 +4,15 @@ DESCRIPTION = ('Creates a beautiful nebula. Percentages show the duration '
                'probability can take its toll.')
 
 # Basic options
-HELP_STARTING_POINT = 'The coordinate of a starting point. By default it\'s in the middle.'
-HELP_REPRODUCE_CHANCE = 'The chance the square can produce other squares. By default it\'s 0.51'
+HELP_STARTING_POINT = "The coordinate of a starting point. By default it's in the middle."
+HELP_REPRODUCE_CHANCE = "The chance the square can produce other squares. By default it's 0.51"
 HELP_MAX_COUNT = 'The maximum number of squares in the image. By default, this is half of all pixels in the future image.'
-HELP_COLOR_BACKGROUND = 'The background color. Color components must be specified between 0 and 255. The default color is white.'
 
 # Multicolor options
 HELP_RANDOM_COLORS = 'All colors will be random.'
+HELP_RANDOM_BACKGROUND = 'Background color will be random'
 HELP_OPAQUE = 'All colors will be opaque.'
-HELP_COLORS_NUMBER = 'How many colors will be used. By default it\'s 3. Must be used with \'--random-colors\' argument.'
+HELP_COLORS_NUMBER = "How many colors will be used. By default it's 3. Must be used with '--random-colors' argument."
 
 # Additional options
 HELP_MIN_PERCENT = 'The program will work until nebula is filled with a certain or greater percentage.'
@@ -29,6 +29,4 @@ HELP_DONT_SHOW_IMAGE = 'Do not show image after execution.'
 NOTIFICATION_MSG_BEFORE_RENDERING = '\nNow the data will be processed and converted to a graphical representation.\nIt can take some time.\n'
 
 # Configs paths
-BOT_CONFIG_PATH = './configs/bot_config.json'
 COLORS_CONFIG_PATH = './configs/colors_config.json'
-SCHEDULER_CONFIG_PATH = './configs/scheduler_config.json'
