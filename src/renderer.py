@@ -1,15 +1,13 @@
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from dataclasses import astuple
-from functools import reduce
 from json import load
-from operator import iconcat
 from os import remove
 from typing import Sequence
 
 import cv2
 import ffmpeg
-from numpy import array
-from PIL import Image, ImageDraw
+import numpy as np
+from PIL import Image
 
 from constants import *
 from nebula import Nebula
@@ -57,36 +55,6 @@ def get_palette() -> tuple[list[Color], Color]:
     color_bg = Color(*colors_dict['color_bg'])
 
     return colors, color_bg
-
-
-def draw_image(
-    image: Image.Image,
-    squares: list[Square],
-    args: Namespace,
-    max_gen: int,
-    grad: list[Color]
-) -> Image.Image:
-    draw = ImageDraw.Draw(image)
-
-    for square in squares:
-        coord = [square.x, square.y]
-        gen = square.gen
-
-        if len(grad) == 1:
-            alpha = round((1 - gen / max_gen) * 255)
-            if args.fade_in:
-                alpha = round(gen / max_gen * 255)
-            if args.opaque:
-                alpha = 255
-
-            fill_color = grad[0]
-            fill_color.a = alpha
-        else:
-            fill_color = grad[gen - 1]
-
-        draw.point(coord, fill=astuple(fill_color))
-
-    return image
 
 
 def compress_video(video_path: str, output_path: str, target_size: int):
@@ -151,7 +119,7 @@ def arg_parse(args: Sequence[str] | None = None) -> Namespace:
 
 
 @benchmark
-def render_image(args: Namespace):
+def render(args: Namespace):
     args = validate_input(args)
     size = Vector(args.width, args.height)
 
@@ -176,48 +144,47 @@ def render_image(args: Namespace):
 
     grad = gradient(nebula.current_generation, colors)
 
-    print(NOTIFICATION_MSG_BEFORE_RENDERING)
+    out_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{generate_filename()}'
+    temp_video_path = OUTPUT_PATH + 'temp_' + out_name + VIDEO_FORMAT
+    video_path = OUTPUT_PATH + out_name + VIDEO_FORMAT
 
-    im = Image.new('RGBA', size)
-    im.paste(astuple(color_bg), [0, 0, size.x, size.y])
-    im = draw_image(im, reduce(iconcat, nebula.population, []), args, max_gen, grad)
+    fourcc = cv2.VideoWriter_fourcc(*VIDEO_CODEC)
+    video = cv2.VideoWriter(temp_video_path, fourcc, VIDEO_FRAMERATE, size)
+    frame = np.full((size.x, size.y, 4), np.array(astuple(color_bg)), dtype=np.uint8)
 
-    im_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{generate_filename()}.png'
+    for gen_index, generation in enumerate(nebula.population, start=1):
+        if len(grad) == 1:
+            alpha = round((1 - gen_index / max_gen) * 255)
+            if args.fade_in:
+                alpha = round(gen_index / max_gen * 255)
+            if args.opaque:
+                alpha = 255
+
+            fill_color = grad[0]
+            fill_color.a = alpha
+        else:
+            fill_color = grad[gen_index - 1]
+
+        coords = [(square.y, square.x) for square in generation]
+        frame[tuple(np.transpose(coords))] = np.array(astuple(fill_color))
+        video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGRA))
+
+    image = Image.fromarray(frame, mode='RGBA')
 
     if args.save:
         if args.path:
-            im.save(args.path + im_name, 'PNG', optimize=True, quality=1)
+            image.save(args.path + out_name + IMAGE_FORMAT, IMAGE_FORMAT[1:])
         else:
-            im.save(im_name, 'PNG', optimize=True, quality=1)
+            image.save(OUTPUT_PATH + out_name + IMAGE_FORMAT, IMAGE_FORMAT[1:])
 
     if not args.dont_show_image:
-        im.show()
+        image.show()
 
-    image = Image.new('RGBA', size)
-    image.paste(astuple(color_bg), [0, 0, size.x, size.y])
-    image = draw_image(image, nebula.population[0], args, max_gen, grad)
-    images = [image]
-
-    for gen_index, generation in enumerate(nebula.population[1:]):
-        current_image = draw_image(images[gen_index].copy(), generation, args, max_gen, grad)
-        images.append(current_image)
-
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
-    video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
-    for image in images:
-        video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
     video.release()
-
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
-    video = cv2.VideoWriter('videos/temp_video.mp4', fourcc, 60, size)
-    for image in images:
-        video.write(cv2.cvtColor(array(image), cv2.COLOR_RGBA2BGRA))
-    video.release()
-    compress_video('videos/temp_video.mp4', 'videos/video.mp4', 1)
-    remove('videos/temp_video.mp4')
-    # #images[0].save(f'gif.gif', 'GIF', minimize=True, save_all=True, append_images=images[1:], duration=50, loop=0)
+    compress_video(temp_video_path, video_path, TARGET_VIDEO_MB_SIZE)
+    remove(temp_video_path)
 
 
 if __name__ == '__main__':
     args = arg_parse()
-    render_image(args)
+    render(args)

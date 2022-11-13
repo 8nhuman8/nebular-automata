@@ -17,7 +17,7 @@ class Nebula:
         self.current_count = 1
         self.current_generation = 1
 
-        self.squares = [[None for _ in range(self.size.y + 1)] for _ in range(self.size.x + 1)]
+        self.squares = [[None for _ in range(self.size.y)] for _ in range(self.size.x)]
         self.__not_reproduced_squares = deque()
         self.population = []
 
@@ -60,12 +60,12 @@ class Nebula:
         # 'nc' stands for 'neighboring coordinate'
         for nc in neighboring_coordinates:
             if (
-                0 <= nc.x <= self.size.x and
-                0 <= nc.y <= self.size.y and
+                0 <= nc.x <= self.size.x - 1 and
+                0 <= nc.y <= self.size.y - 1 and
                 self.__able_to_reproduce() and
                 self.squares[nc.x][nc.y] is None
             ):
-                self.squares[nc.x][nc.y] = Square(nc.x, nc.y, generation)
+                self.squares[nc.x][nc.y] = Square(nc.x, nc.y)
                 neighboring_squares.append(self.squares[nc.x][nc.y])
 
         return neighboring_squares
@@ -84,12 +84,12 @@ class Nebula:
 
 
     def __destroy(self) -> None:
-        self.squares = [[None for _ in range(self.size.y + 1)] for _ in range(self.size.x + 1)]
+        self.squares = [[None for _ in range(self.size.y)] for _ in range(self.size.x)]
         self.current_count = 1
         self.current_generation = 1
         self.__not_reproduced_squares = deque()
 
-        starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
+        starting_square = Square(self.starting_point.x, self.starting_point.y)
         self.population = []
 
         self.squares[starting_square.x][starting_square.y] = starting_square
@@ -103,7 +103,7 @@ class Nebula:
 
 
     def develop(self, min_percent: float | None = None, max_percent: float | None = None) -> None:
-        starting_square = Square(self.starting_point.x, self.starting_point.y, self.current_generation)
+        starting_square = Square(self.starting_point.x, self.starting_point.y)
         self.population.append([starting_square])
 
         self.squares[starting_square.x][starting_square.y] = starting_square

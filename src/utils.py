@@ -7,7 +7,7 @@ from string import ascii_letters, digits
 from typing import Callable
 
 
-Square = namedtuple('Square', ['x', 'y', 'gen'])
+Square = namedtuple('Square', ['x', 'y'])
 Vector = namedtuple('Vector', ['x', 'y'])
 
 @dataclass

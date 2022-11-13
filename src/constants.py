@@ -28,5 +28,15 @@ HELP_DONT_SHOW_IMAGE = 'Do not show image after execution.'
 # Notification messages
 NOTIFICATION_MSG_BEFORE_RENDERING = '\nNow the data will be processed and converted to a graphical representation.\nIt can take some time.\n'
 
-# Configs paths
-COLORS_CONFIG_PATH = './configs/colors_config.json'
+# Formats
+IMAGE_FORMAT = '.png'
+VIDEO_CODEC = 'avc1'
+VIDEO_FORMAT = '.mp4'
+
+# Program paths
+COLORS_CONFIG_PATH = 'configs/colors_config.json'
+OUTPUT_PATH = 'output/'
+
+# Other
+TARGET_VIDEO_MB_SIZE = 5
+VIDEO_FRAMERATE = 60.0

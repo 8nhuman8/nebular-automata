@@ -4,10 +4,9 @@ TODO.txt
 # VS Code workspace settings
 .vscode/
 
-# Generated images, videos and GIFs
-images/
-videos/
-gifs/
+# Output files
+output/*
+!output/.keep
 
 # Telegram and schedule info
 info/
