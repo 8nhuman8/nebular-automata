@@ -2,6 +2,8 @@ from collections import deque
 from datetime import datetime
 from random import random
 
+import numpy as np
+
 from utils import Square, Vector
 
 

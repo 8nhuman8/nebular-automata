@@ -2,9 +2,7 @@
 
 `A program for visualizing an interesting mathematical idea`
 
-![intro_image_1](docs/README/intro_images/1.png)
-![intro_image_2](docs/README/intro_images/2.png)
-![intro_image_3](docs/README/intro_images/3.png)
+![intro_image](docs/README/intro.png)
 
 ## Table of contents
 
@@ -120,11 +118,3 @@ Copyright (c) 2020 Artyom Bezmenov
 ![gallery_image_5](docs/README/5.png)
 ![gallery_image_6](docs/README/6.png)
 ![gallery_image_7](docs/README/7.png)
-![gallery_image_8](docs/README/8.png)
-![gallery_image_9](docs/README/9.png)
-![gallery_image_10](docs/README/10.png)
-![gallery_image_11](docs/README/11.png)
-![gallery_image_12](docs/README/12.png)
-![gallery_image_13](docs/README/13.png)
-![gallery_image_14](docs/README/14.png)
-![gallery_image_15](docs/README/15.png)
