@@ -56,7 +56,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 
 ## Command-line arguments description
 
-```
+```console
 usage: renderer.py [-h] [-sp X Y] [-rc FLOAT] [-mc INT] [-r] [-rbg] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
 
 Creates a beautiful nebula. Percentages show the duration of further program execution in ideal conditions! In fact, probability can take its toll.
