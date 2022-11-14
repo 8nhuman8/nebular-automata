@@ -165,8 +165,8 @@ def render(args: Namespace):
         else:
             fill_color = grad[gen_index - 1]
 
-        coords = [(square.y, square.x) for square in generation]
-        frame[tuple(np.transpose(coords))] = np.array(astuple(fill_color))
+        coords = np.transpose([(square.x, square.y) for square in generation])
+        frame[tuple(coords)] = np.array(astuple(fill_color))
         video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGRA))
 
     image = Image.fromarray(frame, mode='RGBA')

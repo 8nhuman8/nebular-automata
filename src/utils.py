@@ -53,7 +53,7 @@ def random_color() -> Color:
 # gens: int -- generations count
 def gradient(gens: int, colors: list[Color]) -> list[Color]:
     if len(colors) == 1:
-        return [colors[0]]
+        return colors
 
     gens_for_color = ceil(gens / (len(colors) - 1))
 

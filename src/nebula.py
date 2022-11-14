@@ -17,7 +17,7 @@ class Nebula:
         self.current_count = 1
         self.current_generation = 1
 
-        self.squares = [[None for _ in range(self.size.y)] for _ in range(self.size.x)]
+        self.squares = [[None] * self.size.x for _ in range(self.size.y)]
         self.__not_reproduced_squares = deque()
         self.population = []
 
