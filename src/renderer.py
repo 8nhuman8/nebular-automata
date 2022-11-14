@@ -131,7 +131,7 @@ def render(args: Namespace):
         args.quadratic
     )
     nebula.develop(args.min_percent, args.max_percent)
-    max_gen = nebula.current_generation
+    gens_count = nebula.generation
 
     colors, color_bg = get_palette()
     if args.random_colors:
@@ -142,7 +142,7 @@ def render(args: Namespace):
         for color in colors:
             color.a = 255
 
-    grad = gradient(nebula.current_generation, colors)
+    grad = gradient(gens_count, colors)
 
     out_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{generate_filename()}'
     temp_video_path = OUTPUT_PATH + 'temp_' + out_name + VIDEO_FORMAT
@@ -154,9 +154,9 @@ def render(args: Namespace):
 
     for gen_index, generation in enumerate(nebula.population, start=1):
         if len(grad) == 1:
-            alpha = round((1 - gen_index / max_gen) * 255)
+            alpha = round((1 - gen_index / gens_count) * 255)
             if args.fade_in:
-                alpha = round(gen_index / max_gen * 255)
+                alpha = round(gen_index / gens_count * 255)
             if args.opaque:
                 alpha = 255
 

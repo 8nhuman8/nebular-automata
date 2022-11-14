@@ -50,18 +50,17 @@ def random_color() -> Color:
     return Color(r, g, b, a)
 
 
-# gens: int -- generations count
-def gradient(gens: int, colors: list[Color]) -> list[Color]:
+def gradient(gens_count: int, colors: list[Color]) -> list[Color]:
     if len(colors) == 1:
         return colors
 
-    gens_for_color = ceil(gens / (len(colors) - 1))
+    gens_for_color = ceil(gens_count / (len(colors) - 1))
 
     grads = []
     for i in range(len(colors) - 1):
         grads.append(gradient2(gens_for_color, colors[i], colors[i + 1]))
 
-    remaining_gens = gens - (len(colors) - 2) * gens_for_color
+    remaining_gens = gens_count - (len(colors) - 2) * gens_for_color
     remaining_gens = remaining_gens if remaining_gens != 0 else 1
     grads.append(gradient2(remaining_gens, colors[len(colors) - 2], colors[len(colors) - 1]))
 
@@ -72,13 +71,12 @@ def gradient(gens: int, colors: list[Color]) -> list[Color]:
     return gradient_
 
 
-# gens: int -- generations count
-def gradient2(gens: int, c1: Color, c2: Color) -> list[Color]:
+def gradient2(gens_count: int, c1: Color, c2: Color) -> list[Color]:
     # differences
-    d_r = abs(c1.r - c2.r) / gens
-    d_g = abs(c1.g - c2.g) / gens
-    d_b = abs(c1.b - c2.b) / gens
-    d_a = abs(c1.a - c2.a) / gens
+    d_r = abs(c1.r - c2.r) / gens_count
+    d_g = abs(c1.g - c2.g) / gens_count
+    d_b = abs(c1.b - c2.b) / gens_count
+    d_a = abs(c1.a - c2.a) / gens_count
 
     # gradient lists
     grad_r = [c1.r]
@@ -93,7 +91,7 @@ def gradient2(gens: int, c1: Color, c2: Color) -> list[Color]:
         sign = lambda x: (x > 0) - (x < 0)
         t = cc1
         d_cc = cc2 - cc1
-        for _ in range(gens - 1):
+        for _ in range(gens_count - 1):
             t += sign(d_cc) * d_c
             grad_list.append(round(t))
         return grad_list
