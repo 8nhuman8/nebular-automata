@@ -26,8 +26,8 @@ def validate_input(args: Namespace) -> Namespace:
     if args.colors_number <= 0:
         raise ArgumentTypeError('colors_number ∈ N')
 
-    if not 0 <= args.reproduce_chance <= 1:
-        raise ArgumentTypeError('reproduce_chance ∈ [0, 1]')
+    if not 0 <= args.probability <= 1:
+        raise ArgumentTypeError('probability ∈ [0, 1]')
     if args.min_percent is not None:
         if not 0 <= args.min_percent <= 1:
             raise ArgumentTypeError('min_percent ∈ [0, 1]')
@@ -35,12 +35,12 @@ def validate_input(args: Namespace) -> Namespace:
         if not 0 <= args.max_percent <= 1:
             raise ArgumentTypeError('max_percent ∈ [0, 1]')
 
-    if args.starting_point is None:
-        args.starting_point = Vector(size.x // 2, size.y // 2)
+    if args.start_point is None:
+        args.start_point = Vector(size.x // 2, size.y // 2)
     else:
-        args.starting_point = Vector(args.starting_point[0] - 1, args.starting_point[1] - 1)
-    if not (1 <= args.starting_point.x + 1 <= size.x and 1 <= args.starting_point.y + 1 <= size.y):
-        raise ArgumentTypeError('starting_point.x ∈ [1, width], starting_point.y ∈ [1, height]')
+        args.start_point = Vector(args.start_point[0] - 1, args.start_point[1] - 1)
+    if not (1 <= args.start_point.x + 1 <= size.x and 1 <= args.start_point.y + 1 <= size.y):
+        raise ArgumentTypeError('start_point.x ∈ [1, width], start_point.y ∈ [1, height]')
 
     return args
 
@@ -77,15 +77,15 @@ def arg_parse() -> Namespace:
     group_required.add_argument('height', type=int, help='The height of the image.')
 
     group_basic = parser.add_argument_group('Basic options')
-    group_basic.add_argument('-sp', '--starting-point', metavar=('X', 'Y'),
-                             nargs=2, type=int, help=HELP_STARTING_POINT)
-    group_basic.add_argument('-rc', '--reproduce-chance', metavar='FLOAT',
-                             type=float, default=0.51, help=HELP_REPRODUCE_CHANCE)
+    group_basic.add_argument('-sp', '--start-point', metavar=('X', 'Y'),
+                             nargs=2, type=int, help=HELP_START_POINT)
+    group_basic.add_argument('-pr', '--probability', metavar='FLOAT',
+                             type=float, default=0.51, help=HELP_PROBABILTY)
     group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int,
                              help=HELP_MAX_COUNT)
 
     group_multicolor = parser.add_argument_group('Multicoloring options')
-    group_multicolor.add_argument('-r', '--random-colors', action='store_true',
+    group_multicolor.add_argument('-rc', '--random-colors', action='store_true',
                                   help=HELP_RANDOM_COLORS)
     group_multicolor.add_argument('-rbg', '--random-background', action='store_true',
                                   help=HELP_RANDOM_BACKGROUND)
@@ -121,8 +121,8 @@ def render(args: Namespace) -> None:
     nebula = Nebula(
         size,
         args.max_count,
-        args.reproduce_chance,
-        args.starting_point,
+        args.probability,
+        args.start_point,
         args.quadratic
     )
     nebula.develop(args.min_percent, args.max_percent)
@@ -139,7 +139,7 @@ def render(args: Namespace) -> None:
 
     gradient = polylinear_gradient(colors, generations_number)
 
-    out_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{unique_code()}'
+    out_name = f'{size.x}x{size.y}_{args.probability}_{unique_code()}'
     #temp_video_path = OUTPUT_PATH + 'temp_' + out_name + VIDEO_FORMAT
     #video_path = OUTPUT_PATH + out_name + VIDEO_FORMAT
 
@@ -147,7 +147,7 @@ def render(args: Namespace) -> None:
     #video = cv2.VideoWriter(temp_video_path, fourcc, VIDEO_FRAMERATE, size)
     frame = np.full((size.x, size.y, 4), np.array(color_bg), dtype=np.uint8)
 
-    for i, generation in enumerate(nebula.population, start=1):
+    for i, generation in enumerate(nebula.generations, start=1):
         if len(gradient) == 1:
             alpha = round((1 - i / generations_number) * 255)
             if args.fade_in:

@@ -4,8 +4,8 @@ DESCRIPTION = ('Creates a beautiful nebula. Percentages show the duration '
                'probability can take its toll.')
 
 # Basic options
-HELP_STARTING_POINT = "The coordinate of a starting point. By default it's in the middle."
-HELP_REPRODUCE_CHANCE = "The chance the square can produce other squares. By default it's 0.51"
+HELP_START_POINT = "The coordinate of a starting point. By default it's in the middle."
+HELP_PROBABILTY = "The chance the square can produce other squares. By default it's 0.51"
 HELP_MAX_COUNT = 'The maximum number of squares in the image. By default, this is half of all pixels in the future image.'
 
 # Multicolor options
@@ -29,6 +29,7 @@ HELP_DONT_SHOW_IMAGE = 'Do not show image after execution.'
 NOTIFICATION_MSG_BEFORE_RENDERING = '\nNow the data will be processed and converted to a graphical representation.\nIt can take some time.\n'
 
 # Formats
+TIME_FORMAT = '%H:%M:%S:%f'
 IMAGE_FORMAT = '.png'
 VIDEO_CODEC = 'avc1'
 VIDEO_FORMAT = '.mp4'

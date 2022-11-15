@@ -8,6 +8,8 @@ from typing import Any, Callable, ParamSpec, TypeVar
 
 from numpy import array, ndarray
 
+from constants import TIME_FORMAT
+
 
 P = ParamSpec('P')
 T = TypeVar('T')
@@ -41,13 +43,13 @@ def unique_code(size: int = 5) -> str:
 
 def benchmark(function: Callable[P, T]) -> Callable[P, T]:
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
-        start_datetime = datetime.now()
+        start_time = datetime.now()
         return_value = function(*args, **kwargs)
-        end_datetime = datetime.now()
+        end_time = datetime.now()
 
-        print(f'\nStart date: {start_datetime.isoformat()}')
-        print(f'End date: {end_datetime.isoformat()}')
-        print(f'Program took {end_datetime - start_datetime} to run\n')
+        print(f'\nStart time: {start_time.strftime(TIME_FORMAT)}')
+        print(f'End time: {end_time.strftime(TIME_FORMAT)}')
+        print(f'Program took {end_time - start_time} to run\n')
 
         return return_value
 

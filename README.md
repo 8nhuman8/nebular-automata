@@ -57,7 +57,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 ## Command-line arguments description
 
 ```console
-usage: renderer.py [-h] [-sp X Y] [-rc FLOAT] [-mc INT] [-r] [-rbg] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
+usage: renderer.py [-h] [-sp X Y] [-pr FLOAT] [-mc INT] [-rc] [-rbg] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
 
 Creates a beautiful nebula. Percentages show the duration of further program execution in ideal conditions! In fact, probability can take its toll.
 
@@ -69,15 +69,15 @@ Required options:
   height                The height of the image.
 
 Basic options:
-  -sp X Y, --starting-point X Y
+  -sp X Y, --start-point X Y
                         The coordinate of a starting point. By default it's in the middle.
-  -rc FLOAT, --reproduce-chance FLOAT
+  -pr FLOAT, --probability FLOAT
                         The chance the square can produce other squares. By default it's 0.51
   -mc INT, --max-count INT
                         The maximum number of squares in the image. By default, this is half of all pixels in the future image.
 
 Multicoloring options:
-  -r, --random-colors   All colors will be random.
+  -rc, --random-colors  All colors will be random.
   -rbg, --random-background
                         Background color will be random
   -cn INT, --colors-number INT
