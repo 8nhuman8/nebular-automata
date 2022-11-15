@@ -2,8 +2,6 @@ from collections import deque
 from datetime import datetime
 from random import random
 
-import numpy as np
-
 from utils import Square, Vector
 
 
@@ -79,7 +77,8 @@ class Nebula:
             reproduced_neighbors = self.__square_reproduce(square)
             next_generation_squares.extend(reproduced_neighbors)
 
-        self.population.append(next_generation_squares)
+        if next_generation_squares:
+            self.population.append(next_generation_squares)
 
         return next_generation_squares
 
@@ -100,11 +99,11 @@ class Nebula:
     def __develop_one_generation(self) -> None:
         self.__output_debug_info()
         current_generation_squares = self.not_reproduced_squares.popleft()
-        next_generation_square = self.__get_next_generation(current_generation_squares)
-        self.not_reproduced_squares.append(next_generation_square)
+        next_generation_squares = self.__get_next_generation(current_generation_squares)
+        self.not_reproduced_squares.append(next_generation_squares)
 
 
-    def develop(self, min_percent: float | None = None, max_percent: float | None = None) -> None:
+    def develop(self, min_percent: float | None, max_percent: float | None) -> None:
         starting_square = Square(self.starting_point.x, self.starting_point.y)
         self.population.append([starting_square])
 

@@ -1,8 +1,6 @@
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from dataclasses import astuple
 from json import load
 from os import remove
-from typing import Sequence
 
 import cv2
 import ffmpeg
@@ -47,7 +45,7 @@ def validate_input(args: Namespace) -> Namespace:
     return args
 
 
-def get_palette() -> tuple[list[Color], Color]:
+def color_palette() -> tuple[list[Color], Color]:
     with open(COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
 
@@ -57,7 +55,7 @@ def get_palette() -> tuple[list[Color], Color]:
     return colors, color_bg
 
 
-def compress_video(video_path: str, output_path: str, target_size: int):
+def compress_video(video_path: str, output_path: str, target_size: int) -> None:
     probe = ffmpeg.probe(video_path)
     duration = float(probe['format']['duration'])
     video_bitrate = (target_size * 1024 * 1024 * 8) / (duration * 1.073741824)
@@ -71,7 +69,7 @@ def compress_video(video_path: str, output_path: str, target_size: int):
     )
 
 
-def arg_parse(args: Sequence[str] | None = None) -> Namespace:
+def arg_parse() -> Namespace:
     parser = ArgumentParser(description=DESCRIPTION)
 
     group_required = parser.add_argument_group('Required options')
@@ -112,14 +110,11 @@ def arg_parse(args: Sequence[str] | None = None) -> Namespace:
     group_system.add_argument('-dsi', '--dont-show-image', action='store_true',
                               help=HELP_DONT_SHOW_IMAGE)
 
-    if args is None:
-        return parser.parse_args()
-    else:
-        return parser.parse_args(args)
+    return parser.parse_args()
 
 
 @benchmark
-def render(args: Namespace):
+def render(args: Namespace) -> None:
     args = validate_input(args)
     size = Vector(args.width, args.height)
 
@@ -131,9 +126,9 @@ def render(args: Namespace):
         args.quadratic
     )
     nebula.develop(args.min_percent, args.max_percent)
-    gens_count = nebula.generation
+    generations_number = nebula.generation
 
-    colors, color_bg = get_palette()
+    colors, color_bg = color_palette()
     if args.random_colors:
         colors = random_colors(args.colors_number)
     if args.random_background:
@@ -142,32 +137,32 @@ def render(args: Namespace):
         for color in colors:
             color.a = 255
 
-    grad = gradient(gens_count, colors)
+    gradient = polylinear_gradient(colors, generations_number)
 
-    out_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{generate_filename()}'
-    temp_video_path = OUTPUT_PATH + 'temp_' + out_name + VIDEO_FORMAT
-    video_path = OUTPUT_PATH + out_name + VIDEO_FORMAT
+    out_name = f'{size.x}x{size.y}_{args.reproduce_chance}_{unique_code()}'
+    #temp_video_path = OUTPUT_PATH + 'temp_' + out_name + VIDEO_FORMAT
+    #video_path = OUTPUT_PATH + out_name + VIDEO_FORMAT
 
-    fourcc = cv2.VideoWriter_fourcc(*VIDEO_CODEC)
-    video = cv2.VideoWriter(temp_video_path, fourcc, VIDEO_FRAMERATE, size)
-    frame = np.full((size.x, size.y, 4), np.array(astuple(color_bg)), dtype=np.uint8)
+    #fourcc = cv2.VideoWriter_fourcc(*VIDEO_CODEC)
+    #video = cv2.VideoWriter(temp_video_path, fourcc, VIDEO_FRAMERATE, size)
+    frame = np.full((size.x, size.y, 4), np.array(color_bg), dtype=np.uint8)
 
-    for gen_index, generation in enumerate(nebula.population, start=1):
-        if len(grad) == 1:
-            alpha = round((1 - gen_index / gens_count) * 255)
+    for i, generation in enumerate(nebula.population, start=1):
+        if len(gradient) == 1:
+            alpha = round((1 - i / generations_number) * 255)
             if args.fade_in:
-                alpha = round(gen_index / gens_count * 255)
+                alpha = round(i / generations_number * 255)
             if args.opaque:
                 alpha = 255
 
-            fill_color = grad[0]
+            fill_color = gradient[0]
             fill_color.a = alpha
         else:
-            fill_color = grad[gen_index - 1]
+            fill_color = gradient[i - 1]
 
-        coords = np.transpose([(square.x, square.y) for square in generation])
-        frame[tuple(coords)] = np.array(astuple(fill_color))
-        video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGRA))
+        coordinates = np.transpose(generation)
+        frame[tuple(coordinates)] = np.array(fill_color)
+        #video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGRA))
 
     image = Image.fromarray(frame, mode='RGBA')
 
@@ -180,9 +175,9 @@ def render(args: Namespace):
     if not args.dont_show_image:
         image.show()
 
-    video.release()
-    compress_video(temp_video_path, video_path, TARGET_VIDEO_MB_SIZE)
-    remove(temp_video_path)
+    #video.release()
+    #compress_video(temp_video_path, video_path, TARGET_VIDEO_MB_SIZE)
+    #remove(temp_video_path)
 
 
 if __name__ == '__main__':

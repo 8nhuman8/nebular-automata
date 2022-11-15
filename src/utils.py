@@ -1,14 +1,21 @@
 from collections import namedtuple
-from dataclasses import dataclass
+from dataclasses import astuple, dataclass
 from datetime import datetime
 from math import ceil
 from random import choice, randint
 from string import ascii_letters, digits
-from typing import Callable
+from typing import Any, Callable, ParamSpec, TypeVar
+
+from numpy import array, ndarray
+
+
+P = ParamSpec('P')
+T = TypeVar('T')
 
 
 Square = namedtuple('Square', ['x', 'y'])
 Vector = namedtuple('Vector', ['x', 'y'])
+
 
 @dataclass
 class Color:
@@ -17,16 +24,25 @@ class Color:
     b: int
     a: int
 
+    def __array__(self) -> ndarray:
+        return array(astuple(self))
 
-def generate_filename(size: int = 5) -> str:
-    chars = ascii_letters + digits
-    return ''.join(choice(chars) for _ in range(size))
+    def __len__(self) -> int:
+        return astuple(self).__len__()
+
+    def __getitem__(self, item: Any) -> int:
+        return astuple(self).__getitem__(item)
 
 
-def benchmark(func: Callable) -> Callable:
-    def wrapper(*args, **kwargs):
+def unique_code(size: int = 5) -> str:
+    characters = ascii_letters + digits
+    return ''.join(choice(characters) for _ in range(size))
+
+
+def benchmark(function: Callable[P, T]) -> Callable[P, T]:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
         start_datetime = datetime.now()
-        return_value = func(*args, **kwargs)
+        return_value = function(*args, **kwargs)
         end_datetime = datetime.now()
 
         print(f'\nStart date: {start_datetime.isoformat()}')
@@ -43,62 +59,28 @@ def random_colors(n: int) -> list[Color]:
 
 
 def random_color() -> Color:
-    r = randint(0, 255)
-    g = randint(0, 255)
-    b = randint(0, 255)
-    a = randint(0, 255)
-    return Color(r, g, b, a)
+    return Color(*[randint(0, 255) for _ in range(4)])
 
 
-def gradient(gens_count: int, colors: list[Color]) -> list[Color]:
+def polylinear_gradient(colors: list[Color], n: int) -> list[Color]:
     if len(colors) == 1:
         return colors
 
-    gens_for_color = ceil(gens_count / (len(colors) - 1))
+    n_out = ceil(n / (len(colors) - 1))
+    gradient = []
 
-    grads = []
     for i in range(len(colors) - 1):
-        grads.append(gradient2(gens_for_color, colors[i], colors[i + 1]))
+        gradient_btw_two = linear_gradient(colors[i], colors[i + 1], n_out)
+        gradient.extend(gradient_btw_two)
 
-    remaining_gens = gens_count - (len(colors) - 2) * gens_for_color
-    remaining_gens = remaining_gens if remaining_gens != 0 else 1
-    grads.append(gradient2(remaining_gens, colors[len(colors) - 2], colors[len(colors) - 1]))
-
-    gradient_ = []
-    for grad in grads:
-        gradient_.extend(grad)
-
-    return gradient_
+    return gradient
 
 
-def gradient2(gens_count: int, c1: Color, c2: Color) -> list[Color]:
-    # differences
-    d_r = abs(c1.r - c2.r) / gens_count
-    d_g = abs(c1.g - c2.g) / gens_count
-    d_b = abs(c1.b - c2.b) / gens_count
-    d_a = abs(c1.a - c2.a) / gens_count
+def linear_gradient(start_color: Color, finish_color: Color, n: int) -> list[Color]:
+    gradient = [start_color]
 
-    # gradient lists
-    grad_r = [c1.r]
-    grad_g = [c1.g]
-    grad_b = [c1.b]
-    grad_a = [c1.a]
+    for i in range(1, n):
+        color_list = [int(start_color[cc] + i * (finish_color[cc] - start_color[cc]) / (n - 1)) for cc in range(4)]
+        gradient.append(Color(*color_list))
 
-    # cc1 - color component of the 1st color
-    # cc2 - color component of the 2nd color
-    # d_c - difference
-    def fill_grad(cc1: int, cc2: int, d_c: int, grad_list: list[int]) -> list[int]:
-        sign = lambda x: (x > 0) - (x < 0)
-        t = cc1
-        d_cc = cc2 - cc1
-        for _ in range(gens_count - 1):
-            t += sign(d_cc) * d_c
-            grad_list.append(round(t))
-        return grad_list
-
-    grad_r = fill_grad(c1.r, c2.r, d_r, grad_r)
-    grad_g = fill_grad(c1.g, c2.g, d_g, grad_g)
-    grad_b = fill_grad(c1.b, c2.b, d_b, grad_b)
-    grad_a = fill_grad(c1.a, c2.a, d_a, grad_a)
-
-    return [Color(*color) for color in list(zip(grad_r, grad_g, grad_b, grad_a))]
+    return gradient
