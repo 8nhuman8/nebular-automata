@@ -12,6 +12,75 @@ from nebula import Nebula
 from utils import *
 
 
+def arg_parse() -> Namespace:
+    parser = ArgumentParser()
+
+    group_required = parser.add_argument_group('Required options')
+    group_required.add_argument('width', type=int, help=HELP_WIDTH)
+    group_required.add_argument('height', type=int, help=HELP_HEIGHT)
+
+    group_basic = parser.add_argument_group('Basic options')
+    group_basic.add_argument('-sp', '--start-point', metavar=('Y', 'X'), nargs=2, type=int, help=HELP_START_POINT)
+    group_basic.add_argument('-p', '--probability', metavar='FLOAT', type=float, default=0.51, help=HELP_PROBABILTY)
+    group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int, help=HELP_MAX_COUNT)
+    group_basic.add_argument('-minp', '--min-percent', metavar='FLOAT', type=float, help=HELP_MIN_PERCENT)
+    group_basic.add_argument('-maxp', '--max-percent', metavar='FLOAT', type=float, help=HELP_MAX_PERCENT)
+
+    group_multicolor = parser.add_argument_group('Coloring options')
+    group_multicolor.add_argument('-rc', '--random-colors', action='store_true', help=HELP_RANDOM_COLORS)
+    group_multicolor.add_argument('-rbg', '--random-background', action='store_true', help=HELP_RANDOM_BACKGROUND)
+    group_multicolor.add_argument('-cn', '--colors-number', metavar='INT', type=int, default=3, help=HELP_COLORS_NUMBER)
+
+    group_additional = parser.add_argument_group('Additional options')
+    group_additional.add_argument('-o', '--opaque', action='store_true', help=HELP_OPAQUE)
+    group_additional.add_argument('-fi', '--fade-in', action='store_true', help=HELP_FADE_IN)
+    group_additional.add_argument('-q', '--quadratic', action='store_true', help=HELP_QUADRATIC)
+
+    group_image = parser.add_argument_group('Image options')
+    group_image.add_argument('-si', '--save-image', action='store_true', help=HELP_SAVE_IMAGE)
+    group_image.add_argument('-pi', '--path-image', metavar='PATH', type=str, help=HELP_PATH_IMAGE)
+    group_image.add_argument('-dsi', '--dont-show-image', action='store_true', help=HELP_DONT_SHOW_IMAGE)
+
+    group_video = parser.add_argument_group('Video options')
+    group_video.add_argument('-sv', '--save-video', action='store_true', help=HELP_SAVE_VIDEO)
+    group_video.add_argument('-pv', '--path-video', metavar='PATH', type=str, help=HELP_PATH_VIDEO)
+
+    return parser.parse_args()
+
+
+def validate_input(args: Namespace) -> Namespace:
+    if args.width <= 0 or args.height <= 0:
+        raise ArgumentTypeError('width, height ∈ N')
+
+    size = Vector(args.height, args.width)
+
+    if args.max_count is None:
+        args.max_count = size.y * size.x
+    elif args.max_count <= 0:
+        raise ArgumentTypeError('max_count ∈ N')
+
+    if args.colors_number <= 0:
+        raise ArgumentTypeError('colors_number ∈ N')
+
+    if not 0 <= args.probability <= 1:
+        raise ArgumentTypeError('probability ∈ [0, 1]')
+    if args.min_percent is not None:
+        if not 0 <= args.min_percent <= 1:
+            raise ArgumentTypeError('min_percent ∈ [0, 1]')
+    if args.max_percent is not None:
+        if not 0 <= args.max_percent <= 1:
+            raise ArgumentTypeError('max_percent ∈ [0, 1]')
+
+    if args.start_point is None:
+        args.start_point = Vector(size.y // 2, size.x // 2)
+    else:
+        args.start_point = Vector(args.start_point[0] - 1, args.start_point[1] - 1)
+    if not (1 <= args.start_point.y + 1 <= size.y and 1 <= args.start_point.x + 1 <= size.x):
+        raise ArgumentTypeError('start_point.y ∈ [1, height], start_point.x ∈ [1, width]')
+
+    return args
+
+
 @benchmark
 def render(args: Namespace) -> None:
     args = validate_input(args)
@@ -87,39 +156,6 @@ def render(args: Namespace) -> None:
         Path.unlink(TEMP_VIDEO_PATH)
 
 
-def validate_input(args: Namespace) -> Namespace:
-    if args.width <= 0 or args.height <= 0:
-        raise ArgumentTypeError('width, height ∈ N')
-
-    size = Vector(args.height, args.width)
-
-    if args.max_count is None:
-        args.max_count = size.y * size.x
-    elif args.max_count <= 0:
-        raise ArgumentTypeError('max_count ∈ N')
-
-    if args.colors_number <= 0:
-        raise ArgumentTypeError('colors_number ∈ N')
-
-    if not 0 <= args.probability <= 1:
-        raise ArgumentTypeError('probability ∈ [0, 1]')
-    if args.min_percent is not None:
-        if not 0 <= args.min_percent <= 1:
-            raise ArgumentTypeError('min_percent ∈ [0, 1]')
-    if args.max_percent is not None:
-        if not 0 <= args.max_percent <= 1:
-            raise ArgumentTypeError('max_percent ∈ [0, 1]')
-
-    if args.start_point is None:
-        args.start_point = Vector(size.y // 2, size.x // 2)
-    else:
-        args.start_point = Vector(args.start_point[0] - 1, args.start_point[1] - 1)
-    if not (1 <= args.start_point.y + 1 <= size.y and 1 <= args.start_point.x + 1 <= size.x):
-        raise ArgumentTypeError('start_point.y ∈ [1, height], start_point.x ∈ [1, width]')
-
-    return args
-
-
 def color_palette() -> tuple[list[Color], Color]:
     with open(COLORS_CONFIG_PATH, 'r') as json_file:
         colors_dict = load(json_file)
@@ -146,42 +182,6 @@ def compress_video(video_path: str, output_path: str, target_size: int) -> None:
         .global_args('-loglevel', 'error')
         .run()
     )
-
-
-def arg_parse() -> Namespace:
-    parser = ArgumentParser()
-
-    group_required = parser.add_argument_group('Required options')
-    group_required.add_argument('width', type=int, help=HELP_WIDTH)
-    group_required.add_argument('height', type=int, help=HELP_HEIGHT)
-
-    group_basic = parser.add_argument_group('Basic options')
-    group_basic.add_argument('-sp', '--start-point', metavar=('Y', 'X'), nargs=2, type=int, help=HELP_START_POINT)
-    group_basic.add_argument('-p', '--probability', metavar='FLOAT', type=float, default=0.51, help=HELP_PROBABILTY)
-    group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int, help=HELP_MAX_COUNT)
-    group_basic.add_argument('-minp', '--min-percent', metavar='FLOAT', type=float, help=HELP_MIN_PERCENT)
-    group_basic.add_argument('-maxp', '--max-percent', metavar='FLOAT', type=float, help=HELP_MAX_PERCENT)
-
-    group_multicolor = parser.add_argument_group('Coloring options')
-    group_multicolor.add_argument('-rc', '--random-colors', action='store_true', help=HELP_RANDOM_COLORS)
-    group_multicolor.add_argument('-rbg', '--random-background', action='store_true', help=HELP_RANDOM_BACKGROUND)
-    group_multicolor.add_argument('-cn', '--colors-number', metavar='INT', type=int, default=3, help=HELP_COLORS_NUMBER)
-
-    group_additional = parser.add_argument_group('Additional options')
-    group_additional.add_argument('-o', '--opaque', action='store_true', help=HELP_OPAQUE)
-    group_additional.add_argument('-fi', '--fade-in', action='store_true', help=HELP_FADE_IN)
-    group_additional.add_argument('-q', '--quadratic', action='store_true', help=HELP_QUADRATIC)
-
-    group_image = parser.add_argument_group('Image options')
-    group_image.add_argument('-si', '--save-image', action='store_true', help=HELP_SAVE_IMAGE)
-    group_image.add_argument('-pi', '--path-image', metavar='PATH', type=str, help=HELP_PATH_IMAGE)
-    group_image.add_argument('-dsi', '--dont-show-image', action='store_true', help=HELP_DONT_SHOW_IMAGE)
-
-    group_video = parser.add_argument_group('Video options')
-    group_video.add_argument('-sv', '--save-video', action='store_true', help=HELP_SAVE_VIDEO)
-    group_video.add_argument('-pv', '--path-video', metavar='PATH', type=str, help=HELP_PATH_VIDEO)
-
-    return parser.parse_args()
 
 
 if __name__ == '__main__':
