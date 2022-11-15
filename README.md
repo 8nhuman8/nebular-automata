@@ -6,7 +6,6 @@
 
 ## Table of contents
 
-- [My Telegram channel](#my-telegram-channel)
 - [Idea](#idea)
 - [Some remarks](#some-remarks)
 - [Usage](#usage)
@@ -16,10 +15,6 @@
 - [Credits and references](#credits-and-references)
 - [License](#license)
 - [Gallery](#gallery-images-created-by-this-program)
-
-## My Telegram channel
-
-I created a [Telegram channel](https://t.me/nebular_automata) in which the bot generates and uploads images with detailed characteristics every two hours.
 
 ## Idea
 
@@ -57,9 +52,8 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 ## Command-line arguments description
 
 ```console
-usage: renderer.py [-h] [-sp X Y] [-pr FLOAT] [-mc INT] [-rc] [-rbg] [-cn INT] [-o] [-minp FLOAT] [-maxp FLOAT] [-fi] [-q] [-s] [-p PATH] [-dsi] width height
-
-Creates a beautiful nebula. Percentages show the duration of further program execution in ideal conditions! In fact, probability can take its toll.
+usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-o] [-fi] [-q] [-si] [-pi PATH] [-dsi] [-sv] [-pv PATH]
+                   width height
 
 options:
   -h, --help            show this help message and exit
@@ -69,34 +63,40 @@ Required options:
   height                The height of the image.
 
 Basic options:
-  -sp X Y, --start-point X Y
-                        The coordinate of a starting point. By default it's in the middle.
-  -pr FLOAT, --probability FLOAT
-                        The chance the square can produce other squares. By default it's 0.51
+  -sp Y X, --start-point Y X
+                        The coordinate of a starting point. Default value: middle of the image.
+  -p FLOAT, --probability FLOAT
+                        The probability that a square will multiply in a one direction. Default value: 0.51
   -mc INT, --max-count INT
-                        The maximum number of squares in the image. By default, this is half of all pixels in the future image.
+                        The maximum number of squares in the image. Default value: width * height.
+  -minp FLOAT, --min-percent FLOAT
+                        The program will work until the nebula is filled with a chosen or greater percentage.
+  -maxp FLOAT, --max-percent FLOAT
+                        The program will work until the nebula is filled with a chosen percentage.
 
-Multicoloring options:
-  -rc, --random-colors  All colors will be random.
+Coloring options:
+  -rc, --random-colors  All colors will be chosen randomly.
   -rbg, --random-background
-                        Background color will be random
+                        The background color will be chosen randomly.
   -cn INT, --colors-number INT
-                        How many colors will be used. By default it's 3. Must be used with '--random-colors' argument.
-  -o, --opaque          All colors will be opaque.
+                        The number of colors to use in the image. Default value: 3. Use with: -rc.
 
 Additional options:
-  -minp FLOAT, --min-percent FLOAT
-                        The program will work until nebula is filled with a certain or greater percentage.
-  -maxp FLOAT, --max-percent FLOAT
-                        The program will work until a nebula is filled with a certain percentage.
-  -fi, --fade-in        The original color is white. The color of each new generation will fade into the specified color.
+  -o, --opaque          All colors will be opaque including background.
+  -fi, --fade-in        Starting color is white. The color of each new generation will fade into the specified color. Use with: -rc -cn 1
   -q, --quadratic       Each square will be surrounded not only on each side, but also on each corner.
 
-System options:
-  -s, --save            The generated image will be saved in the root if no path is specified.
-  -p PATH, --path PATH  The path by which the generated image will be saved. Write the path without quotes, separating the directories with the usual single slash.
+Image options:
+  -si, --save-image     The rendered image will be saved.
+  -pi PATH, --path-image PATH
+                        The path where the image will be saved. Default path: output/
   -dsi, --dont-show-image
-                        Do not show image after execution.
+                        Do not show image in the end.
+
+Video options:
+  -sv, --save-video     The rendered video will be saved.
+  -pv PATH, --path-video PATH
+                        The path where the video will be saved. Default path: output/
 ```
 
 ## Credits and references

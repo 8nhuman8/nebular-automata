@@ -24,7 +24,7 @@ class Nebula:
         start_square = Square(*self.start_point)
 
         self.grid = [[None] * self.size.x for _ in range(self.size.y)]
-        self.grid[start_square.x][start_square.y] = start_square
+        self.grid[start_square.y][start_square.x] = start_square
 
         self.generations = [[start_square]]
         self._unreproduced_squares = [[start_square]]
@@ -88,19 +88,18 @@ class Nebula:
     def _square_reproduce(self, square: Square) -> list[Square]:
         self.count += 1
 
-        x = square.x
-        y = square.y
+        y, x = square
 
-        right = Vector(x + 1, y)
-        up = Vector(x, y + 1)
-        left = Vector(x - 1, y)
-        bottom = Vector(x, y - 1)
+        right = Vector(y + 1, x)
+        up = Vector(y, x + 1)
+        left = Vector(y - 1, x)
+        bottom = Vector(y, x - 1)
 
         if self.quadratic:
-            right_up = Vector(x + 1, y + 1)
-            right_down = Vector(x + 1, y - 1)
-            left_up = Vector(x - 1, y + 1)
-            left_down = Vector(x - 1, y - 1)
+            right_up = Vector(y + 1, x + 1)
+            right_down = Vector(y + 1, x - 1)
+            left_up = Vector(y - 1, x + 1)
+            left_down = Vector(y - 1, x - 1)
 
             neighbors_coordinates = [right, up, left, bottom, right_up, right_down, left_up, left_down]
         else:
@@ -109,13 +108,13 @@ class Nebula:
         neighbors = []
         for nc in neighbors_coordinates:
             if (
-                0 <= nc.x <= self.size.x - 1 and
                 0 <= nc.y <= self.size.y - 1 and
+                0 <= nc.x <= self.size.x - 1 and
                 self._able_to_reproduce() and
-                self.grid[nc.x][nc.y] is None
+                self.grid[nc.y][nc.x] is None
             ):
-                self.grid[nc.x][nc.y] = Square(*nc)
-                neighbors.append(self.grid[nc.x][nc.y])
+                self.grid[nc.y][nc.x] = Square(*nc)
+                neighbors.append(self.grid[nc.y][nc.x])
 
         return neighbors
 

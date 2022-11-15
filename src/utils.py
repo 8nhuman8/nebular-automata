@@ -15,8 +15,8 @@ P = ParamSpec('P')
 T = TypeVar('T')
 
 
-Square = namedtuple('Square', ['x', 'y'])
-Vector = namedtuple('Vector', ['x', 'y'])
+Square = namedtuple('Square', ['y', 'x'])
+Vector = namedtuple('Vector', ['y', 'x'])
 
 
 @dataclass
