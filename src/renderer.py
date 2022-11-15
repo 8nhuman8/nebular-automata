@@ -44,6 +44,7 @@ def arg_parse() -> Namespace:
     group_video = parser.add_argument_group('Video options')
     group_video.add_argument('-sv', '--save-video', action='store_true', help=HELP_SAVE_VIDEO)
     group_video.add_argument('-pv', '--path-video', metavar='PATH', type=str, help=HELP_PATH_VIDEO)
+    group_video.add_argument('-vs', '--video-size', metavar='INT', type=int, default=8, help=HELP_VIDEO_SIZE)
 
     return parser.parse_args()
 
@@ -55,12 +56,14 @@ def validate_input(args: Namespace) -> Namespace:
     size = Vector(args.height, args.width)
 
     if args.max_count is None:
-        args.max_count = size.y * size.x
+        args.max_count = 2 * (size.y * size.x) // 3
     elif args.max_count <= 0:
         raise ArgumentTypeError('max_count ∈ N')
 
     if args.colors_number <= 0:
         raise ArgumentTypeError('colors_number ∈ N')
+    if args.video_size <= 0:
+        raise ArgumentTypeError('video_size ∈ N')
 
     if not 0 <= args.probability <= 1:
         raise ArgumentTypeError('probability ∈ [0, 1]')
@@ -137,8 +140,8 @@ def render(args: Namespace) -> None:
         else:
             fill_color = gradient[i - 1]
 
-        coordinates = np.transpose(generation)
-        frame[tuple(coordinates)] = np.array(fill_color)
+        coordinates = tuple(np.transpose(generation))
+        frame[coordinates] = np.array(fill_color)
 
         if args.save_video:
             video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGRA))
@@ -152,7 +155,7 @@ def render(args: Namespace) -> None:
         image.save(image_path, 'PNG')
     if args.save_video:
         video.release()
-        compress_video(TEMP_VIDEO_PATH, video_path, 5)
+        compress_video(TEMP_VIDEO_PATH, video_path, args.video_size)
         Path.unlink(TEMP_VIDEO_PATH)
 
 

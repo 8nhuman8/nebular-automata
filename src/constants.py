@@ -8,7 +8,7 @@ HELP_HEIGHT = 'The height of the image.'
 # Basic options
 HELP_START_POINT = 'The coordinate of a starting point. Default value: middle of the image.'
 HELP_PROBABILTY = 'The probability that a square will multiply in a one direction. Default value: 0.51'
-HELP_MAX_COUNT = 'The maximum number of squares in the image. Default value: width * height.'
+HELP_MAX_COUNT = 'The maximum number of squares in the image. Default value: 2 * (width * height) // 3.'
 
 # Multicolor options
 HELP_RANDOM_COLORS = 'All colors will be chosen randomly.'
@@ -22,12 +22,15 @@ HELP_MAX_PERCENT = 'The program will work until the nebula is filled with a chos
 HELP_FADE_IN = 'Starting color is white. The color of each new generation will fade into the specified color. Use with: -rc -cn 1'
 HELP_QUADRATIC = 'Each square will be surrounded not only on each side, but also on each corner.'
 
-# System options
+# Image options
 HELP_SAVE_IMAGE = 'The rendered image will be saved.'
-HELP_SAVE_VIDEO = 'The rendered video will be saved.'
 HELP_PATH_IMAGE = 'The path where the image will be saved. Default path: output/'
-HELP_PATH_VIDEO = 'The path where the video will be saved. Default path: output/'
 HELP_DONT_SHOW_IMAGE = 'Do not show image in the end.'
+
+# Video options
+HELP_SAVE_VIDEO = 'The rendered video will be saved.'
+HELP_PATH_VIDEO = 'The path where the video will be saved. Default path: output/'
+HELP_VIDEO_SIZE = 'The size of the video in MB to which the size of the original video will be reduced using compression.'
 
 # Formats
 TIME_FORMAT = '%H:%M:%S:%f'

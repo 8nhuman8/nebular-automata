@@ -53,6 +53,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 
 ```console
 usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-o] [-fi] [-q] [-si] [-pi PATH] [-dsi] [-sv] [-pv PATH]
+                   [-vs INT]
                    width height
 
 options:
@@ -68,7 +69,7 @@ Basic options:
   -p FLOAT, --probability FLOAT
                         The probability that a square will multiply in a one direction. Default value: 0.51
   -mc INT, --max-count INT
-                        The maximum number of squares in the image. Default value: width * height.
+                        The maximum number of squares in the image. Default value: 2 * (width * height) // 3.
   -minp FLOAT, --min-percent FLOAT
                         The program will work until the nebula is filled with a chosen or greater percentage.
   -maxp FLOAT, --max-percent FLOAT
@@ -97,6 +98,8 @@ Video options:
   -sv, --save-video     The rendered video will be saved.
   -pv PATH, --path-video PATH
                         The path where the video will be saved. Default path: output/
+  -vs INT, --video-size INT
+                        The size of the video in MB to which the size of the original video will be reduced using compression.
 ```
 
 ## Credits and references
