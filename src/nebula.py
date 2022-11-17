@@ -7,12 +7,20 @@ from constants import TIME_FORMAT
 
 
 class Nebula:
-    def __init__(self, size: Vector, max_count: int, probability: float, start_point: Vector, quadratic: bool) -> None:
+    def __init__(self,
+        size: Vector,
+        max_count: int,
+        probability: float,
+        start_point: Vector,
+        quadratic: bool,
+        directions: list[Vector]
+    ) -> None:
         self.size = size
         self.max_count = max_count
         self.probability = probability
         self.start_point = start_point
         self.quadratic = quadratic
+        self.directions = directions
 
         self.reset()
 
@@ -89,32 +97,20 @@ class Nebula:
         self.count += 1
 
         y, x = square
-
-        right = Vector(y + 1, x)
-        up = Vector(y, x + 1)
-        left = Vector(y - 1, x)
-        bottom = Vector(y, x - 1)
-
-        if self.quadratic:
-            right_up = Vector(y + 1, x + 1)
-            right_down = Vector(y + 1, x - 1)
-            left_up = Vector(y - 1, x + 1)
-            left_down = Vector(y - 1, x - 1)
-
-            neighbors_coordinates = [right, up, left, bottom, right_up, right_down, left_up, left_down]
-        else:
-            neighbors_coordinates = [right, up, left, bottom]
-
         neighbors = []
-        for nc in neighbors_coordinates:
-            if (
-                0 <= nc.y <= self.size.y - 1 and
-                0 <= nc.x <= self.size.x - 1 and
+
+        for direction in self.directions:
+            ny = y + direction.y
+            nx = x + direction.x
+
+            if (0 <= ny <= self.size.y - 1 and
+                0 <= nx <= self.size.x - 1 and
                 self._able_to_reproduce() and
-                self.grid[nc.y][nc.x] is None
+                self.grid[ny][nx] is None
             ):
-                self.grid[nc.y][nc.x] = Square(*nc)
-                neighbors.append(self.grid[nc.y][nc.x])
+                neighbor = Square(ny, nx)
+                self.grid[ny][nx] = neighbor
+                neighbors.append(neighbor)
 
         return neighbors
 

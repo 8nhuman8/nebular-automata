@@ -36,6 +36,18 @@ class Color:
         return astuple(self).__getitem__(item)
 
 
+direction_to_vector = {
+    'left_down':  Vector(1, -1),
+    'left':       Vector(0, -1),
+    'left_up':    Vector(-1, -1),
+    'bottom':     Vector(1, 0),
+    'up':         Vector(-1, 0),
+    'right_down': Vector(1, 1),
+    'right':      Vector(0, 1),
+    'right_up':   Vector(1, 1)
+}
+
+
 def unique_code(size: int = 5) -> str:
     characters = ascii_letters + digits
     return ''.join(choice(characters) for _ in range(size))

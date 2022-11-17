@@ -1,0 +1,20 @@
+{
+    "colors": [
+        [255, 0, 0, 255],
+        [0, 0, 255, 255]
+    ],
+
+    "color_background": [255, 255, 255, 255],
+
+    "allowed_reproduction_directions":
+    {
+        "left_down":  false,
+        "left":       true,
+        "left_up":    false,
+        "bottom":     true,
+        "up":         true,
+        "right_down": false,
+        "right":      true,
+        "right_up":   false
+    }
+}

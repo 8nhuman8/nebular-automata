@@ -87,19 +87,21 @@ def validate_input(args: Namespace) -> Namespace:
 @benchmark
 def render(args: Namespace) -> None:
     args = validate_input(args)
+
     size = Vector(args.height, args.width)
+    colors, color_bg, directions = import_config()
 
     nebula = Nebula(
         size,
         args.max_count,
         args.probability,
         args.start_point,
-        args.quadratic
+        args.quadratic,
+        directions
     )
     nebula.develop(args.min_percent, args.max_percent)
     generations_number = nebula.generation
 
-    colors, color_bg = color_palette()
     if args.random_colors:
         colors = random_colors(args.colors_number)
     if args.random_background:
@@ -115,11 +117,11 @@ def render(args: Namespace) -> None:
     if args.path_image:
         image_path = out_path(args.path_image, out_name, '.png')
     else:
-        image_path = out_path(OUTPUT_PATH, out_name, '.png')
+        image_path = out_path(OUTPUT_FILES_PATH, out_name, '.png')
     if args.path_video:
         video_path = out_path(args.path_video, out_name, '.mp4').as_posix()
     else:
-        video_path = out_path(OUTPUT_PATH, out_name, '.mp4').as_posix()
+        video_path = out_path(OUTPUT_FILES_PATH, out_name, '.mp4').as_posix()
 
     if args.save_video:
         fourcc = cv2.VideoWriter_fourcc(*'avc1')
@@ -159,14 +161,21 @@ def render(args: Namespace) -> None:
         Path.unlink(TEMP_VIDEO_PATH)
 
 
-def color_palette() -> tuple[list[Color], Color]:
-    with open(COLORS_CONFIG_PATH, 'r') as json_file:
-        colors_dict = load(json_file)
+def import_config() -> tuple[list[Color], Color, list[Vector]]:
+    with open(CONFIG_PATH) as json_file:
+        config = load(json_file)
 
-    colors = [Color(*color) for color in list(colors_dict['colors'].values())]
-    color_bg = Color(*colors_dict['color_bg'])
+    colors = [Color(*color) for color in config['colors']]
+    color_bg = Color(*config['color_background'])
 
-    return colors, color_bg
+    directions = direction_to_vector.copy()
+    allowed_reproduction_directions = config['allowed_reproduction_directions']
+
+    for direction, allowed in allowed_reproduction_directions.items():
+        if not allowed:
+            directions.pop(direction)
+
+    return colors, color_bg, list(directions.values())
 
 
 def out_path(path: str, name: str, ext: str) -> Path:

@@ -45,7 +45,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 ### Usage of renderer ([`renderer.py`](src/renderer.py))
 
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
-2. Then you can specify the colors you need in the [`colors_config.json`](configs/colors_config.json).
+2. Then you can specify the colors and allowed reproduction directions in the [`config.json`](configs/config.json).
 3. Run the `renderer.py` with `python src/renderer.py [parameters you need]`.
 4. Enjoy the beauty.
 

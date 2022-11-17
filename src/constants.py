@@ -36,6 +36,6 @@ HELP_VIDEO_SIZE = 'The size of the video in MB to which the size of the original
 TIME_FORMAT = '%H:%M:%S:%f'
 
 # Program paths
-COLORS_CONFIG_PATH = Path('configs/colors_config.json')
-OUTPUT_PATH = Path('output/')
-TEMP_VIDEO_PATH = (OUTPUT_PATH / 'temp.mp4').as_posix()
+CONFIG_PATH = Path('configs/config.json')
+OUTPUT_FILES_PATH = Path('output/')
+TEMP_VIDEO_PATH = (OUTPUT_FILES_PATH / 'temp.mp4').as_posix()
