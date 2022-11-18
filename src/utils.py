@@ -44,7 +44,7 @@ direction_to_vector = {
     'up':         Vector(-1, 0),
     'right_down': Vector(1, 1),
     'right':      Vector(0, 1),
-    'right_up':   Vector(1, 1)
+    'right_up':   Vector(-1, 1)
 }
 
 
