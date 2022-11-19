@@ -8,13 +8,13 @@
 
     "allowed_reproduction_directions":
     {
-        "left_down":  false,
+        "bottom_left":  false,
         "left":       true,
-        "left_up":    false,
+        "top_left":    false,
         "bottom":     true,
-        "up":         true,
-        "right_down": false,
+        "top":         true,
+        "bottom_right": false,
         "right":      true,
-        "right_up":   false
+        "top_right":   false
     }
 }

@@ -37,14 +37,14 @@ class Color:
 
 
 direction_to_vector = {
-    'left_down':  Vector(1, -1),
-    'left':       Vector(0, -1),
-    'left_up':    Vector(-1, -1),
-    'bottom':     Vector(1, 0),
-    'up':         Vector(-1, 0),
-    'right_down': Vector(1, 1),
-    'right':      Vector(0, 1),
-    'right_up':   Vector(-1, 1)
+    'bottom_left':  Vector(1, -1),
+    'left':         Vector(0, -1),
+    'top_left':     Vector(-1, -1),
+    'bottom':       Vector(1, 0),
+    'top':          Vector(-1, 0),
+    'bottom_right': Vector(1, 1),
+    'right':        Vector(0, 1),
+    'top_right':    Vector(-1, 1)
 }
 
 
