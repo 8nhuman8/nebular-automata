@@ -7,7 +7,6 @@
 ## Table of contents
 
 - [Idea](#idea)
-- [Some remarks](#some-remarks)
 - [Usage](#usage)
   - [Installation](#installation)
   - [Usage of renderer](#usage-of-renderer-rendererpy)
@@ -25,17 +24,6 @@ We will limit the growth of the population by setting a certain maximum allowabl
 
 As you probably noticed when looking at the images [below](#gallery-images-created-by-this-program), the edges of the shapes have a different color, into which the initial color smoothly flows. This was done not only to illustrate the process of structure development, but also for greater saturation and prettiness of images.
 
-## Some remarks
-
-With **q** tending to **1**, the structure becomes more and more like a *rhombus*, that is not really surprising.
-If the **q** is less than **0.5**, then the structure is *unlikely to grow*.
-If **q** approximately equal to **0.5**, the structure is *complete chaos*.
-With **q** approximately equal to **0.6**, the structure resembles a *circle*.
-If **q** is in **\[0.7, 1)**, the the structure looks like a *convex rhombus*.
-If **q** is equals to **1**, the structure becomes a *rhombus*.
-
-In fact, we can also generate squares if we surround each square not only on each side, but also on each corner. Therefore, I added an additional `--quadratic` parameter to generate squares.
-
 ## Usage
 
 ### Installation
@@ -52,7 +40,7 @@ Upgrade required packages with `pip install -r requirements.txt --upgrade` (if y
 ## Command-line arguments description
 
 ```console
-usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-o] [-fi] [-q] [-si] [-pi PATH] [-dsi] [-sv] [-pv PATH]
+usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-o] [-fi] [-si] [-pi PATH] [-dsi] [-sv] [-pv PATH]
                    [-vs INT]
                    width height
 
@@ -69,7 +57,7 @@ Basic options:
   -p FLOAT, --probability FLOAT
                         The probability that a square will multiply in a one direction. Default value: 0.51
   -mc INT, --max-count INT
-                        The maximum number of squares in the image. Default value: 2 * (width * height) // 3.
+                        The maximum number of squares in the image. Default value: (width * height) // 2.
   -minp FLOAT, --min-percent FLOAT
                         The program will work until the nebula is filled with a chosen or greater percentage.
   -maxp FLOAT, --max-percent FLOAT
@@ -85,7 +73,6 @@ Coloring options:
 Additional options:
   -o, --opaque          All colors will be opaque including background.
   -fi, --fade-in        Starting color is white. The color of each new generation will fade into the specified color. Use with: -rc -cn 1
-  -q, --quadratic       Each square will be surrounded not only on each side, but also on each corner.
 
 Image options:
   -si, --save-image     The rendered image will be saved.

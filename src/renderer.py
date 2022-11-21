@@ -34,7 +34,6 @@ def arg_parse() -> Namespace:
     group_additional = parser.add_argument_group('Additional options')
     group_additional.add_argument('-o', '--opaque', action='store_true', help=HELP_OPAQUE)
     group_additional.add_argument('-fi', '--fade-in', action='store_true', help=HELP_FADE_IN)
-    group_additional.add_argument('-q', '--quadratic', action='store_true', help=HELP_QUADRATIC)
 
     group_image = parser.add_argument_group('Image options')
     group_image.add_argument('-si', '--save-image', action='store_true', help=HELP_SAVE_IMAGE)
@@ -56,7 +55,7 @@ def validate_input(args: Namespace) -> Namespace:
     size = Vector(args.height, args.width)
 
     if args.max_count is None:
-        args.max_count = 2 * (size.y * size.x) // 3
+        args.max_count = (size.y * size.x) // 2
     elif args.max_count <= 0:
         raise ArgumentTypeError('max_count ∈ N')
 

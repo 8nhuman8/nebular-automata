@@ -94,7 +94,12 @@ def linear_gradient(start_color: Color, finish_color: Color, n: int) -> list[Col
     gradient = [start_color]
 
     for i in range(1, n):
-        color_list = [int(start_color[cc] + i * (finish_color[cc] - start_color[cc]) / (n - 1)) for cc in range(4)]
-        gradient.append(Color(*color_list))
+        gradient_color = []
+
+        for cc in range(4):
+            step = i * (finish_color[cc] - start_color[cc]) / (n - 1)
+            gradient_color.append(start_color[cc] + int(step))
+
+        gradient.append(Color(*gradient_color))
 
     return gradient

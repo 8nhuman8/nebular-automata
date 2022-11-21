@@ -9,12 +9,12 @@
     "allowed_reproduction_directions":
     {
         "bottom_left":  false,
-        "left":       true,
-        "top_left":    false,
-        "bottom":     true,
-        "top":         true,
+        "left":         true,
+        "top_left":     false,
+        "bottom":       true,
+        "top":          true,
         "bottom_right": false,
-        "right":      true,
-        "top_right":   false
+        "right":        true,
+        "top_right":    false
     }
 }
