@@ -94,12 +94,11 @@ class Nebula:
     def _square_reproduce(self, square: Square) -> list[Square]:
         self.count += 1
 
-        y, x = square
         neighbors = []
 
         for direction in self.directions:
-            ny = y + direction.y
-            nx = x + direction.x
+            ny = square.y + direction.y
+            nx = square.x + direction.x
 
             if (0 <= ny <= self.size.y - 1 and
                 0 <= nx <= self.size.x - 1 and
