@@ -95,7 +95,6 @@ def render(args: Namespace) -> None:
         args.max_count,
         args.probability,
         args.start_point,
-        args.quadratic,
         directions
     )
     nebula.develop(args.min_percent, args.max_percent)

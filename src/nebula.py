@@ -12,14 +12,12 @@ class Nebula:
         max_count: int,
         probability: float,
         start_point: Vector,
-        quadratic: bool,
         directions: list[Vector]
     ) -> None:
         self.size = size
         self.max_count = max_count
         self.probability = probability
         self.start_point = start_point
-        self.quadratic = quadratic
         self.directions = directions
 
         self.reset()
