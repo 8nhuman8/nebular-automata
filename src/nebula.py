@@ -41,7 +41,7 @@ class Nebula:
 
         while min_percent or max_percent or not pass_once:
             while self._unreproduced_squares[0] and self.count <= self.max_count:
-                self.output_debug_info()
+                self.print_info()
                 self.develop_generation()
 
                 if max_percent:
@@ -66,23 +66,23 @@ class Nebula:
 
     def develop_generation(self) -> None:
         current_generation = self._unreproduced_squares.pop()
-        next_generation = self._next_generation(current_generation)
+        next_generation = self._produce_next_generation(current_generation)
         self._unreproduced_squares.append(next_generation)
 
 
-    def output_debug_info(self) -> None:
+    def print_info(self) -> None:
         print(self.generation, end='\t')
         print(datetime.now().strftime(TIME_FORMAT), end='\t')
         print(f'{self.count / self.max_count * 100 : .5f} %', end='\t')
         print(f'{self.count} / {self.max_count}')
 
 
-    def _next_generation(self, current_generation: list[Square]) -> list[Square]:
+    def _produce_next_generation(self, current_generation: list[Square]) -> list[Square]:
         self.generation += 1
 
         next_generation = []
         for square in current_generation:
-            neighbors = self._square_reproduce(square)
+            neighbors = self._reproduce(square)
             next_generation.extend(neighbors)
 
         if next_generation:
@@ -91,7 +91,7 @@ class Nebula:
         return next_generation
 
 
-    def _square_reproduce(self, square: Square) -> list[Square]:
+    def _reproduce(self, square: Square) -> list[Square]:
         self.count += 1
 
         neighbors = []
