@@ -1,6 +1,6 @@
 # Nebular Automata
 
-`A program for visualizing an interesting mathematical idea`
+`A program for visualizing a probabilistic cellular automata`
 
 ![intro_image](docs/README/intro.png)
 
