@@ -1,6 +1,6 @@
 # Nebular Automata
 
-`A program for visualizing a probabilistic cellular automata`
+The program for visualizing a probabilistic cellular automata
 
 ![intro_image](docs/README/intro.png)
 
@@ -28,14 +28,13 @@ As you probably noticed when looking at the images [below](#gallery-images-creat
 
 ### Installation
 
-Upgrade required packages with `pip install -r requirements.txt --upgrade` (if you don't have one, it will be automatically installed).
+Install/upgrade required packages with `pip install -r requirements.txt --upgrade`.
 
 ### Usage of renderer ([`renderer.py`](src/renderer.py))
 
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Then you can specify the colors and allowed reproduction directions in the [`config.json`](configs/config.json).
 3. Run the `renderer.py` with `python src/renderer.py [parameters you need]`.
-4. Enjoy the beauty.
 
 ## Command-line arguments description
 
@@ -97,7 +96,7 @@ The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46
 
 [Nebular Automata](https://github.com/8nhuman8/nebular-automata) specific code is distributed under [MIT License](https://github.com/8nhuman8/nebular-automata/blob/master/LICENSE).
 
-Copyright (c) 2020 Artyom Bezmenov
+Copyright (c) 2022 Artyom Bezmenov
 
 ## Gallery (images created by this program)
 
