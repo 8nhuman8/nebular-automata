@@ -123,7 +123,7 @@ def render(args: Namespace) -> None:
 
     if args.save_video:
         fourcc = cv2.VideoWriter_fourcc(*'avc1')
-        video = cv2.VideoWriter(TEMP_VIDEO_PATH, fourcc, 60.0, size)
+        video = cv2.VideoWriter(TEMP_VIDEO_PATH, fourcc, 60, size[::-1])
 
     frame = np.full((size.y, size.x, 4), np.array(color_bg), dtype=np.uint8)
 
