@@ -39,8 +39,8 @@ Install/upgrade required packages with `pip install -r requirements.txt --upgrad
 ## Command-line arguments description
 
 ```console
-usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-o] [-fi] [-si] [-pi PATH] [-dsi] [-sv] [-pv PATH]
-                   [-vs INT]
+usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-o] [-fi] [-si] [-pi PATH] [-dsi] [-sv] [-pv PATH] [-vs INT]
+                   [-sg] [-pg PATH]
                    width height
 
 options:
@@ -86,6 +86,11 @@ Video options:
                         The path where the video will be saved. Default path: output/
   -vs INT, --video-size INT
                         The size of the video in MB to which the size of the original video will be reduced using compression.
+
+GIF options:
+  -sg, --save-gif       The rendered GIF will be saved.
+  -pg PATH, --path-gif PATH
+                        The path where the GIF will be saved. Default path: output/
 ```
 
 ## Credits and references
