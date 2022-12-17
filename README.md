@@ -2,7 +2,7 @@
 
 The program for visualizing a probabilistic cellular automata
 
-![intro_image](docs/README/intro.png)
+![intro_gif](docs/README/intro.gif)
 
 ## Table of contents
 
@@ -104,6 +104,3 @@ Copyright (c) 2022 Artyom Bezmenov
 ![gallery_image_2](docs/README/2.png)
 ![gallery_image_3](docs/README/3.png)
 ![gallery_image_4](docs/README/4.png)
-![gallery_image_5](docs/README/5.png)
-![gallery_image_6](docs/README/6.png)
-![gallery_image_7](docs/README/7.png)

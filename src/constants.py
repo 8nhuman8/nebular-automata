@@ -31,8 +31,14 @@ HELP_SAVE_VIDEO = 'The rendered video will be saved.'
 HELP_PATH_VIDEO = 'The path where the video will be saved. Default path: output/'
 HELP_VIDEO_SIZE = 'The size of the video in MB to which the size of the original video will be reduced using compression.'
 
+# GIF options
+HELP_SAVE_GIF = 'The rendered GIF will be saved.'
+HELP_PATH_GIF ='The path where the GIF will be saved. Default path: output/'
+
+
 # Formats
 TIME_FORMAT = '%H:%M:%S:%f'
+
 
 # Program paths
 CONFIG_PATH = Path('configs/config.json')

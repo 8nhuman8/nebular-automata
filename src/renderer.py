@@ -45,6 +45,10 @@ def arg_parse() -> Namespace:
     group_video.add_argument('-pv', '--path-video', metavar='PATH', type=str, help=HELP_PATH_VIDEO)
     group_video.add_argument('-vs', '--video-size', metavar='INT', type=int, default=8, help=HELP_VIDEO_SIZE)
 
+    gif_video = parser.add_argument_group('GIF options')
+    gif_video.add_argument('-sg', '--save-gif', action='store_true', help=HELP_SAVE_GIF)
+    gif_video.add_argument('-pg', '--path-gif', metavar='PATH', type=str, help=HELP_PATH_GIF)
+
     return parser.parse_args()
 
 
@@ -120,12 +124,18 @@ def render(args: Namespace) -> None:
         video_path = out_path(args.path_video, out_name, '.mp4').as_posix()
     else:
         video_path = out_path(OUTPUT_FILES_PATH, out_name, '.mp4').as_posix()
+    if args.path_gif:
+        gif_path = out_path(args.path_gif, out_name, '.gif')
+    else:
+        gif_path = out_path(OUTPUT_FILES_PATH, out_name, '.gif')
 
     if args.save_video:
         fourcc = cv2.VideoWriter_fourcc(*'avc1')
         video = cv2.VideoWriter(TEMP_VIDEO_PATH, fourcc, 60, size[::-1])
 
     frame = np.full((size.y, size.x, 4), np.array(color_bg), dtype=np.uint8)
+    if args.save_gif:
+        frames = [frame.copy()]
 
     for i, generation in enumerate(nebula.generations, start=1):
         if len(gradient) == 1:
@@ -145,6 +155,8 @@ def render(args: Namespace) -> None:
 
         if args.save_video:
             video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGRA))
+        if args.save_gif:
+            frames.append(frame.copy())
 
     image = Image.fromarray(frame, mode='RGBA')
 
@@ -157,6 +169,9 @@ def render(args: Namespace) -> None:
         video.release()
         compress_video(TEMP_VIDEO_PATH, video_path, args.video_size)
         Path.unlink(TEMP_VIDEO_PATH)
+    if args.save_gif:
+        images = [Image.fromarray(frame) for frame in frames]
+        images[0].save(gif_path, 'GIF', save_all=True, append_images=images[1:], duration=40, loop=0)
 
 
 def import_config() -> tuple[list[Color], Color, list[Vector]]:
