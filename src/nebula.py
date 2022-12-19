@@ -1,5 +1,5 @@
 from datetime import datetime
-from random import random
+from random import Random, random
 
 from utils import Square, Vector
 
@@ -12,13 +12,15 @@ class Nebula:
         max_count: int,
         probability: float,
         start_point: Vector,
-        directions: list[Vector]
+        directions: list[Vector],
+        seed: int | None
     ) -> None:
         self.size = size
         self.max_count = max_count
         self.probability = probability
         self.start_point = start_point
         self.directions = directions
+        self.seed = seed
 
         self.reset()
 
@@ -113,4 +115,10 @@ class Nebula:
 
 
     def _able_to_reproduce(self) -> bool:
-        return random() < self.probability
+        if self.seed:
+            random_number = Random(self.seed).random()
+            self.seed = random_number
+        else:
+            random_number = random()
+
+        return random_number < self.probability

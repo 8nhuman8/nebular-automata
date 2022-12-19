@@ -25,6 +25,7 @@ def arg_parse() -> Namespace:
     group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int, help=HELP_MAX_COUNT)
     group_basic.add_argument('-minp', '--min-percent', metavar='FLOAT', type=float, help=HELP_MIN_PERCENT)
     group_basic.add_argument('-maxp', '--max-percent', metavar='FLOAT', type=float, help=HELP_MAX_PERCENT)
+    group_basic.add_argument('-s', '--seed', metavar='INT', type=float, help=HELP_SEED)
 
     group_multicolor = parser.add_argument_group('Coloring options')
     group_multicolor.add_argument('-rc', '--random-colors', action='store_true', help=HELP_RANDOM_COLORS)
@@ -99,7 +100,8 @@ def render(args: Namespace) -> None:
         args.max_count,
         args.probability,
         args.start_point,
-        directions
+        directions,
+        args.seed
     )
     nebula.develop(args.min_percent, args.max_percent)
     generations_number = nebula.generation
