@@ -11,7 +11,6 @@ HELP_PROBABILTY = 'The probability that a square will multiply in a one directio
 HELP_MAX_COUNT = 'The maximum number of squares in the image. Default value: (width * height) // 2.'
 HELP_MIN_PERCENT = 'The program will work until the nebula is filled with a chosen or greater percentage.'
 HELP_MAX_PERCENT = 'The program will work until the nebula is filled with a chosen percentage.'
-HELP_SEED = 'The program will generate the nebula based on the entered seed. In this case, the generation time is significantly increased.'
 
 # Multicolor options
 HELP_RANDOM_COLORS = 'All colors will be chosen randomly.'
@@ -21,6 +20,8 @@ HELP_COLORS_NUMBER = 'The number of colors to use in the image. Default value: 3
 # Additional options
 HELP_OPAQUE = 'All colors will be opaque including background.'
 HELP_FADE_IN = 'Starting color is white. The color of each new generation will fade into the specified color. Use with: -rc -cn 1'
+HELP_SEED = 'The program will generate the nebula based on the entered seed. In this case, the generation time is significantly increased.'
+HELP_TORUS = 'The nebula will develop on a grid with toroidal topology.'
 
 # Image options
 HELP_SAVE_IMAGE = 'The rendered image will be saved.'

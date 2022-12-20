@@ -1,4 +1,4 @@
-from argparse import ArgumentParser, ArgumentTypeError, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, BooleanOptionalAction, Namespace
 from json import load
 from pathlib import Path
 
@@ -12,7 +12,7 @@ from nebula import Nebula
 from utils import *
 
 
-def arg_parse() -> Namespace:
+def parse_cl_arguments() -> Namespace:
     parser = ArgumentParser()
 
     group_required = parser.add_argument_group('Required options')
@@ -25,7 +25,6 @@ def arg_parse() -> Namespace:
     group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int, help=HELP_MAX_COUNT)
     group_basic.add_argument('-minp', '--min-percent', metavar='FLOAT', type=float, help=HELP_MIN_PERCENT)
     group_basic.add_argument('-maxp', '--max-percent', metavar='FLOAT', type=float, help=HELP_MAX_PERCENT)
-    group_basic.add_argument('-s', '--seed', metavar='INT', type=float, help=HELP_SEED)
 
     group_multicolor = parser.add_argument_group('Coloring options')
     group_multicolor.add_argument('-rc', '--random-colors', action='store_true', help=HELP_RANDOM_COLORS)
@@ -35,6 +34,8 @@ def arg_parse() -> Namespace:
     group_additional = parser.add_argument_group('Additional options')
     group_additional.add_argument('-o', '--opaque', action='store_true', help=HELP_OPAQUE)
     group_additional.add_argument('-fi', '--fade-in', action='store_true', help=HELP_FADE_IN)
+    group_additional.add_argument('-s', '--seed', metavar='INT', type=float, help=HELP_SEED)
+    group_additional.add_argument('-t', '--torus', action=BooleanOptionalAction, help=HELP_TORUS)
 
     group_image = parser.add_argument_group('Image options')
     group_image.add_argument('-si', '--save-image', action='store_true', help=HELP_SAVE_IMAGE)
@@ -101,7 +102,8 @@ def render(args: Namespace) -> None:
         args.probability,
         args.start_point,
         directions,
-        args.seed
+        args.seed,
+        args.torus
     )
     nebula.develop(args.min_percent, args.max_percent)
     generations_number = nebula.generation
@@ -133,7 +135,7 @@ def render(args: Namespace) -> None:
 
     if args.save_video:
         fourcc = cv2.VideoWriter_fourcc(*'avc1')
-        video = cv2.VideoWriter(TEMP_VIDEO_PATH, fourcc, 60, size[::-1])
+        video = cv2.VideoWriter(TEMP_VIDEO_PATH, fourcc, 144, size[::-1])
 
     frame = np.full((size.y, size.x, 4), np.array(color_bg), dtype=np.uint8)
     if args.save_gif:
@@ -212,5 +214,5 @@ def compress_video(video_path: str, output_path: str, target_size: int) -> None:
 
 
 if __name__ == '__main__':
-    args = arg_parse()
-    render(args)
+    cl_argumentss = parse_cl_arguments()
+    render(cl_argumentss)

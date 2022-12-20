@@ -13,7 +13,8 @@ class Nebula:
         probability: float,
         start_point: Vector,
         directions: list[Vector],
-        seed: int | None
+        seed: int | None,
+        torus: bool
     ) -> None:
         self.size = size
         self.max_count = max_count
@@ -21,6 +22,7 @@ class Nebula:
         self.start_point = start_point
         self.directions = directions
         self.seed = seed
+        self.torus = torus
 
         self.reset()
 
@@ -102,11 +104,22 @@ class Nebula:
             ny = square.y + direction.y
             nx = square.x + direction.x
 
-            if (0 <= ny <= self.size.y - 1 and
-                0 <= nx <= self.size.x - 1 and
-                self._able_to_reproduce() and
-                self.grid[ny][nx] is None
-            ):
+            if self.torus:
+                if ny == -1:
+                    ny = self.size.y - 1
+                if ny == self.size.y:
+                    ny = 0
+
+                if nx == -1:
+                    nx = self.size.x - 1
+                if nx == self.size.x:
+                    nx = 0
+            else:
+                if not (0 <= ny <= self.size.y - 1 and
+                        0 <= nx <= self.size.x - 1):
+                    continue
+
+            if self._able_to_reproduce() and self.grid[ny][nx] is None:
                 neighbor = Square(ny, nx)
                 self.grid[ny][nx] = neighbor
                 neighbors.append(neighbor)
