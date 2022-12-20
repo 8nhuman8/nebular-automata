@@ -45,12 +45,13 @@ def parse_cl_arguments() -> Namespace:
     group_video = parser.add_argument_group('Video options')
     group_video.add_argument('-sv', '--save-video', action='store_true', help=HELP_SAVE_VIDEO)
     group_video.add_argument('-pv', '--path-video', metavar='PATH', type=str, help=HELP_PATH_VIDEO)
-    group_video.add_argument('-fps', '--video-fps', metavar='INT', type=int, default=60, help=HELP_VIDEO_FPS)
+    group_video.add_argument('-vfps', '--video-fps', metavar='INT', type=int, default=60, help=HELP_VIDEO_FPS)
     group_video.add_argument('-vs', '--video-size', metavar='INT', type=int, default=8, help=HELP_VIDEO_SIZE)
 
-    gif_video = parser.add_argument_group('GIF options')
-    gif_video.add_argument('-sg', '--save-gif', action='store_true', help=HELP_SAVE_GIF)
-    gif_video.add_argument('-pg', '--path-gif', metavar='PATH', type=str, help=HELP_PATH_GIF)
+    group_gif = parser.add_argument_group('GIF options')
+    group_gif.add_argument('-sg', '--save-gif', action='store_true', help=HELP_SAVE_GIF)
+    group_gif.add_argument('-pg', '--path-gif', metavar='PATH', type=str, help=HELP_PATH_GIF)
+    group_gif.add_argument('-gd', '--gif-duration', metavar='INT', type=int, default=30, help=HELP_GIF_DURATION)
 
     return parser.parse_args()
 
@@ -178,7 +179,14 @@ def render(args: Namespace) -> None:
         Path.unlink(TEMP_VIDEO_PATH)
     if args.save_gif:
         images = [Image.fromarray(frame) for frame in frames]
-        images[0].save(gif_path, 'GIF', save_all=True, append_images=images[1:], duration=40, loop=0)
+        images[0].save(
+            gif_path, 'GIF',
+            save_all=True,
+            append_images=images[1:],
+            optimize=False,
+            duration=args.gif_duration,
+            loop=0
+        )
 
 
 def import_config() -> tuple[list[Color], Color, list[Vector]]:

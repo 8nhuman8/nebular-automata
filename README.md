@@ -7,13 +7,12 @@ The program for visualizing a probabilistic cellular automata
 ## Table of contents
 
 - [Idea](#idea)
+- [Installation](#installation)
 - [Usage](#usage)
-  - [Installation](#installation)
-  - [Usage of renderer](#usage-of-renderer-rendererpy)
 - [Command-line arguments description](#command-line-arguments-description)
 - [Credits and references](#credits-and-references)
 - [License](#license)
-- [Gallery](#gallery-images-created-by-this-program)
+- [Gallery](#gallery)
 
 ## Idea
 
@@ -22,15 +21,13 @@ The program for visualizing a probabilistic cellular automata
 Let a square be surrounded on each side by a new square of the same size with a chance of **q**. Newly formed squares reproduce other squares and so on, to infinity.
 We will limit the growth of the population by setting a certain maximum allowable number of squares, upon reaching which the program will be completed.
 
-As you probably noticed when looking at the images [below](#gallery-images-created-by-this-program), the edges of the shapes have a different color, into which the initial color smoothly flows. This was done not only to illustrate the process of structure development, but also for greater saturation and prettiness of images.
+As you probably noticed when looking at the images [below](#gallery), the edges of the shapes have a different color, into which the initial color smoothly flows. This was done not only to illustrate the process of structure development, but also for greater saturation and prettiness of images.
 
-## Usage
-
-### Installation
+## Installation
 
 Install/upgrade required packages with `pip install -r requirements.txt --upgrade`.
 
-### Usage of renderer ([`renderer.py`](src/renderer.py))
+## Usage
 
 1. Check out all the command-line parameters [below](#command-line-arguments-description).
 2. Then you can specify the colors and allowed reproduction directions in the [`config.json`](configs/config.json).
@@ -40,7 +37,7 @@ Install/upgrade required packages with `pip install -r requirements.txt --upgrad
 
 ```console
 usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-s INT] [-o] [-fi] [-t] [-si] [-pi PATH] [-dsi] [-sv]
-                   [-pv PATH] [-fps INT] [-vs INT] [-sg] [-pg PATH]
+                   [-pv PATH] [-vfps INT] [-vs INT] [-sg] [-pg PATH] [-gd INT]
                    width height
 
 options:
@@ -86,7 +83,7 @@ Video options:
   -sv, --save-video     The rendered video will be saved.
   -pv PATH, --path-video PATH
                         The path where the video will be saved. Default path: output/
-  -fps INT, --video-fps INT
+  -vfps INT, --video-fps INT
                         The frame rate of the video. Default value: 60.
   -vs INT, --video-size INT
                         The size of the video in MB to which the size of the original video will be reduced using compression.
@@ -95,6 +92,8 @@ GIF options:
   -sg, --save-gif       The rendered GIF will be saved.
   -pg PATH, --path-gif PATH
                         The path where the GIF will be saved. Default path: output/
+  -gd INT, --gif-duration INT
+                        The display duration of each frame of the GIF in milliseconds. Default value: 30.
 ```
 
 ## Credits and references
@@ -107,7 +106,7 @@ The original idea was found [here](https://vk.com/math_dosug?w=wall-149993556_46
 
 Copyright (c) 2022 Artyom Bezmenov
 
-## Gallery (images created by this program)
+## Gallery
 
 ![gallery_image_1](docs/README/1.png)
 ![gallery_image_2](docs/README/2.png)

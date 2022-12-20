@@ -36,7 +36,8 @@ HELP_VIDEO_SIZE = 'The size of the video in MB to which the size of the original
 
 # GIF options
 HELP_SAVE_GIF = 'The rendered GIF will be saved.'
-HELP_PATH_GIF ='The path where the GIF will be saved. Default path: output/'
+HELP_PATH_GIF = 'The path where the GIF will be saved. Default path: output/'
+HELP_GIF_DURATION = 'The display duration of each frame of the GIF in milliseconds. Default value: 30.'
 
 
 # Formats
