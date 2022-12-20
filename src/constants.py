@@ -18,9 +18,9 @@ HELP_RANDOM_BACKGROUND = 'The background color will be chosen randomly.'
 HELP_COLORS_NUMBER = 'The number of colors to use in the image. Default value: 3. Use with: -rc.'
 
 # Additional options
+HELP_SEED = 'The program will generate the nebula based on the entered seed. In this case, the generation time is significantly increased.'
 HELP_OPAQUE = 'All colors will be opaque including background.'
 HELP_FADE_IN = 'Starting color is white. The color of each new generation will fade into the specified color. Use with: -rc -cn 1'
-HELP_SEED = 'The program will generate the nebula based on the entered seed. In this case, the generation time is significantly increased.'
 HELP_TORUS = 'The nebula will develop on a grid with toroidal topology.'
 
 # Image options
@@ -31,6 +31,7 @@ HELP_DONT_SHOW_IMAGE = 'Do not show image in the end.'
 # Video options
 HELP_SAVE_VIDEO = 'The rendered video will be saved.'
 HELP_PATH_VIDEO = 'The path where the video will be saved. Default path: output/'
+HELP_VIDEO_FPS = 'The frame rate of the video. Default value: 60.'
 HELP_VIDEO_SIZE = 'The size of the video in MB to which the size of the original video will be reduced using compression.'
 
 # GIF options

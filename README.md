@@ -39,8 +39,8 @@ Install/upgrade required packages with `pip install -r requirements.txt --upgrad
 ## Command-line arguments description
 
 ```console
-usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-o] [-fi] [-si] [-pi PATH] [-dsi] [-sv] [-pv PATH] [-vs INT]
-                   [-sg] [-pg PATH]
+usage: renderer.py [-h] [-sp Y X] [-p FLOAT] [-mc INT] [-minp FLOAT] [-maxp FLOAT] [-rc] [-rbg] [-cn INT] [-s INT] [-o] [-fi] [-t] [-si] [-pi PATH] [-dsi] [-sv]
+                   [-pv PATH] [-fps INT] [-vs INT] [-sg] [-pg PATH]
                    width height
 
 options:
@@ -70,8 +70,10 @@ Coloring options:
                         The number of colors to use in the image. Default value: 3. Use with: -rc.
 
 Additional options:
+  -s INT, --seed INT    The program will generate the nebula based on the entered seed. In this case, the generation time is significantly increased.
   -o, --opaque          All colors will be opaque including background.
   -fi, --fade-in        Starting color is white. The color of each new generation will fade into the specified color. Use with: -rc -cn 1
+  -t, --torus           The nebula will develop on a grid with toroidal topology.
 
 Image options:
   -si, --save-image     The rendered image will be saved.
@@ -84,6 +86,8 @@ Video options:
   -sv, --save-video     The rendered video will be saved.
   -pv PATH, --path-video PATH
                         The path where the video will be saved. Default path: output/
+  -fps INT, --video-fps INT
+                        The frame rate of the video. Default value: 60.
   -vs INT, --video-size INT
                         The size of the video in MB to which the size of the original video will be reduced using compression.
 

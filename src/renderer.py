@@ -1,4 +1,4 @@
-from argparse import ArgumentParser, ArgumentTypeError, BooleanOptionalAction, Namespace
+from argparse import ArgumentParser, ArgumentTypeError, Namespace
 from json import load
 from pathlib import Path
 
@@ -32,10 +32,10 @@ def parse_cl_arguments() -> Namespace:
     group_multicolor.add_argument('-cn', '--colors-number', metavar='INT', type=int, default=3, help=HELP_COLORS_NUMBER)
 
     group_additional = parser.add_argument_group('Additional options')
+    group_additional.add_argument('-s', '--seed', metavar='INT', type=int, help=HELP_SEED)
     group_additional.add_argument('-o', '--opaque', action='store_true', help=HELP_OPAQUE)
     group_additional.add_argument('-fi', '--fade-in', action='store_true', help=HELP_FADE_IN)
-    group_additional.add_argument('-s', '--seed', metavar='INT', type=float, help=HELP_SEED)
-    group_additional.add_argument('-t', '--torus', action=BooleanOptionalAction, help=HELP_TORUS)
+    group_additional.add_argument('-t', '--torus', action='store_true', help=HELP_TORUS)
 
     group_image = parser.add_argument_group('Image options')
     group_image.add_argument('-si', '--save-image', action='store_true', help=HELP_SAVE_IMAGE)
@@ -45,6 +45,7 @@ def parse_cl_arguments() -> Namespace:
     group_video = parser.add_argument_group('Video options')
     group_video.add_argument('-sv', '--save-video', action='store_true', help=HELP_SAVE_VIDEO)
     group_video.add_argument('-pv', '--path-video', metavar='PATH', type=str, help=HELP_PATH_VIDEO)
+    group_video.add_argument('-fps', '--video-fps', metavar='INT', type=int, default=60, help=HELP_VIDEO_FPS)
     group_video.add_argument('-vs', '--video-size', metavar='INT', type=int, default=8, help=HELP_VIDEO_SIZE)
 
     gif_video = parser.add_argument_group('GIF options')
@@ -67,6 +68,8 @@ def validate_input(args: Namespace) -> Namespace:
 
     if args.colors_number <= 0:
         raise ArgumentTypeError('colors_number ∈ N')
+    if args.video_fps <= 0:
+        raise ArgumentTypeError('video_fps ∈ N')
     if args.video_size <= 0:
         raise ArgumentTypeError('video_size ∈ N')
 
@@ -135,7 +138,7 @@ def render(args: Namespace) -> None:
 
     if args.save_video:
         fourcc = cv2.VideoWriter_fourcc(*'avc1')
-        video = cv2.VideoWriter(TEMP_VIDEO_PATH, fourcc, 144, size[::-1])
+        video = cv2.VideoWriter(TEMP_VIDEO_PATH, fourcc, args.video_fps, size[::-1])
 
     frame = np.full((size.y, size.x, 4), np.array(color_bg), dtype=np.uint8)
     if args.save_gif:
@@ -214,5 +217,5 @@ def compress_video(video_path: str, output_path: str, target_size: int) -> None:
 
 
 if __name__ == '__main__':
-    cl_argumentss = parse_cl_arguments()
-    render(cl_argumentss)
+    cl_arguments = parse_cl_arguments()
+    render(cl_arguments)
