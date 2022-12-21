@@ -188,6 +188,10 @@ def render(args: Namespace) -> None:
             loop=0
         )
 
+    print('\nUsed colors:')
+    for i, color in enumerate(colors, start=1):
+        print(f'{i}: {color}')
+
 
 def import_config() -> tuple[list[Color], Color, list[Vector]]:
     with open(CONFIG_PATH) as json_file:
