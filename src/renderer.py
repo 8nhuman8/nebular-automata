@@ -21,9 +21,9 @@ def parse_cl_arguments() -> Namespace:
 
     group_basic = parser.add_argument_group('Basic options')
     group_basic.add_argument('-sp', '--start-point', metavar=('Y', 'X'), nargs=2, type=int, help=HELP_START_POINT)
-    group_basic.add_argument('-p', '--probability', metavar='FLOAT', type=float, default=0.51, help=HELP_PROBABILTY)
+    group_basic.add_argument('-p', '--probability', metavar='FLOAT', type=float, default=0.5, help=HELP_PROBABILTY)
     group_basic.add_argument('-mc', '--max-count', metavar='INT', type=int, help=HELP_MAX_COUNT)
-    group_basic.add_argument('-minp', '--min-percent', metavar='FLOAT', type=float, help=HELP_MIN_PERCENT)
+    group_basic.add_argument('-minp', '--min-percent', metavar='FLOAT', type=float, default=0.75, help=HELP_MIN_PERCENT)
     group_basic.add_argument('-maxp', '--max-percent', metavar='FLOAT', type=float, help=HELP_MAX_PERCENT)
 
     group_multicolor = parser.add_argument_group('Coloring options')
