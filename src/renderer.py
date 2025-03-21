@@ -162,7 +162,7 @@ def render(args: Namespace) -> None:
         frame[coordinates] = np.array(fill_color)
 
         if args.save_video:
-            video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGRA))
+            video.write(cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR))
         if args.save_gif:
             frames.append(frame.copy())
 
@@ -221,7 +221,7 @@ def compress_video(video_path: str, output_path: str, target_size: int) -> None:
     (
         ffmpeg
         .input(video_path)
-        .output(output_path, **{'c:v': 'libx264', 'b:v': video_bitrate, 'f': 'mp4'})
+        .output(output_path, **{'c:v': 'libx265', 'b:v': video_bitrate, 'f': 'mp4'})
         .overwrite_output()
         .global_args('-loglevel', 'error')
         .run()
