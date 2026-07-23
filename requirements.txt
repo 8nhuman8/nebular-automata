@@ -1,4 +1,4 @@
 ffmpeg-python==0.2.0
 numpy==1.24.0
 opencv-python==4.8.1.78
-Pillow==12.2.0
+Pillow==12.3.0
